@@ -3,10 +3,10 @@ Ai = function (game) {
     this.runLoopId = 0;
     this.generation = [];
     this.fertileCount = 4;
-    this.neurons = 6;
+    this.neurons = 6; //Todo: What is it used for?
     this.populationCount = this.game.config.ai.populationCount;
     this.inputVectorSize = this.game.grid.width * this.game.grid.height;
-    this.inputLayerSize = Math.floor(this.inputVectorSize / this.game.config.ai.layerToInputRatio);
+    this.modelFactory = new ModelFactory(game);
 
     this.initialise();
     // let inputMatrix = this.getInputMatrix();
@@ -15,7 +15,7 @@ Ai = function (game) {
 
 Ai.prototype.initialise = function () {
     for (let i = 0; i < this.populationCount; i++)
-        this.generation.push(this.createModel());
+        this.generation.push(this.modelFactory.createModel());
     this.currentModelIndex = 0;
     this.currentModel = this.generation[0];
 }
@@ -30,7 +30,7 @@ Ai.prototype.populateNextGeneration = function () {
     const crossover1 = this.crossOver(winners[0], winners[1]);
     const crossover2 = this.crossOver(winners[2], winners[3]);
     // const mutatedWinners = this.mutateBias(winners);
-    const mutatedWinners = [this.createModel(), this.createModel()];
+    const mutatedWinners = [this.modelFactory.createModel(), this.modelFactory.createModel()];
     this.generation = [crossover1, ...winners, crossover2, ...mutatedWinners];
     this.currentModelIndex = 0;
     log("Next gen: " + this.generation.length);
@@ -79,15 +79,6 @@ Ai.prototype.exchangeBias = function (tensorA, tensorB) {
 //         return model;
 //     });
 // }
-
-Ai.prototype.createModel = function () {
-    let model = tf.sequential();
-    model.add(tf.layers.dense({ units: this.inputLayerSize, inputShape: [this.inputVectorSize] }));  //Todo: Make units a function of the grid size
-    model.add(tf.layers.dense({ units: 4 }));
-    // const optimiser = tf.train.sgd(0.1);
-    // this.currentModel.compile({ loss: "meanSquaredError", optimizer: optimiser });
-    return model;
-}
 
 Ai.prototype.pickNextModel = function (score) {
     this.currentModel.score = score;
