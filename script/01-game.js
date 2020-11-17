@@ -94,10 +94,10 @@ Game.prototype.togglePause = function () {
 	}
 }
 
-Game.prototype.gameOver = function () {
+Game.prototype.wormDied = function () {
 	this.stopRunning();
 	this.control.disable();
-	this.worm.die();
+	this.worm = new Worm(this);
 	if (this.lifeCount < this.config.ai.lifeCount)
 		this.restart();
 	else {
