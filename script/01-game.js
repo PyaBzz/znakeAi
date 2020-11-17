@@ -30,7 +30,6 @@ Game.prototype.initialise = function () {
 Game.prototype.splashClicked = function () {
 	this.initialiseSound();
 	let me = this;
-	Crosshairs("target", () => me.sound.mouseInBeep(), () => me.sound.mouseOutBeep());
 	this.worm = new Worm(this);
 }
 

@@ -16,7 +16,6 @@ znakeConfig = {
         pause: ' ',
     },
     soundVolume: 0.15,  // [0~1]
-    runMode: runModeEnum.manual,  // 0 = manual 1 = auto
     ai: {
         lifeCount: 1,
         generationCount: 8,

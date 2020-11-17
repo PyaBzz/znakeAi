@@ -1,19 +1,10 @@
-//###########################  Overlay  ############################################
 Overlay = function (game) {
     this.game = game;
     this.element = document.getElementById('overlay');
 
-    if (game.config.runMode === runModeEnum.auto) {
-        this.element.classList.add('overlay-ai');
-        this.line2 = "AI autoplay!";
-    }
-    else if (this.game.config.devMode) {
+    if (this.game.config.devMode) {
         this.element.classList.add('overlay-dev');
         this.line2 = "Developer mode";
-    }
-    else {
-        this.element.classList.add('overlay-manual');
-        this.line2 = "Manual mode";
     }
 
     this.bindHandler();

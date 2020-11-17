@@ -2,13 +2,7 @@
   --worm-colour: yellowgreen;
   --food-colour: yellow;
   --obstacle-colour: orangered;
-  /* ----------------------------------------- */
-  /* --worm-colour: #252525; */
-  /* --food-colour: #303030; */
-  /* --obstacle-colour: #202020; */
-  /* ----------------------------------------- */
   --corner-percentage: 20%;
-  --crosshair-movement-time: 0.2s;
   --cell-dimension: 20px;
 }
 * {
@@ -80,18 +74,11 @@ body {
 }
 
 .overlay {
+    background-color: yellow;
     position: absolute;
     width: 100%;
     height: 100%;
     z-index: 1;
-}
-
-.overlay-manual {
-    background-color: yellowgreen;
-}
-
-.overlay-ai {
-    background-color: yellow;
 }
 
 .overlay-dev {
@@ -156,57 +143,4 @@ td.worm {
 }
 td.food {
   background-color: var(--food-colour);
-}
-
-.target {
-  position: relative;
-}
-.corners {
-  position: absolute;
-  width: var(--corner-percentage);
-  height: var(--corner-percentage);
-  transition-duration: var(--crosshair-movement-time);
-  transition-timing-function: linear;
-  border-color: transparent;
-  border-width: 2px;
-}
-.corner-top-left {
-  border-style: solid none none solid;
-  top: calc(50% - var(--corner-percentage));
-  left: calc(50% - var(--corner-percentage));
-}
-.corner-top-right {
-  border-style: solid solid none none;
-  top: calc(50% - var(--corner-percentage));
-  right: calc(50% - var(--corner-percentage));
-}
-.corner-bottom-left {
-  border-style: none none solid solid;
-  bottom: calc(50% - var(--corner-percentage));
-  left: calc(50% - var(--corner-percentage));
-}
-.corner-bottom-right {
-  border-style: none solid solid none;
-  bottom: calc(50% - var(--corner-percentage));
-  right: calc(50% - var(--corner-percentage));
-}
-
-.target:hover .corners {
-  border-color: var(--food-colour);
-}
-.target:hover .corner-top-left {
-  top: 0;
-  left: 0;
-}
-.target:hover .corner-top-right {
-  top: 0;
-  right: 0;
-}
-.target:hover .corner-bottom-left {
-  bottom: 0;
-  left: 0;
-}
-.target:hover .corner-bottom-right {
-  bottom: 0;
-  right: 0;
 }
