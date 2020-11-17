@@ -1,13 +1,13 @@
-ModelFactory = function (game) {
+ModelService = function (game) {
     this.game = game;
     this.inputVectorSize = this.game.grid.width * this.game.grid.height;
     this.inputLayerSize = Math.floor(this.inputVectorSize / this.game.config.ai.layerToInputRatio);
 }
 
-ModelFactory.prototype.initialise = function () {
+ModelService.prototype.initialise = function () {
 }
 
-ModelFactory.prototype.createModel = function () {
+ModelService.prototype.createModel = function () {
     let model = tf.sequential();
     model.add(tf.layers.dense({ units: this.inputLayerSize, inputShape: [this.inputVectorSize] }));  //Todo: Make units a function of the grid size
     model.add(tf.layers.dense({ units: 4 }));
@@ -16,18 +16,18 @@ ModelFactory.prototype.createModel = function () {
     return model;
 }
 
-ModelFactory.prototype.crossOver = function (modelA, modelB) {
+ModelService.prototype.crossOver = function (modelA, modelB) {
     const biasA = modelA.layers[0].bias.read();
     const biasB = modelB.layers[0].bias.read();
     return this.setBias(modelA, this.exchangeBias(biasA, biasB));
 }
 
-ModelFactory.prototype.setBias = function (model, bias) {
+ModelService.prototype.setBias = function (model, bias) {
     model.layers[0].bias.write(bias);
     return model;
 }
 
-ModelFactory.prototype.exchangeBias = function (tensorA, tensorB) {
+ModelService.prototype.exchangeBias = function (tensorA, tensorB) {
     const size = Math.ceil(tensorA.size / 2);
     return tf.tidy(() => {
         const a = tensorA.slice([0], [size]);
