@@ -3,7 +3,7 @@ znakeConfig = {
     gridHeight: 8,  // cells >= 4
     gridWidth: 8,  // cells >= 4
     movingTimeStep: 80,  // milliseconds
-    numberOfFoodCellsAtOnce: 1,
+    numberOfFoodCellsAtOnce: 3,
     startAtCentre: true,
     keys: {
         up: 'E',
@@ -16,6 +16,7 @@ znakeConfig = {
     ai: {
         lifeCount: 1,
         generationCount: 8,
+        layerToInputRatio: 4,
     }
 }
 

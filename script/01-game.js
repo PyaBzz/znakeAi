@@ -61,8 +61,8 @@ Game.prototype.restart = function () {
 	this.movingTimeStep = this.config.movingTimeStep;
 	this.worm.reset();
 	this.control.setForRunning();
-	this.run();
 	this.feeder.dropFood();
+	this.run();
 }
 
 Game.prototype.run = function () {

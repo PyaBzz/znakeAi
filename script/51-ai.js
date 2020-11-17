@@ -6,6 +6,7 @@ Ai = function (game) {
     this.neurons = 6;
     this.generationCount = this.game.config.ai.generationCount;
     this.inputVectorSize = this.game.grid.width * this.game.grid.height;
+    this.inputLayerSize = Math.floor(this.inputVectorSize / this.game.config.ai.layerToInputRatio);
 
     this.initialise();
     // let inputMatrix = this.getInputMatrix();
@@ -66,14 +67,13 @@ Ai.prototype.exchangeBias = function (tensorA, tensorB) {
 //     return models.map(item => {
 //         let model = tf.sequential();
 //         model.add(tf.layers.dense({
-//             units: 90,
+//             units: this.inputLayerSize,
 //             inputShape: [this.inputVectorSize],
 //             activation: 'sigmoid',
 //             kernelInitializer: 'leCunNormal',
 //             useBias: true,
 //             biasInitializer: tf.initializers.constant({ value: rand.getInRange(-2, 2), }),
 //         }));
-//         model.add(tf.layers.dense({ units: 20 }));
 //         model.add(tf.layers.dense({ units: 4 }));
 
 //         return model;
@@ -82,8 +82,7 @@ Ai.prototype.exchangeBias = function (tensorA, tensorB) {
 
 Ai.prototype.createModel = function () {
     let model = tf.sequential();
-    model.add(tf.layers.dense({ units: 90, inputShape: [this.inputVectorSize] }));  //Todo: Make units a function of the grid size
-    model.add(tf.layers.dense({ units: 20 }));
+    model.add(tf.layers.dense({ units: this.inputLayerSize, inputShape: [this.inputVectorSize] }));  //Todo: Make units a function of the grid size
     model.add(tf.layers.dense({ units: 4 }));
     // const optimiser = tf.train.sgd(0.1);
     // this.currentModel.compile({ loss: "meanSquaredError", optimizer: optimiser });
