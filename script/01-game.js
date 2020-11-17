@@ -44,8 +44,8 @@ Game.prototype.start = function () {
 	this.infoboard.life(this.lifeCount);
 	this.button.beRestartButton();
 	this.control.setForRunning()
-	this.run();
 	this.feeder.dropFood();
+	this.run();
 }
 
 Game.prototype.restart = function () {
@@ -57,13 +57,12 @@ Game.prototype.restart = function () {
 		this.isPaused = false;
 	} else {
 		this.stopRunning();
-		this.feeder.stopFeeding();
 	}
 	this.movingTimeStep = this.config.movingTimeStep;
 	this.worm.reset();
 	this.control.setForRunning();
 	this.run();
-	this.feeder.feed();
+	this.feeder.dropFood();
 }
 
 Game.prototype.run = function () {
@@ -83,14 +82,12 @@ Game.prototype.stopRunning = function () {
 Game.prototype.togglePause = function () {
 	if (this.isPaused) {
 		this.run();
-		this.feeder.feed();
 		this.isPaused = false;
 		this.control.setForRunning();
 		this.overlay.popDown();
 	}
 	else {
 		this.stopRunning();
-		this.feeder.stopFeeding();
 		this.isPaused = true;
 		this.control.setForPause();
 		this.overlay.popUp();
@@ -99,7 +96,6 @@ Game.prototype.togglePause = function () {
 
 Game.prototype.gameOver = function () {
 	this.stopRunning();
-	this.feeder.stopFeeding();
 	this.control.disable();
 	this.worm.die();
 	if (this.lifeCount < this.config.ai.lifeCount)

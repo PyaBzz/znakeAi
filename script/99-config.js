@@ -3,8 +3,6 @@ znakeConfig = {
     gridHeight: 8,  // cells >= 4
     gridWidth: 8,  // cells >= 4
     movingTimeStep: 80,  // milliseconds
-    feedWhenEaten: true,
-    feedingTimeStep: 3000,  // milliseconds
     numberOfFoodCellsAtOnce: 1,
     startAtCentre: true,
     keys: {

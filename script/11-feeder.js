@@ -5,16 +5,6 @@ Feeder = function (game) {
 	this.foodCells = [];
 }
 
-Feeder.prototype.feed = function () {
-	this.loopId++;
-	let me = this;
-	this.loopHandle = setInterval(() => me.dropFood(), me.feedingTimeStep);
-}
-
-Feeder.prototype.stopFeeding = function () {
-	clearInterval(this.loopHandle);
-}
-
 Feeder.prototype.dropFood = function () {
 	this.foodCells.forEach(function (cell) {
 		if (cell.isFood)
@@ -30,10 +20,3 @@ Feeder.prototype.dropFood = function () {
 	}
 	this.foodCells.forEach((cell) => cell.beFood());
 }
-
-Object.defineProperties(Feeder.prototype, {
-	loopHandle: {
-		get: function () { return this['feedingLoop' + this.loopId]; },
-		set: function (val) { this['feedingLoop' + this.loopId] = val; }
-	},
-});
