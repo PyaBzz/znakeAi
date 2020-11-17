@@ -4,7 +4,7 @@ Ai = function (game) {
     this.generation = [];
     this.fertileCount = 4;
     this.neurons = 6;
-    this.generationCount = this.game.config.ai.generationCount;
+    this.populationCount = this.game.config.ai.populationCount;
     this.inputVectorSize = this.game.grid.width * this.game.grid.height;
 
     this.initialise();
@@ -13,7 +13,7 @@ Ai = function (game) {
 }
 
 Ai.prototype.initialise = function () {
-    for (let i = 0; i < this.generationCount; i++)
+    for (let i = 0; i < this.populationCount; i++)
         this.generation.push(this.createModel());
     this.currentModelIndex = 0;
     this.currentModel = this.generation[0];
@@ -93,7 +93,7 @@ Ai.prototype.createModel = function () {
 Ai.prototype.pickNextModel = function (score) {
     this.currentModel.score = score;
     this.currentModelIndex++;
-    if (this.currentModelIndex < this.generationCount) {
+    if (this.currentModelIndex < this.populationCount) {
         this.currentModel = this.generation[this.currentModelIndex];
         return true;
     }
