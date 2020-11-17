@@ -9,8 +9,6 @@ Ai = function (game) {
     this.modelService = new ModelService(game);
 
     this.initialise();
-    // let inputMatrix = this.getInputMatrix();
-    // this.visualise(inputMatrix);
 }
 
 Ai.prototype.initialise = function () {
@@ -109,11 +107,4 @@ Ai.prototype.getCellValue = function (cell) {
         return 1;
     if (cell.isDeadly)
         return 2;
-}
-
-Ai.prototype.visualise = function (matrix) {
-    tfvis.visor();
-    const inputObj = { values: matrix };
-    const surface = { name: "dasoo name", tab: "dasoo tab" }
-    tfvis.render.heatmap(surface, inputObj);
 }
