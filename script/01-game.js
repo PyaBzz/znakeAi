@@ -1,55 +1,125 @@
-ManualGame = function (znakeConf) {
-	Game.call(this, znakeConf);
+Game = function (znakeConf) {
+	this.importConfig(znakeConf);
+	this.initialise();
+	this.loopId = 0;
 }
 
-ManualGame.prototype.constructor = Game;
-
-ManualGame.prototype.importConfig = function (znakeConf) {
-	Game.prototype.importConfig.call(this, znakeConf);
+Game.prototype.importConfig = function (znakeConf) {
+	this.config = {}
+	for (let key in znakeConf)
+		this.config[key] = znakeConf[key];
+	if (this.config["gridHeight"] < 4)
+		throw "Grid height must be at least 4"
+	if (this.config["gridWidth"] < 4)
+		throw "Grid width must be at least 4"
 }
 
-ManualGame.prototype.initialise = function () {
-	Game.prototype.initialise.call(this);
+Game.prototype.initialise = function () {
+	this.lifeCount = 0;
+	this.movingTimeStep = this.config.movingTimeStep;
+	this.mouse = new Mouse(this);
+	this.grid = new Grid(this, document.getElementById('grid-container'));
+	this.infoboard = new InfoBoard(this);
+	this.control = new Control(this);
+	this.overlay = new Overlay(this);
+	this.feeder = new Feeder(this);
+	this.button = new Button(this, document.getElementById('button'));
+	this.ai = new Ai(this);
 }
 
-ManualGame.prototype.splashClicked = function () {
-	Game.prototype.splashClicked.call(this);
+Game.prototype.splashClicked = function () {
+	this.initialiseSound();
+	let me = this;
+	Crosshairs("target", () => me.sound.mouseInBeep(), () => me.sound.mouseOutBeep());
+	this.worm = new Worm(this);
 }
 
-ManualGame.prototype.initialiseSound = function () {
-	Game.prototype.initialiseSound.call(this);
+Game.prototype.initialiseSound = function () {
+	if (isUndefined(this.sound) || isUndefined(this.sound.audioCtx)) {
+		this.sound = new znakeSound(this.config.soundVolume);
+	}
 }
 
-ManualGame.prototype.start = function () {
-	Game.prototype.start.call(this);
+Game.prototype.start = function () {
+	this.lifeCount = 1;
+	this.infoboard.life(this.lifeCount);
+	this.button.beRestartButton();
+	this.control.setForRunning()
+	this.run();
+	this.feeder.dropFood();
+}
+
+Game.prototype.restart = function () {
+	this.lifeCount++;
+	this.infoboard.life(this.lifeCount);
+
+	if (this.isPaused) {
+		this.overlay.popDown();
+		this.isPaused = false;
+	} else {
+		this.stopRunning();
+		this.feeder.stopFeeding();
+	}
+	this.movingTimeStep = this.config.movingTimeStep;
+	this.worm.reset();
+	this.control.setForRunning();
+	this.run();
 	this.feeder.feed();
 }
 
-ManualGame.prototype.restart = function () {
-	Game.prototype.restart.call(this);
+Game.prototype.run = function () {
+	this.runLoopId++;
+	let me = this;
+	this.runLoopHandle = setInterval(function () {
+		let direction = me.ai.getNextDirection();
+		me.control.funcs[direction]();
+		me.worm.update();
+	}, me.movingTimeStep);
 }
 
-ManualGame.prototype.run = function () {
-	Game.prototype.run.call(this);
+Game.prototype.stopRunning = function () {
+	clearInterval(this.runLoopHandle);
 }
 
-ManualGame.prototype.stopRunning = function () {
-	Game.prototype.stopRunning.call(this);
+Game.prototype.togglePause = function () {
+	if (this.isPaused) {
+		this.run();
+		this.feeder.feed();
+		this.isPaused = false;
+		this.control.setForRunning();
+		this.overlay.popDown();
+	}
+	else {
+		this.stopRunning();
+		this.feeder.stopFeeding();
+		this.isPaused = true;
+		this.control.setForPause();
+		this.overlay.popUp();
+	}
 }
 
-ManualGame.prototype.togglePause = function () {
-	Game.prototype.togglePause.call(this);
+Game.prototype.gameOver = function () {
+	this.stopRunning();
+	this.feeder.stopFeeding();
+	this.control.disable();
+	this.worm.die();
+	if (this.lifeCount < this.config.ai.lifeCount)
+		this.restart();
+	else {
+		if (this.ai.pickNextModel(this.worm.length)) {
+			this.lifeCount = 0;
+			this.restart();
+		} else {
+			this.ai.generationFinished();
+		}
+	}
 }
 
-ManualGame.prototype.gameOver = function () {
-	Game.prototype.gameOver.call(this);
+Game.prototype.speedUp = function () {
+	this.feeder.dropFood();
 }
 
-ManualGame.prototype.speedUp = function () {
-	Game.prototype.speedUp.call(this);
-}
-
-Object.defineProperties(ManualGame.prototype, {
+Object.defineProperties(Game.prototype, {
 	loopHandle: {
 		get: function () { return this['runningLoop' + this.loopId]; },
 		set: function (val) { this['runningLoop' + this.loopId] = val; }
