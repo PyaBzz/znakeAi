@@ -15,3 +15,23 @@ ModelFactory.prototype.createModel = function () {
     // this.currentModel.compile({ loss: "meanSquaredError", optimizer: optimiser });
     return model;
 }
+
+ModelFactory.prototype.crossOver = function (modelA, modelB) {
+    const biasA = modelA.layers[0].bias.read();
+    const biasB = modelB.layers[0].bias.read();
+    return this.setBias(modelA, this.exchangeBias(biasA, biasB));
+}
+
+ModelFactory.prototype.setBias = function (model, bias) {
+    model.layers[0].bias.write(bias);
+    return model;
+}
+
+ModelFactory.prototype.exchangeBias = function (tensorA, tensorB) {
+    const size = Math.ceil(tensorA.size / 2);
+    return tf.tidy(() => {
+        const a = tensorA.slice([0], [size]);
+        const b = tensorB.slice([size], [size]);
+        return a.concat(b);
+    });
+}

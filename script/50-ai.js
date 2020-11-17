@@ -27,38 +27,18 @@ Ai.prototype.generationFinished = function () {
 
 Ai.prototype.populateNextGeneration = function () {
     let winners = this.getWinners();
-    const crossover1 = this.crossOver(winners[0], winners[1]);
-    const crossover2 = this.crossOver(winners[2], winners[3]);
+    const crossover1 = this.modelFactory.crossOver(winners[0], winners[1]);  //Todo: Get rid of hardcoded number of next population
+    const crossover2 = this.modelFactory.crossOver(winners[2], winners[3]);
     // const mutatedWinners = this.mutateBias(winners);
     const mutatedWinners = [this.modelFactory.createModel(), this.modelFactory.createModel()];
     this.generation = [crossover1, ...winners, crossover2, ...mutatedWinners];
     this.currentModelIndex = 0;
-    log("Next gen: " + this.generation.length);
+    log("Next gen: " + this.generation.length);  //Todo: Add generation counter
     this.currentModel = this.generation[0];
 }
 
 Ai.prototype.getWinners = function () {
     return this.generation.getWithHighest(m => m.score, this.fertileCount);
-}
-
-Ai.prototype.crossOver = function (a, b) {
-    const biasA = a.layers[0].bias.read();
-    const biasB = b.layers[0].bias.read();
-    return this.setBias(a, this.exchangeBias(biasA, biasB));
-}
-
-Ai.prototype.setBias = function (model, bias) {
-    model.layers[0].bias.write(bias);
-    return model;
-}
-
-Ai.prototype.exchangeBias = function (tensorA, tensorB) {
-    const size = Math.ceil(tensorA.size / 2);
-    return tf.tidy(() => {
-        const a = tensorA.slice([0], [size]);
-        const b = tensorB.slice([size], [size]);
-        return a.concat(b);
-    });
 }
 
 // Ai.prototype.mutateBias = function (models) {
