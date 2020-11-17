@@ -19,9 +19,7 @@ Worm.prototype.update = function () {
 
     else if (nextCell.isFood) {
         this.moveHeadTo(nextCell);
-        this.game.sound.foodBeep();
-        this.game.infoboard.updateScore(this.length);
-        this.game.speedUp();
+        this.game.foodEaten();
     }
     else {
         this.moveHeadTo(nextCell);

@@ -114,7 +114,9 @@ Game.prototype.gameOver = function () {
 	}
 }
 
-Game.prototype.speedUp = function () {
+Game.prototype.foodEaten = function () {
+	this.sound.foodBeep();
+	this.infoboard.updateScore(this.worm.length);
 	this.feeder.dropFood();
 }
 
