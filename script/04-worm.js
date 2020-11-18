@@ -16,6 +16,9 @@ Worm = function (game) {
 
 Worm.prototype.update = function () {
     this.age++;
+    let direction = this.getNextDirection();
+    this.game.control.funcs[direction]();
+    this.game.infoboard.updateAge(this.age);
     let nextCell = this.getNextCell();
 
     if (nextCell.isDeadly) {

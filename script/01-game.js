@@ -64,10 +64,7 @@ Game.prototype.run = function () {
 	this.runLoopId++;
 	let me = this;
 	this.runLoopHandle = setInterval(function () {
-		let direction = me.worm.getNextDirection();
-		me.control.funcs[direction]();
 		me.worm.update();
-		me.infoboard.updateAge(me.worm.age);
 	}, me.movingTimeStep);
 }
 
