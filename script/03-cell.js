@@ -5,7 +5,7 @@ Cell = function (rowNumber, colNumber) {
     this.element.className = 'cell';
     this.element.cell = this;
     this.row = rowNumber;
-    this.column = colNumber;
+    this.col = colNumber;
     this.type = cellTypeEnum.blank;
 }
 
@@ -43,5 +43,5 @@ Object.defineProperties(Cell.prototype, {
     isFood: { get: function () { return this.type === cellTypeEnum.food } },
     isBlank: { get: function () { return this.type === cellTypeEnum.blank } },
     isObstacle: { get: function () { return this.type === cellTypeEnum.obstacle } },
-    isDeadly: { get: function () { return this.type === cellTypeEnum.obstacle || this.type === cellTypeEnum.worm } },
+    isDeadly: { get: function () { return this.isObstacle || this.isWorm } },
 });
