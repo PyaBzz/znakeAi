@@ -8,7 +8,6 @@ Worm = function (game) {
     this.previousDirection = 2;
     this.age = 0;
     this.directionFuncs = {};
-    this.mapKeys();
     this.game.infoboard.updateScore(this.length);
     this.inputVectorSize = this.game.grid.width * this.game.grid.height;
     this.brain = this.game.ai.getNextModel();
@@ -17,7 +16,12 @@ Worm = function (game) {
 Worm.prototype.update = function () {
     this.age++;
     let direction = this.getNextDirection();
-    this.game.control.funcs[direction]();
+    if (this.shouldIgnoreDirection(direction)) {
+        dasoo();
+    } else {
+        this.directionQueue.push(direction);
+        this.previousDirection = direction;
+    }
     this.game.infoboard.updateAge(this.age);
     let nextCell = this.getNextCell();
 
@@ -47,26 +51,13 @@ Worm.prototype.moveTail = function () {
 }
 
 Worm.prototype.getNextCell = function () {
-    if (this.directionQueue.hasAny)
+    if (this.directionQueue.hasAny)  //Todo: Get rid of the queue
         this.currentDirection = this.directionQueue.takeFirstOut();
     return this.game.grid.getNextCell(this);
 }
 
 Worm.prototype.disappear = function (nextHeadCell) {
     this.sections.doToAll(s => s.beBlank());
-}
-
-Worm.prototype.mapKeys = function () {
-    let me = this;
-    for (let directionName in directionEnum) {
-        let directionCode = directionEnum[directionName];
-        this.directionFuncs[directionCode] = function () {
-            if (me.shouldIgnoreDirection(directionCode))
-                return;
-            me.directionQueue.push(directionCode);
-            me.previousDirection = directionCode;
-        };
-    }
 }
 
 Worm.prototype.shouldIgnoreDirection = function (dirCode) {

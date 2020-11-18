@@ -82,7 +82,6 @@ Game.prototype.togglePause = function () {
 	else {
 		this.stopRunning();
 		this.isPaused = true;
-		this.control.setForPause();
 		this.overlay.popUp();
 	}
 }
