@@ -11,7 +11,7 @@ Worm = function (game) {
     this.brain = this.game.ai.getNextModel();
 }
 
-Worm.prototype.update = function () {
+Worm.prototype.step = function () {
     this.age++;
     let direction = this.getNextDirection();
     if (this.shouldConsiderDirection(direction)) {

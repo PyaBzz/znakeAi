@@ -15,7 +15,7 @@ Game.prototype.importConfig = function (znakeConf) {
 }
 
 Game.prototype.initialise = function () {
-	this.movingTimeStep = this.config.movingTimeStep;
+	this.wormStepTime = this.config.wormStepTime;
 	this.mouse = new Mouse(this);
 	this.grid = new Grid(this, document.getElementById('grid-container'));
 	this.infoboard = new InfoBoard(this);
@@ -52,7 +52,7 @@ Game.prototype.restart = function () {
 	} else {
 		this.stopRunning();
 	}
-	this.movingTimeStep = this.config.movingTimeStep;
+	this.wormStepTime = this.config.wormStepTime;
 	this.worm.disappear();
 	this.worm = new Worm(this);
 	this.control.setForRunning();
@@ -64,8 +64,8 @@ Game.prototype.run = function () {
 	this.runLoopId++;
 	let me = this;
 	this.runLoopHandle = setInterval(function () {
-		me.worm.update();
-	}, me.movingTimeStep);
+		me.worm.step();
+	}, me.wormStepTime);
 }
 
 Game.prototype.stopRunning = function () {
