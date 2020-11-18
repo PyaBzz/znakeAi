@@ -19,7 +19,7 @@ Worm.prototype.update = function () {
     } else {
         log("Avoid self bite");
     }
-    let nextCell = this.game.grid.getNextCell(this);
+    let nextCell = this.game.grid.getNextCell(this.head, this.currentDirection);
     this.game.infoboard.updateAge(this.age);
 
     if (nextCell.isDeadly) {
@@ -80,16 +80,7 @@ Worm.prototype.getDirectionFromOutput = function (tensor) {
 }
 
 Worm.prototype.getInputVector = function () {
-    return this.game.grid.cells.flat().map(this.getCellValue);
-}
-
-Worm.prototype.getCellValue = function (cell) {
-    if (cell.isFood)
-        return 0;
-    if (cell.isBlank)
-        return 1;
-    if (cell.isDeadly)
-        return 2;
+    return this.game.grid.cells.flat().map(c => c.getValue());
 }
 
 Object.defineProperties(Worm.prototype, {

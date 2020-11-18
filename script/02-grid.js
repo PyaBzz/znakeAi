@@ -41,8 +41,8 @@ Grid.prototype.getCentreCell = function () {
     return this.cells[row][col];
 }
 
-Grid.prototype.getNextCell = function (worm) {
-    return this.nextCellGettingFunctions[worm.currentDirection](this, worm.head);
+Grid.prototype.getNextCell = function (wormHead, direction) {
+    return this.nextCellGettingFunctions[direction](this, wormHead);
 }
 
 Grid.prototype.getBlankCells = function () {

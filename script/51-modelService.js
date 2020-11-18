@@ -9,7 +9,7 @@ ModelService.prototype.initialise = function () {
 
 ModelService.prototype.createModel = function () {
     let model = tf.sequential();
-    model.add(tf.layers.dense({ units: this.inputLayerSize, inputShape: [this.inputVectorSize] }));  //Todo: Make units a function of the grid size
+    model.add(tf.layers.dense({ units: this.inputLayerSize, inputShape: [this.inputVectorSize] }));
     model.add(tf.layers.dense({ units: 4 }));
     // const optimiser = tf.train.sgd(0.1);
     // this.currentModel.compile({ loss: "meanSquaredError", optimizer: optimiser });

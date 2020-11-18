@@ -55,7 +55,7 @@ example.prototype.setBias = function (model, bias) {
 example.prototype.mutateBias = function (population) {
     return population.map(bird => {
         const hiddenLayer = tf.layers.dense({
-            units: NEURONS, //Todo: fix this!
+            units: NEURONS,
             inputShape: [2],
             activation: 'sigmoid',
             kernelInitializer: 'leCunNormal',

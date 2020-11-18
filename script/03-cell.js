@@ -5,7 +5,7 @@ Cell = function (rowNumber, colNumber) {
     this.element.className = 'cell';
     this.element.cell = this;
     this.row = rowNumber;
-    this.column = colNumber;  //Todo: Rename to col
+    this.column = colNumber;
     this.type = cellTypeEnum.blank;
 }
 
@@ -27,6 +27,15 @@ Cell.prototype.beBlank = function () {
 Cell.prototype.beObstacle = function () {
     this.type = cellTypeEnum.obstacle;
     this.element.className = 'obstacle';
+}
+
+Cell.prototype.getValue = function () {
+    if (this.isFood)
+        return 0;
+    if (this.isBlank)
+        return 1;
+    if (this.isDeadly)
+        return 2;
 }
 
 Object.defineProperties(Cell.prototype, {
