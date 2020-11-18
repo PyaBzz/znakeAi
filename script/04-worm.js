@@ -3,9 +3,7 @@ Worm = function (game) {
     this.sections = [];
     this.sections.push(this.game.grid.getStartCell());
     this.head.beWorm();
-    this.directionQueue = [2];
-    this.currentDirection = 2;
-    this.previousDirection = 2;
+    this.currentDirection = directionEnum.right;
     this.age = 0;
     this.directionFuncs = {};
     this.game.infoboard.updateScore(this.length);
@@ -16,14 +14,13 @@ Worm = function (game) {
 Worm.prototype.update = function () {
     this.age++;
     let direction = this.getNextDirection();
-    if (this.shouldIgnoreDirection(direction)) {
-        dasoo();
+    if (this.shouldConsiderDirection(direction)) {
+        this.currentDirection = direction;
     } else {
-        this.directionQueue.push(direction);
-        this.previousDirection = direction;
+        log("Avoid self bite");
     }
+    let nextCell = this.game.grid.getNextCell(this);
     this.game.infoboard.updateAge(this.age);
-    let nextCell = this.getNextCell();
 
     if (nextCell.isDeadly) {
         this.sections.doToAll(s => s.beBlank());
@@ -40,6 +37,28 @@ Worm.prototype.update = function () {
     }
 }
 
+Worm.prototype.getNextDirection = function () {
+    let me = this;
+    let inputVector = this.getInputVector();
+    let modelOutput = tf.tidy(() => {
+        let inputTensor = tf.tensor(inputVector, [1, me.inputVectorSize]);
+        return me.brain.predict(inputTensor, args = { batchSize: 1 });
+    });
+    let direction = this.getDirectionFromOutput(modelOutput);
+    return direction;
+}
+
+Worm.prototype.shouldConsiderDirection = function (dirCode) {
+    if (this.isUnicellular)
+        return true;
+    else {
+        if (dirCode === oppositeDirectionEnum[this.currentDirection]) // No backwards moving
+            return false;
+        else
+            return true;
+    }
+}
+
 Worm.prototype.moveHeadTo = function (nextHeadCell) {
     this.sections.addToFront(nextHeadCell);
     this.head.beWorm();
@@ -50,32 +69,8 @@ Worm.prototype.moveTail = function () {
     this.sections.takeLastOut();
 }
 
-Worm.prototype.getNextCell = function () {
-    if (this.directionQueue.hasAny)  //Todo: Get rid of the queue
-        this.currentDirection = this.directionQueue.takeFirstOut();
-    return this.game.grid.getNextCell(this);
-}
-
 Worm.prototype.disappear = function (nextHeadCell) {
     this.sections.doToAll(s => s.beBlank());
-}
-
-Worm.prototype.shouldIgnoreDirection = function (dirCode) {
-    if (dirCode === this.previousDirection)
-        return true;
-    if (this.isMulticellular && dirCode === oppositeDirectionEnum[this.previousDirection]) // No backwards moving
-        return true;
-}
-
-Worm.prototype.getNextDirection = function () {
-    let me = this;
-    let inputVector = this.getInputVector();
-    let modelOutput = tf.tidy(() => {
-        let inputTensor = tf.tensor(inputVector, [1, me.inputVectorSize]);
-        return me.brain.predict(inputTensor, args = { batchSize: 1 });
-    });
-    let direction = this.getDirectionFromOutput(modelOutput);
-    return direction;
 }
 
 Worm.prototype.getDirectionFromOutput = function (tensor) {
