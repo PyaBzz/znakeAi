@@ -6,10 +6,6 @@ znakeConfig = {
     numberOfFoodCellsAtOnce: 3,
     startAtCentre: true,
     keys: {
-        up: 'E',
-        right: 'F',
-        down: 'D',
-        left: 'S',
         pause: ' ',
     },
     soundVolume: 0.15,  // [0~1]
