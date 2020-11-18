@@ -20,21 +20,19 @@ Ai.prototype.initialise = function () {
 }
 
 Ai.prototype.getNextModel = function () {
-    if (this.pickNextModel()) {
+    this.currentModelIndex++;
+    if (this.currentModelIndex < this.populationCount) {
+        this.currentModel = this.generation[this.currentModelIndex];
         return this.currentModel;
-    } else {
+    }
+    else {
         this.populateNextGeneration();
         return this.currentModel;
     }
 }
 
-Ai.prototype.pickNextModel = function (score) {
-    this.currentModelIndex++;
-    if (this.currentModelIndex < this.populationCount) {
-        this.currentModel = this.generation[this.currentModelIndex];
-        return true;
-    }
-    else return false;
+Ai.prototype.currentModelScored = function (score) {
+    this.currentModel.score = score;
 }
 
 Ai.prototype.populateNextGeneration = function () {
@@ -52,10 +50,6 @@ Ai.prototype.populateNextGeneration = function () {
 
 Ai.prototype.getWinners = function () {
     return this.generation.getWithHighest(m => m.score, this.fertileCount);
-}
-
-Ai.prototype.currentModelScored = function (score) {
-    this.currentModel.score = score;
 }
 
 // Ai.prototype.mutateBias = function (models) {
