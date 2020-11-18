@@ -46,15 +46,8 @@ Worm.prototype.getNextCell = function () {
     return this.game.grid.getNextCell(this);
 }
 
-Worm.prototype.reset = function () {
+Worm.prototype.disappear = function (nextHeadCell) {
     this.doToAllSections(s => s.beBlank());
-    this.sections = [];
-    this.sections.push(this.game.grid.getStartCell());
-    this.head.beWorm();
-    this.game.infoboard.updateScore(this.length);
-    this.directionQueue = [directionEnum.right];
-    this.currentDirection = directionEnum.right;
-    this.previousDirection = directionEnum.right;
 }
 
 Worm.prototype.mapKeys = function () {

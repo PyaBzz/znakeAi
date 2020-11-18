@@ -59,7 +59,8 @@ Game.prototype.restart = function () {
 		this.stopRunning();
 	}
 	this.movingTimeStep = this.config.movingTimeStep;
-	this.worm.reset();
+	this.worm.disappear();
+	this.worm = new Worm(this);
 	this.control.setForRunning();
 	this.feeder.dropFood();
 	this.run();
@@ -97,7 +98,6 @@ Game.prototype.togglePause = function () {
 Game.prototype.wormDied = function () {
 	this.stopRunning();
 	this.control.disable();
-	this.worm = new Worm(this);
 	if (this.lifeCount < this.config.ai.lifeCount)
 		this.restart();
 	else {
