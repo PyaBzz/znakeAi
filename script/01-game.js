@@ -15,7 +15,6 @@ Game.prototype.importConfig = function (znakeConf) {
 }
 
 Game.prototype.initialise = function () {
-	this.lifeCount = 0;
 	this.movingTimeStep = this.config.movingTimeStep;
 	this.mouse = new Mouse(this);
 	this.grid = new Grid(this, document.getElementById('grid-container'));
@@ -40,8 +39,6 @@ Game.prototype.initialiseSound = function () {
 }
 
 Game.prototype.start = function () {
-	this.lifeCount = 1;
-	this.infoboard.updateLifeCount(this.lifeCount);
 	this.button.beRestartButton();
 	this.control.setForRunning()
 	this.feeder.dropFood();
@@ -49,9 +46,6 @@ Game.prototype.start = function () {
 }
 
 Game.prototype.restart = function () {
-	this.lifeCount++;
-	this.infoboard.updateLifeCount(this.lifeCount);
-
 	if (this.isPaused) {
 		this.overlay.popDown();
 		this.isPaused = false;
@@ -99,15 +93,10 @@ Game.prototype.togglePause = function () {
 Game.prototype.wormDied = function () {
 	this.stopRunning();
 	this.control.disable();
-	if (this.lifeCount < this.config.ai.lifeCount)
+	if (this.ai.pickNextModel(this.worm.length)) {
 		this.restart();
-	else {
-		if (this.ai.pickNextModel(this.worm.length)) {
-			this.lifeCount = 0;
-			this.restart();
-		} else {
-			this.ai.generationFinished();
-		}
+	} else {
+		this.ai.generationFinished();
 	}
 }
 

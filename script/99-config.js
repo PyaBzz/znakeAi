@@ -14,7 +14,6 @@ znakeConfig = {
     },
     soundVolume: 0.15,  // [0~1]
     ai: {
-        lifeCount: 1,
         populationCount: 8,
         layerToInputRatio: 4,
     }
