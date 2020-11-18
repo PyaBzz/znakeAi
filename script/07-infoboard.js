@@ -1,6 +1,7 @@
 InfoBoard = function (game) {
     this.game = game;
     this.score = document.getElementById('score');
+    this.age = document.getElementById('age');
     this.lifeCount = document.getElementById('life-count');
 }
 
@@ -8,7 +9,11 @@ InfoBoard.prototype.updateScore = function (number) {
     this.score.innerHTML = number;
 }
 
-InfoBoard.prototype.life = function (number) {
+InfoBoard.prototype.updateAge = function (number) {
+    this.age.innerHTML = number;
+}
+
+InfoBoard.prototype.updateLifeCount = function (number) {
     this.lifeCount.innerHTML = number;
 }
 

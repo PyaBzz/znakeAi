@@ -41,7 +41,7 @@ Game.prototype.initialiseSound = function () {
 
 Game.prototype.start = function () {
 	this.lifeCount = 1;
-	this.infoboard.life(this.lifeCount);
+	this.infoboard.updateLifeCount(this.lifeCount);
 	this.button.beRestartButton();
 	this.control.setForRunning()
 	this.feeder.dropFood();
@@ -50,7 +50,7 @@ Game.prototype.start = function () {
 
 Game.prototype.restart = function () {
 	this.lifeCount++;
-	this.infoboard.life(this.lifeCount);
+	this.infoboard.updateLifeCount(this.lifeCount);
 
 	if (this.isPaused) {
 		this.overlay.popDown();
@@ -73,6 +73,7 @@ Game.prototype.run = function () {
 		let direction = me.ai.getNextDirection();
 		me.control.funcs[direction]();
 		me.worm.update();
+		me.infoboard.updateAge(me.worm.age);
 	}, me.movingTimeStep);
 }
 
