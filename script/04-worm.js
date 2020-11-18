@@ -17,7 +17,7 @@ Worm.prototype.update = function () {
     let nextCell = this.getNextCell();
 
     if (nextCell.isDeadly) {
-        this.doToAllSections(s => s.beBlank());
+        this.sections.doToAll(s => s.beBlank());
         this.game.wormDied();
     }
     else if (nextCell.isFood) {
@@ -47,7 +47,7 @@ Worm.prototype.getNextCell = function () {
 }
 
 Worm.prototype.disappear = function (nextHeadCell) {
-    this.doToAllSections(s => s.beBlank());
+    this.sections.doToAll(s => s.beBlank());
 }
 
 Worm.prototype.mapKeys = function () {
@@ -68,10 +68,6 @@ Worm.prototype.shouldIgnoreDirection = function (dirCode) {
         return true;
     if (this.isMulticellular && dirCode === oppositeDirectionEnum[this.previousDirection]) // No backwards moving
         return true;
-}
-
-Worm.prototype.doToAllSections = function (func) {
-    this.sections.forEach(function (section) { func(section); });
 }
 
 Object.defineProperties(Worm.prototype, {
