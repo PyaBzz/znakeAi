@@ -11,13 +11,7 @@ Worm = function (game) {
     this.mapKeys();
     this.game.infoboard.updateScore(this.length);
     this.inputVectorSize = this.game.grid.width * this.game.grid.height;
-    if (this.game.ai.pickNextModel(this.length)) {
-        this.brain = this.game.ai.currentModel;
-    } else {
-        this.game.ai.generationFinished();
-        this.game.ai.pickNextModel(this.length);
-        this.brain = this.game.ai.currentModel;
-    }
+    this.brain = this.game.ai.getNextModel();
 }
 
 Worm.prototype.update = function () {
@@ -26,6 +20,7 @@ Worm.prototype.update = function () {
 
     if (nextCell.isDeadly) {
         this.sections.doToAll(s => s.beBlank());
+        this.game.ai.currentModelScored(this.length);
         this.game.wormDied();
     }
     else if (nextCell.isFood) {

@@ -18,8 +18,22 @@ Ai.prototype.initialise = function () {
     this.currentModel = this.generation[0];
 }
 
-Ai.prototype.generationFinished = function () {
-    this.populateNextGeneration();
+Ai.prototype.getNextModel = function () {
+    if (this.pickNextModel()) {
+        return this.currentModel;
+    } else {
+        this.populateNextGeneration();
+        return this.currentModel;
+    }
+}
+
+Ai.prototype.pickNextModel = function (score) {
+    this.currentModelIndex++;
+    if (this.currentModelIndex < this.populationCount) {
+        this.currentModel = this.generation[this.currentModelIndex];
+        return true;
+    }
+    else return false;
 }
 
 Ai.prototype.populateNextGeneration = function () {
@@ -36,6 +50,10 @@ Ai.prototype.populateNextGeneration = function () {
 
 Ai.prototype.getWinners = function () {
     return this.generation.getWithHighest(m => m.score, this.fertileCount);
+}
+
+Ai.prototype.currentModelScored = function (score) {
+    this.currentModel.score = score;
 }
 
 // Ai.prototype.mutateBias = function (models) {
@@ -56,13 +74,3 @@ Ai.prototype.getWinners = function () {
 //         return model;
 //     });
 // }
-
-Ai.prototype.pickNextModel = function (score) {
-    this.currentModel.score = score;
-    this.currentModelIndex++;
-    if (this.currentModelIndex < this.populationCount) {
-        this.currentModel = this.generation[this.currentModelIndex];
-        return true;
-    }
-    else return false;
-}
