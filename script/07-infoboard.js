@@ -2,7 +2,7 @@ InfoBoard = function (game) {
     this.game = game;
     this.score = document.getElementById('score');
     this.age = document.getElementById('age');
-    this.lifeCount = document.getElementById('generation');
+    this.generation = document.getElementById('generation');
 }
 
 InfoBoard.prototype.updateScore = function (number) {
@@ -14,7 +14,7 @@ InfoBoard.prototype.updateAge = function (number) {
 }
 
 InfoBoard.prototype.updateGeneration = function (number) {
-    this.lifeCount.innerHTML = number;
+    this.generation.innerHTML = number;
 }
 
 InfoBoard.prototype.reset = function () {

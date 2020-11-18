@@ -2,12 +2,13 @@ Ai = function (game) {
     this.game = game;
     this.runLoopId = 0;
     this.generation = [];
+    this.generationNumber = 1;
     this.fertileCount = 4;
     this.neurons = 6; //Todo: What is it used for?
     this.populationCount = this.game.config.ai.populationCount;
     this.inputVectorSize = this.game.grid.width * this.game.grid.height;
     this.modelService = new ModelService(game);
-
+    this.game.infoboard.updateGeneration(this.generationNumber);
     this.initialise();
 }
 
@@ -44,8 +45,9 @@ Ai.prototype.populateNextGeneration = function () {
     const mutatedWinners = [this.modelService.createModel(), this.modelService.createModel()];
     this.generation = [crossover1, ...winners, crossover2, ...mutatedWinners];
     this.currentModelIndex = 0;
-    log("Next gen: " + this.generation.length);  //Todo: Add generation counter
     this.currentModel = this.generation[0];
+    this.generationNumber++;
+    this.game.infoboard.updateGeneration(this.generationNumber);
 }
 
 Ai.prototype.getWinners = function () {
