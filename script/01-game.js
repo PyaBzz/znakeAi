@@ -64,7 +64,7 @@ Game.prototype.run = function () {
 	this.runLoopId++;
 	let me = this;
 	this.runLoopHandle = setInterval(function () {
-		let direction = me.ai.getNextDirection();
+		let direction = me.worm.getNextDirection();
 		me.control.funcs[direction]();
 		me.worm.update();
 		me.infoboard.updateAge(me.worm.age);
@@ -93,11 +93,7 @@ Game.prototype.togglePause = function () {
 Game.prototype.wormDied = function () {
 	this.stopRunning();
 	this.control.disable();
-	if (this.ai.pickNextModel(this.worm.length)) {
-		this.restart();
-	} else {
-		this.ai.generationFinished();
-	}
+	this.restart();
 }
 
 Game.prototype.foodEaten = function () {

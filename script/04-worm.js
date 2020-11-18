@@ -10,6 +10,14 @@ Worm = function (game) {
     this.directionFuncs = {};
     this.mapKeys();
     this.game.infoboard.updateScore(this.length);
+    this.inputVectorSize = this.game.grid.width * this.game.grid.height;
+    if (this.game.ai.pickNextModel(this.length)) {
+        this.brain = this.game.ai.currentModel;
+    } else {
+        this.game.ai.generationFinished();
+        this.game.ai.pickNextModel(this.length);
+        this.brain = this.game.ai.currentModel;
+    }
 }
 
 Worm.prototype.update = function () {
@@ -68,6 +76,36 @@ Worm.prototype.shouldIgnoreDirection = function (dirCode) {
         return true;
     if (this.isMulticellular && dirCode === oppositeDirectionEnum[this.previousDirection]) // No backwards moving
         return true;
+}
+
+Worm.prototype.getNextDirection = function () {
+    let me = this;
+    let inputVector = this.getInputVector();
+    let modelOutput = tf.tidy(() => {
+        let inputTensor = tf.tensor(inputVector, [1, me.inputVectorSize]);
+        return me.brain.predict(inputTensor, args = { batchSize: 1 });
+    });
+    let direction = this.getDirectionFromOutput(modelOutput);
+    return direction;
+}
+
+Worm.prototype.getDirectionFromOutput = function (tensor) {
+    let array = tensor.arraySync()[0];
+    let indexOfMax = array.getIndexOfMax();
+    return indexOfMax + 1;  // because directions start from 1
+}
+
+Worm.prototype.getInputVector = function () {
+    return this.game.grid.cells.flat().map(this.getCellValue);
+}
+
+Worm.prototype.getCellValue = function (cell) {
+    if (cell.isFood)
+        return 0;
+    if (cell.isBlank)
+        return 1;
+    if (cell.isDeadly)
+        return 2;
 }
 
 Object.defineProperties(Worm.prototype, {

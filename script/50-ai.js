@@ -20,7 +20,6 @@ Ai.prototype.initialise = function () {
 
 Ai.prototype.generationFinished = function () {
     this.populateNextGeneration();
-    this.game.restart();
 }
 
 Ai.prototype.populateNextGeneration = function () {
@@ -66,45 +65,4 @@ Ai.prototype.pickNextModel = function (score) {
         return true;
     }
     else return false;
-}
-
-Ai.prototype.getNextDirection = function () {
-    // let myRandom = new Random();
-    // return myRandom.pickElement(Object.values(directionEnum));
-    let me = this;
-    let inputVector = this.getInputVector();
-    let modelOutput = tf.tidy(() => {
-        let inputTensor = tf.tensor(inputVector, [1, me.inputVectorSize]);
-        return me.currentModel.predict(inputTensor, args = { batchSize: 1 });
-    });
-    let direction = this.getDirectionFromOutput(modelOutput);
-    return direction;
-}
-
-Ai.prototype.getDirectionFromOutput = function (tensor) {
-    // tensor.print();
-    let array = tensor.arraySync()[0];
-    let indexOfMax = array.getIndexOfMax();
-    return indexOfMax + 1;  // because directions start from 1
-}
-
-Ai.prototype.getInputMatrix = function () {
-    let gridCells = this.game.grid.cells;
-    let values = [];
-    for (let row of gridCells)
-        values.push(row.map(this.getCellValue));
-    return values;
-}
-
-Ai.prototype.getInputVector = function () {
-    return this.game.grid.cells.flat().map(this.getCellValue);
-}
-
-Ai.prototype.getCellValue = function (cell) {
-    if (cell.isFood)
-        return 0;
-    if (cell.isBlank)
-        return 1;
-    if (cell.isDeadly)
-        return 2;
 }
