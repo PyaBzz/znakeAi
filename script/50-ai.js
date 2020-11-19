@@ -36,7 +36,7 @@ Ai.prototype.currentModelDied = function (length, age) {
 }
 
 Ai.prototype.populateNextGeneration = function () {
-    let winners = this.getWinners();
+    let winners = this.getTheBest();
     const crossover1 = this.modelService.crossOver(winners[0], winners[1]);  //Todo: Get rid of hardcoded number of next population
     const crossover2 = this.modelService.crossOver(winners[2], winners[3]);
     // const mutatedWinners = this.mutateBias(winners);
@@ -48,7 +48,7 @@ Ai.prototype.populateNextGeneration = function () {
     this.game.infoboard.updateGeneration(this.generationNumber);
 }
 
-Ai.prototype.getWinners = function () {
+Ai.prototype.getTheBest = function () {
     return this.generation.getWithHighest(m => m.wormLength * 20 + m.age, this.reproducingPopulation);
 }
 
