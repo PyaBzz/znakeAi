@@ -37,11 +37,10 @@ Ai.prototype.currentModelDied = function (length, age) {
 
 Ai.prototype.populateNextGeneration = function () {
     let winners = this.getTheBest();
-    const crossover1 = this.modelService.crossOver(winners[0], winners[1]);  //Todo: Get rid of hardcoded number of next population
-    const crossover2 = this.modelService.crossOver(winners[2], winners[3]);
-    // const mutatedWinners = this.mutateBias(winners);
+    let offspring = this.modelService.getCrossovers(winners);
+    // const mutatedWinners = this.mutateBias(winners);  //Todo: Use these in the generation
     const mutatedWinners = [this.modelService.createModel(), this.modelService.createModel()];
-    this.generation = [crossover1, ...winners, crossover2, ...mutatedWinners];
+    this.generation = [...offspring, ...winners, ...mutatedWinners];
     this.currentModelIndex = 0;
     this.currentModel = this.generation[0];
     this.generationNumber++;

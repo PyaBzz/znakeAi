@@ -16,6 +16,19 @@ ModelService.prototype.createModel = function () {
     return model;
 }
 
+ModelService.prototype.getCrossovers = function (parentWorms) {
+    let children = []
+    let numberOfMatings = Math.floor(parentWorms.length / 2);
+    for (i = 0; i < numberOfMatings; i++) {
+        let mother = parentWorms[2 * i];
+        let father = parentWorms[2 * i + 1];
+        children.push(this.crossOver(mother, father));
+    }
+    // if (children.length % 2)
+    //     children.push(parentWorms.last);
+    return children;
+}
+
 ModelService.prototype.crossOver = function (modelA, modelB) {
     const biasA = modelA.layers[0].bias.read();
     const biasB = modelB.layers[0].bias.read();
