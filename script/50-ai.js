@@ -50,7 +50,7 @@ Ai.prototype.populateNextGeneration = function () {
 }
 
 Ai.prototype.getWinners = function () {
-    return this.generation.getWithHighest(m => m.length, this.fertileCount);
+    return this.generation.getWithHighest(m => m.wormLength * 20 + m.age, this.fertileCount);
 }
 
 // Ai.prototype.mutateBias = function (models) {
