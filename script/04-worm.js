@@ -1,8 +1,12 @@
 Worm = function (game) {
     this.game = game;
     this.sections = [];
-    this.sections.push(this.game.grid.getStartCell());
+    let origin = this.game.grid.getStartCell();
+    let originIsFood = origin.isFood;
+    this.sections.push(origin);
     this.head.beWorm();
+    if (originIsFood)
+        this.game.feeder.dropFood();
     this.currentDirection = directionEnum.right;
     this.age = 0;
     this.directionFuncs = {};

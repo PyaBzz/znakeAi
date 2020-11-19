@@ -41,7 +41,7 @@ Game.prototype.initialiseSound = function () {
 Game.prototype.start = function () {
 	this.button.beRestartButton();
 	this.control.setForRunning()
-	this.feeder.dropFood();
+	this.feeder.dropFoodInitial();
 	this.run();
 }
 
@@ -56,7 +56,6 @@ Game.prototype.restart = function () {
 	this.worm.disappear();
 	this.worm = new Worm(this);
 	this.control.setForRunning();
-	this.feeder.dropFood();
 	this.run();
 }
 
