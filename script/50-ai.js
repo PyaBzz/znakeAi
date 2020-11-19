@@ -4,8 +4,7 @@ Ai = function (game) {
     this.generation = [];
     this.generationNumber = 1;
     this.fertileCount = 4;
-    this.neurons = 6; //Todo: What is it used for?
-    this.populationCount = this.game.config.ai.populationCount;
+    this.population = this.game.config.ai.population;
     this.inputVectorSize = this.game.grid.width * this.game.grid.height;
     this.modelService = new ModelService(game);
     this.game.infoboard.updateGeneration(this.generationNumber);
@@ -13,7 +12,7 @@ Ai = function (game) {
 }
 
 Ai.prototype.initialise = function () {
-    for (let i = 0; i < this.populationCount; i++)
+    for (let i = 0; i < this.population; i++)
         this.generation.push(this.modelService.createModel());
     this.currentModelIndex = 0;
     this.currentModel = this.generation[0];
@@ -21,7 +20,7 @@ Ai.prototype.initialise = function () {
 
 Ai.prototype.getNextModel = function () {
     this.currentModelIndex++;
-    if (this.currentModelIndex < this.populationCount) {
+    if (this.currentModelIndex < this.population) {
         this.currentModel = this.generation[this.currentModelIndex];
         return this.currentModel;
     }
