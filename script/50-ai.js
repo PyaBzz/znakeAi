@@ -3,8 +3,8 @@ Ai = function (game) {
     this.runLoopId = 0;
     this.generation = [];
     this.generationNumber = 1;
-    this.fertileCount = 4;
     this.population = this.game.config.ai.population;
+    this.reproducingPopulation = this.game.config.ai.reproducingPopulation;
     this.inputVectorSize = this.game.grid.width * this.game.grid.height;
     this.modelService = new ModelService(game);
     this.game.infoboard.updateGeneration(this.generationNumber);
@@ -49,7 +49,7 @@ Ai.prototype.populateNextGeneration = function () {
 }
 
 Ai.prototype.getWinners = function () {
-    return this.generation.getWithHighest(m => m.wormLength * 20 + m.age, this.fertileCount);
+    return this.generation.getWithHighest(m => m.wormLength * 20 + m.age, this.reproducingPopulation);
 }
 
 // Ai.prototype.mutateBias = function (models) {

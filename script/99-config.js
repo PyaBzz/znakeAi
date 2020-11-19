@@ -10,9 +10,10 @@ znakeConfig = {
     },
     soundVolume: 0.15,  // [0~1]
     ai: {
-        population: 8,
         layerToInputRatio: 4,
         maxWormAge: 20,
+        population: 8,
+        reproducingPopulation: 4,
     }
 }
 
