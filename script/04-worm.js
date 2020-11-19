@@ -1,5 +1,7 @@
 Worm = function (game) {
     this.game = game;
+    this.maxAge = this.game.config.ai.maxWormAge;
+    this.age = 0;
     this.sections = [];
     let origin = this.game.grid.getStartCell();
     let originIsFood = origin.isFood;
@@ -8,7 +10,6 @@ Worm = function (game) {
     if (originIsFood)
         this.game.feeder.dropFood();
     this.currentDirection = directionEnum.right;
-    this.age = 0;
     this.directionFuncs = {};
     this.game.infoboard.updateScore(this.length);
     this.inputVectorSize = this.game.grid.width * this.game.grid.height;
@@ -21,15 +22,12 @@ Worm.prototype.step = function () {
     if (this.shouldConsiderDirection(direction)) {
         this.currentDirection = direction;
     } else {
-        log("Avoid self bite");
+        //
     }
     let nextCell = this.game.grid.getNextCell(this.head, this.currentDirection);
-    this.game.infoboard.updateAge(this.age);
 
     if (nextCell.isDeadly) {
-        this.sections.doToAll(s => s.beBlank());
-        this.game.ai.currentModelScored(this.length);
-        this.game.wormDied();
+        this.die();
     }
     else if (nextCell.isFood) {
         this.moveHeadTo(nextCell);
@@ -39,6 +37,9 @@ Worm.prototype.step = function () {
         this.moveHeadTo(nextCell);
         this.moveTail();
     }
+    this.game.infoboard.updateAge(this.age);
+    if (this.age === this.maxAge)
+        this.die();
 }
 
 Worm.prototype.getNextDirection = function () {
@@ -75,6 +76,12 @@ Worm.prototype.moveTail = function () {
 
 Worm.prototype.disappear = function (nextHeadCell) {
     this.sections.doToAll(s => s.beBlank());
+}
+
+Worm.prototype.die = function (nextHeadCell) {
+    this.sections.doToAll(s => s.beBlank());
+    this.game.ai.currentModelDied(this.length, this.age);
+    this.game.wormDied();
 }
 
 Worm.prototype.getDirectionFromOutput = function (tensor) {

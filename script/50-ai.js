@@ -31,8 +31,9 @@ Ai.prototype.getNextModel = function () {
     }
 }
 
-Ai.prototype.currentModelScored = function (score) {
-    this.currentModel.score = score;
+Ai.prototype.currentModelDied = function (length, age) {
+    this.currentModel.wormLength = length;
+    this.currentModel.age = age;
 }
 
 Ai.prototype.populateNextGeneration = function () {
@@ -49,7 +50,7 @@ Ai.prototype.populateNextGeneration = function () {
 }
 
 Ai.prototype.getWinners = function () {
-    return this.generation.getWithHighest(m => m.score, this.fertileCount);
+    return this.generation.getWithHighest(m => m.length, this.fertileCount);
 }
 
 // Ai.prototype.mutateBias = function (models) {

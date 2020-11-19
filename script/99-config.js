@@ -12,6 +12,7 @@ znakeConfig = {
     ai: {
         populationCount: 8,
         layerToInputRatio: 4,
+        maxWormAge: 20,
     }
 }
 
