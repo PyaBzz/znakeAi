@@ -17,6 +17,7 @@ znakeConfig = {
 }
 
 
+//Todo: Reduce output paths to 3 for "Forward", "Left", "Right"
 //Todo: Experiment with model save, load, etc.
 //Todo: Experiment with model history, crossover, genetic algorithm, etc.
 //Todo: Use the tidy() function for model operations

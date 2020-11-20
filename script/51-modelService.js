@@ -58,7 +58,7 @@ ModelService.prototype.exchangeBias = function (tensorA, tensorB) {
     });
 }
 
-// ModelService.prototype.mutateBias = function (models) {  //Todo: Is this of any use?
+// ModelService.prototype.mutateBias = function (models) {  // Is this of any use?
 //     let me = this;
 //     let rand = new Random();
 //     return models.map(item => {
