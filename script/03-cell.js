@@ -31,11 +31,11 @@ Cell.prototype.beObstacle = function () {
 
 Cell.prototype.getValue = function () {
     if (this.isFood)
-        return 0;
-    if (this.isBlank)
-        return 1;
-    if (this.isDeadly)
         return 2;
+    if (this.isBlank)
+        return 0;
+    if (this.isDeadly)
+        return -2;
 }
 
 Object.defineProperties(Cell.prototype, {

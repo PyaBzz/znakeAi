@@ -1,9 +1,9 @@
 znakeConfig = {
     devMode: true,
-    gridHeight: 8,  // cells >= 4
-    gridWidth: 8,  // cells >= 4
+    gridHeight: 14,  // cells >= 4
+    gridWidth: 14,  // cells >= 4
     wormStepTime: 80,  // milliseconds
-    numberOfFoodCellsAtOnce: 3,
+    numberOfFoodCellsAtOnce: 10,
     startAtCentre: true,
     keys: {
         pause: ' ',
@@ -11,7 +11,7 @@ znakeConfig = {
     soundVolume: 0.15,  // [0~1]
     ai: {
         layerToInputRatio: 4,
-        maxWormAge: 20,
+        maxWormAge: 40,
         population: 20,
         reproducingPopulation: 10,
     }
