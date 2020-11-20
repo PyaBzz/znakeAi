@@ -41,10 +41,11 @@ ModelService.prototype.setBias = function (model, bias) {
 }
 
 ModelService.prototype.exchangeBias = function (tensorA, tensorB) {
-    const size = Math.ceil(tensorA.size / 2);
+    const firstHalfSize = Math.ceil(tensorA.size / 2);
+    const secondHalfSize = tensorA.size - firstHalfSize;
     return tf.tidy(() => {
-        const a = tensorA.slice([0], [size]);
-        const b = tensorB.slice([size], [size]);
+        const a = tensorA.slice([0], [firstHalfSize]);
+        const b = tensorB.slice([firstHalfSize], [secondHalfSize]);
         return a.concat(b);
     });
 }
