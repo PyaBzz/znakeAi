@@ -8,7 +8,6 @@ znakeConfig = {
     keys: {
         pause: ' ',
     },
-    soundVolume: 0.15,  // [0~1]
     ai: {
         layerToInputRatio: 4,
         maxWormAge: 40,

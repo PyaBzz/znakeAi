@@ -27,15 +27,7 @@ Game.prototype.initialise = function () {
 }
 
 Game.prototype.splashClicked = function () {
-	this.initialiseSound();
-	let me = this;
 	this.worm = new Worm(this);
-}
-
-Game.prototype.initialiseSound = function () {
-	if (isUndefined(this.sound) || isUndefined(this.sound.audioCtx)) {
-		this.sound = new znakeSound(this.config.soundVolume);
-	}
 }
 
 Game.prototype.start = function () {
@@ -92,7 +84,6 @@ Game.prototype.wormDied = function () {
 }
 
 Game.prototype.foodEaten = function () {
-	this.sound.foodBeep();
 	this.infoboard.updateScore(this.worm.length);
 	this.feeder.dropFood();
 }
