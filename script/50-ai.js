@@ -38,9 +38,11 @@ Ai.prototype.currentModelDied = function (length, age) {
 Ai.prototype.populateNextGeneration = function () {
     let winners = this.getTheBest();
     let offspring = this.modelService.getCrossovers(winners);
-    // const mutatedWinners = this.mutateBias(winners);  //Todo: Use these in the generation
-    const mutatedWinners = [this.modelService.createModel(), this.modelService.createModel()];
-    this.generation = [...offspring, ...winners, ...mutatedWinners];
+    // const mutatedWinners = this.modelService.mutateBias(winners);
+    // const mutatedWinners = [this.modelService.createModel(), this.modelService.createModel()];
+    this.generation = [...offspring, ...winners];
+    for (i = this.generation.length; i < this.population; i++)
+        this.generation[i] = this.modelService.createModel();
     this.currentModelIndex = 0;
     this.currentModel = this.generation[0];
     this.generationNumber++;
@@ -50,22 +52,3 @@ Ai.prototype.populateNextGeneration = function () {
 Ai.prototype.getTheBest = function () {
     return this.generation.getWithHighest(m => m.wormLength * 20 + m.age, this.reproducingPopulation);
 }
-
-// Ai.prototype.mutateBias = function (models) {
-//     let me = this;
-//     let rand = new Random();
-//     return models.map(item => {
-//         let model = tf.sequential();
-//         model.add(tf.layers.dense({
-//             units: this.inputLayerSize,
-//             inputShape: [this.inputVectorSize],
-//             activation: 'sigmoid',
-//             kernelInitializer: 'leCunNormal',
-//             useBias: true,
-//             biasInitializer: tf.initializers.constant({ value: rand.getInRange(-2, 2), }),
-//         }));
-//         model.add(tf.layers.dense({ units: 4 }));
-
-//         return model;
-//     });
-// }

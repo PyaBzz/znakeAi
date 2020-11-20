@@ -48,3 +48,22 @@ ModelService.prototype.exchangeBias = function (tensorA, tensorB) {
         return a.concat(b);
     });
 }
+
+// ModelService.prototype.mutateBias = function (models) {  //Todo: Is this of any use?
+//     let me = this;
+//     let rand = new Random();
+//     return models.map(item => {
+//         let model = tf.sequential();
+//         model.add(tf.layers.dense({
+//             units: me.inputLayerSize,
+//             inputShape: [me.inputVectorSize],
+//             activation: 'sigmoid',
+//             kernelInitializer: 'leCunNormal',
+//             useBias: true,
+//             biasInitializer: tf.initializers.constant({ value: rand.getInRange(-2, 2), }),
+//         }));
+//         model.add(tf.layers.dense({ units: 4 }));
+
+//         return model;
+//     });
+// }
