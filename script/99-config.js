@@ -17,6 +17,9 @@ znakeConfig = {
 }
 
 
+//Todo: Determine number and size of neural layers in config
+//Todo: Change exchangeBias so that exchange happens at all layers
+//Todo: Make sure bias and activation are the ones used in flappy bird
 //Todo: Reduce output paths to 3 for "Forward", "Left", "Right"
 //Todo: Experiment with model save, load, etc.
 //Todo: Experiment with model history, crossover, genetic algorithm, etc.
