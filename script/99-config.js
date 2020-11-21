@@ -9,7 +9,7 @@ znakeConfig = {
         pause: ' ',
     },
     ai: {
-        layerToInputRatio: 4,
+        layerSizes: [100, 60, 4],
         maxWormAge: 40,
         population: 40,
         reproducingPopulation: 20,
@@ -17,7 +17,6 @@ znakeConfig = {
 }
 
 
-//Todo: Determine number and size of neural layers in config
 //Todo: Change exchangeBias so that exchange happens at all layers
 //Todo: Make sure bias and activation are the ones used in flappy bird
 //Todo: Reduce output paths to 3 for "Forward", "Left", "Right"

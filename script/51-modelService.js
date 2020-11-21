@@ -1,7 +1,7 @@
 ModelService = function (game) {
     this.game = game;
-    this.inputVectorSize = this.game.grid.width * this.game.grid.height;
-    this.inputLayerSize = Math.floor(this.inputVectorSize / this.game.config.ai.layerToInputRatio);
+    this.layerSizes = game.config.ai.layerSizes;
+    this.inputVectorSize = game.grid.width * game.grid.height;
 }
 
 ModelService.prototype.initialise = function () {
@@ -10,15 +10,23 @@ ModelService.prototype.initialise = function () {
 ModelService.prototype.createModel = function () {
     let model = tf.sequential();
 
-    let layerSize = this.inputLayerSize;
-    model.add(tf.layers.dense({ units: layerSize, inputShape: [this.inputVectorSize] }));
-
-    layerSize = Math.floor(layerSize / this.game.config.ai.layerToInputRatio);
-    model.add(tf.layers.dense({ units: layerSize }));
-
-    model.add(tf.layers.dense({ units: layerSize }));
-
-    model.add(tf.layers.dense({ units: 4 }));
+    for (let layerSize of this.layerSizes) {
+        if (model.layers.length === 0)
+            model.add(tf.layers.dense({
+                units: layerSize,
+                inputShape: [this.inputVectorSize],
+                activation: 'sigmoid',
+                kernelInitializer: 'leCunNormal',
+                useBias: true,
+            }));
+        else
+            model.add(tf.layers.dense({
+                units: layerSize,
+                activation: 'sigmoid',
+                kernelInitializer: 'leCunNormal',
+                useBias: true,
+            }));
+    }
     // const optimiser = tf.train.sgd(0.1);
     // this.currentModel.compile({ loss: "meanSquaredError", optimizer: optimiser });
     return model;
