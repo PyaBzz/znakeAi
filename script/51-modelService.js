@@ -46,14 +46,14 @@ ModelService.prototype.getCrossovers = function (parentWorms) {
 }
 
 ModelService.prototype.crossOver = function (modelA, modelB) {
-    const biasA = modelA.layers[0].bias.read();
-    const biasB = modelB.layers[0].bias.read();
-    return this.setBias(modelA, this.exchangeBias(biasA, biasB));
-}
-
-ModelService.prototype.setBias = function (model, bias) {
-    model.layers[0].bias.write(bias);
-    return model;
+    let offspring = modelA; //Todo: Make a clone of modelA here
+    for (let i = 0; i < this.layerSizes.length; i++) {
+        const biasA = offspring.layers[i].bias.read();
+        const biasB = modelB.layers[i].bias.read();
+        const exchangedBias = this.exchangeBias(biasA, biasB);
+        offspring.layers[i].bias.write(exchangedBias);
+    }
+    return offspring;
 }
 
 ModelService.prototype.exchangeBias = function (tensorA, tensorB) {

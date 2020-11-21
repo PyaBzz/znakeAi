@@ -17,7 +17,6 @@ znakeConfig = {
 }
 
 
-//Todo: Change exchangeBias so that exchange happens at all layers
 //Todo: Make sure bias and activation are the ones used in flappy bird
 //Todo: Reduce output paths to 3 for "Forward", "Left", "Right"
 //Todo: Experiment with model save, load, etc.
