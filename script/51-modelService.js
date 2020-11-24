@@ -32,32 +32,31 @@ ModelService.prototype.createModel = function () {
     return model;
 }
 
-ModelService.prototype.getCrossovers = function (parentWorms) {
+ModelService.prototype.getOffsprings = function (parentWorms) {
     let children = []
     let numberOfMatings = Math.floor(parentWorms.length / 2);
     for (i = 0; i < numberOfMatings; i++) {
         let mother = parentWorms[2 * i];
         let father = parentWorms[2 * i + 1];
-        children.push(this.crossOver(mother, father));
+        children.push(this.mate(mother, father));
     }
     // if (children.length % 2)
     //     children.push(parentWorms.last);
     return children;
 }
 
-//Todo: Work with weights instead of bias values
-ModelService.prototype.crossOver = function (modelA, modelB) {
-    let offspring = this.clone(modelA);
+ModelService.prototype.mate = function (mother, father) {
+    let offspring = this.clone(mother);
     for (let i = 0; i < this.layerSizes.length; i++) {
-        const biasA = offspring.layers[i].bias.read();
-        const biasB = modelB.layers[i].bias.read();
-        const exchangedBias = this.exchangeBias(biasA, biasB);
-        offspring.layers[i].bias.write(exchangedBias);
+        const biasesA = offspring.layers[i].bias.read();
+        const biasesB = father.layers[i].bias.read();
+        const mixedBiases = this.getMixture(biasesA, biasesB);
+        offspring.layers[i].bias.write(mixedBiases);
     }
     return offspring;
 }
 
-ModelService.prototype.exchangeBias = function (tensorA, tensorB) {
+ModelService.prototype.getMixture = function (tensorA, tensorB) {
     const firstHalfSize = Math.ceil(tensorA.size / 2);
     const secondHalfSize = tensorA.size - firstHalfSize;
     return tf.tidy(() => {
@@ -68,6 +67,7 @@ ModelService.prototype.exchangeBias = function (tensorA, tensorB) {
 }
 
 ModelService.prototype.clone = function (sourceModel) {
+    //Todo: Should we tidy() here?
     let clone = this.createModel();
     for (let i = 0; i < sourceModel.layers.length; i++) {
         const sourceLayer = sourceModel.layers[i];

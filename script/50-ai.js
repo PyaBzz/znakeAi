@@ -37,7 +37,7 @@ Ai.prototype.currentModelDied = function (length, age) {
 
 Ai.prototype.populateNextGeneration = function () {
     let winners = this.getTheBest();
-    let offspring = this.modelService.getCrossovers(winners);
+    let offspring = this.modelService.getOffsprings(winners);
     // const mutatedWinners = this.modelService.mutateBias(winners);
     // const mutatedWinners = [this.modelService.createModel(), this.modelService.createModel()];
     this.generation = [...offspring, ...winners];
