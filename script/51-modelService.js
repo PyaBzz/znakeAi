@@ -63,30 +63,19 @@ ModelService.prototype.mate = function (mother, father) {
         const motherBiases = motherWeights[1];
         const fatherBiases = fatherWeights[1];
 
-        const mixedCoefficients = this.mix2d(motherCoefficients, fatherCoefficients);
-        const mixedBiases = this.mix1d(motherBiases, fatherBiases);
+        const mixedCoefficients = this.mix(motherCoefficients, fatherCoefficients);
+        const mixedBiases = this.mix(motherBiases, fatherBiases);
         childLayer.setWeights([mixedCoefficients, mixedBiases]);
     }
     return offspring;
 }
 
-ModelService.prototype.mix1d = function (tensorA, tensorB) {
-    const firstHalfSize = Math.floor(tensorA.size / 2);
-    const secondHalfSize = tensorA.size - firstHalfSize;
+ModelService.prototype.mix = function (tensorA, tensorB) {
     return tf.tidy(() => {
-        const firstHalf = tensorA.slice([0], [firstHalfSize]);
-        const secondHalf = tensorB.slice([firstHalfSize], [secondHalfSize]);
-        return firstHalf.concat(secondHalf);
-    });
-}
-
-ModelService.prototype.mix2d = function (tensorA, tensorB) {
-    return tf.tidy(() => {
-        const [firstHalf, discardedA] = tf.split(tensorA, 2, 1);
-        const [discardedB, secondHalf] = tf.split(tensorB, 2, 1);
-        const axis = 1;
+        const axis = 0;
+        const [firstHalf, discardedA] = tf.split(tensorA, 2, axis);
+        const [discardedB, secondHalf] = tf.split(tensorB, 2, axis);
         res = tf.concat([firstHalf, secondHalf], axis);
-        tf.print(res.shape);
         return res;
     });
 }
