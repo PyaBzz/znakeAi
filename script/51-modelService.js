@@ -48,6 +48,7 @@ ModelService.prototype.getOffsprings = function (parentWorms) {
 }
 
 ModelService.prototype.mate = function (mother, father) {
+    //Todo: Should we tidy() here?
     let offspring = this.clone(mother);
     for (let i = 0; i < mother.layers.length; i++) {
         const motherLayer = mother.layers[i];
@@ -85,10 +86,8 @@ ModelService.prototype.clone = function (sourceModel) {
     let clone = this.createModel();
     for (let i = 0; i < sourceModel.layers.length; i++) {
         const sourceLayer = sourceModel.layers[i];
-        const biases = sourceLayer.bias.read();
         const weights = sourceLayer.getWeights();
         const targetLayer = clone.layers[i];
-        targetLayer.bias.write(biases);
         targetLayer.setWeights(weights);
     }
     return clone;
