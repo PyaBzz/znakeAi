@@ -45,8 +45,9 @@ ModelService.prototype.getCrossovers = function (parentWorms) {
     return children;
 }
 
+//Todo: Work with weights instead of bias values
 ModelService.prototype.crossOver = function (modelA, modelB) {
-    let offspring = modelA; //Todo: Make a clone of modelA here
+    let offspring = this.clone(modelA);
     for (let i = 0; i < this.layerSizes.length; i++) {
         const biasA = offspring.layers[i].bias.read();
         const biasB = modelB.layers[i].bias.read();
@@ -64,6 +65,19 @@ ModelService.prototype.exchangeBias = function (tensorA, tensorB) {
         const b = tensorB.slice([firstHalfSize], [secondHalfSize]);
         return a.concat(b);
     });
+}
+
+ModelService.prototype.clone = function (sourceModel) {
+    let clone = this.createModel();
+    for (let i = 0; i < sourceModel.layers.length; i++) {
+        const sourceLayer = sourceModel.layers[i];
+        const biases = sourceLayer.bias.read();
+        const weights = sourceLayer.getWeights();
+        const targetLayer = clone.layers[i];
+        targetLayer.bias.write(biases);
+        targetLayer.setWeights(weights);
+    }
+    return clone;
 }
 
 // ModelService.prototype.mutateBias = function (models) {  // Is this of any use?

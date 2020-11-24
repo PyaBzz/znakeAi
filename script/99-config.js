@@ -16,8 +16,9 @@ znakeConfig = {
     }
 }
 
-
+//Todo: Lifetime isn't a valid score for worms that circulate all the time! Correct this
 //Todo: Give information about head cell to the worm
+//Todo: Select input values and activation function that preserve information e.g -1 and -10 generate the same output for ReLU
 //Todo: Check if both weights and biases are mutated
 //Todo: Make sure bias and activation are the ones used in flappy bird
 //Todo: Reduce output paths to 3 for "Forward", "Left", "Right"
