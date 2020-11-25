@@ -29,7 +29,7 @@ Ai.prototype.getNextModel = function () {
         return this.currentModel;
     }
 }
-
+//Todo: Add logic to handle the case where a certain success threshold is reached by the worm
 Ai.prototype.currentModelDied = function (length, age) {
     this.currentModel.wormLength = length;
     this.currentModel.age = age;
