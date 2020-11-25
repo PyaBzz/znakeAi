@@ -29,7 +29,7 @@ Ai.prototype.getNextModel = function () {
         return this.currentModel;
     }
 }
-//Todo: Add logic to handle the case where a certain success threshold is reached by the worm
+
 Ai.prototype.currentModelDied = function (length, age) {
     this.currentModel.wormLength = length;
     this.currentModel.age = age;
@@ -42,6 +42,7 @@ Ai.prototype.currentModelDied = function (length, age) {
 
 Ai.prototype.populateNextGeneration = function () {
     let winners = this.getTheBest();
+    winners.shuffle();
     let offspring = this.modelService.getOffsprings(winners);
     // const mutatedWinners = this.modelService.mutateBias(winners);
     // const mutatedWinners = [this.modelService.createModel(), this.modelService.createModel()];
