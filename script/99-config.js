@@ -1,16 +1,20 @@
 znakeConfig = {
     devMode: true,
-    gridHeight: 14,  // cells >= 4
-    gridWidth: 14,  // cells >= 4
-    wormStepTime: 20,  // milliseconds
-    numberOfFoodCellsAtOnce: 10,
+    stepTime: 20,  // milliseconds
     startAtCentre: true,
+    numberOfFoodCellsAtOnce: 10,
+    worm: {
+        maxAge: 40,
+    },
+    grid: {
+        height: 20,  // cells >= 4
+        width: 20,  // cells >= 4
+    },
     keys: {
         pause: ' ',
     },
     ai: {
         layerSizes: [100, 60, 4],
-        maxWormAge: 40,
         population: 40,
         reproducingPopulation: 20,
     }

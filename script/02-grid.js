@@ -1,8 +1,8 @@
 Grid = function (game, container) {
     this.game = game;
     this.container = container;
-    this.height = this.game.config.gridHeight;
-    this.width = this.game.config.gridWidth;
+    this.height = this.game.config.grid.height;
+    this.width = this.game.config.grid.width;
     this.element = document.createElement('table');
     this.element.id = 'grid';
     this.cells = [];
@@ -36,8 +36,8 @@ Grid.prototype.getStartCell = function () {
 }
 
 Grid.prototype.getCentreCell = function () {
-    let row = Math.floor(this.game.config.gridHeight / 2 - 1);
-    let col = Math.floor(this.game.config.gridWidth / 2 - 1);
+    let row = Math.floor(this.game.config.grid.height / 2 - 1);
+    let col = Math.floor(this.game.config.grid.width / 2 - 1);
     return this.cells[row][col];
 }
 

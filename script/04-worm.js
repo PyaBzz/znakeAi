@@ -1,6 +1,6 @@
 Worm = function (game) {
     this.game = game;
-    this.maxAge = this.game.config.ai.maxWormAge;
+    this.maxAge = this.game.config.worm.maxAge;
     this.age = 0;
     this.sections = [];
     let origin = this.game.grid.getStartCell();
