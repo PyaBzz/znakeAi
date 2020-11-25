@@ -1,4 +1,5 @@
-cellTypeEnum = Object.freeze({ "blank": "blank", "obstacle": "obstacle", "worm": "worm", "food": "food" });
+cellTypeEnum = Object.freeze({ "head": "head", "worm": "worm", "obstacle": "obstacle", "blank": "blank", "food": "food" });
+cellValueEnum = Object.freeze({ "head": -2, "worm": -1, "obstacle": -1, "blank": 0, "food": 2 });
 
 Cell = function (rowNumber, colNumber) {
     this.element = document.createElement('td');
@@ -11,6 +12,11 @@ Cell = function (rowNumber, colNumber) {
 
 Cell.prototype.beWorm = function () {
     this.type = cellTypeEnum.worm;
+    this.element.className = 'worm';
+}
+
+Cell.prototype.beHead = function () {
+    this.type = cellTypeEnum.head;
     this.element.className = 'worm';
 }
 
@@ -29,19 +35,11 @@ Cell.prototype.beObstacle = function () {
     this.element.className = 'obstacle';
 }
 
-Cell.prototype.getValue = function () {  //Todo: Change this to a key-value lookup
-    if (this.isFood)
-        return 10;
-    if (this.isBlank)
-        return 0;
-    if (this.isDeadly)  //Todo: Assign head -2, deadly -1, blank 0, food 1
-        return -10;
-}
-
 Object.defineProperties(Cell.prototype, {
     isWorm: { get: function () { return this.type === cellTypeEnum.worm } },
     isFood: { get: function () { return this.type === cellTypeEnum.food } },
     isBlank: { get: function () { return this.type === cellTypeEnum.blank } },
     isObstacle: { get: function () { return this.type === cellTypeEnum.obstacle } },
     isDeadly: { get: function () { return this.isObstacle || this.isWorm } },
+    value: { get: function () { return cellValueEnum[this.type] } },
 });

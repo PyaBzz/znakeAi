@@ -6,7 +6,7 @@ Worm = function (game) {
     let origin = this.game.grid.getStartCell();
     let originIsFood = origin.isFood;
     this.sections.push(origin);
-    this.head.beWorm();
+    this.head.beHead();
     if (originIsFood)
         this.game.feeder.dropFood();
     this.currentDirection = directionEnum.right;
@@ -65,8 +65,9 @@ Worm.prototype.shouldConsiderDirection = function (dirCode) {
 }
 
 Worm.prototype.moveHeadTo = function (nextHeadCell) {
-    this.sections.addToFront(nextHeadCell);
     this.head.beWorm();
+    this.sections.addToFront(nextHeadCell);
+    this.head.beHead();
 }
 
 Worm.prototype.moveTail = function () {
@@ -79,8 +80,8 @@ Worm.prototype.disappear = function (nextHeadCell) {
 }
 
 Worm.prototype.die = function (nextHeadCell) {
-    this.sections.doToAll(s => s.beBlank());
     this.game.ai.currentModelDied(this.length, this.age);
+    this.sections.doToAll(s => s.beBlank());
     this.game.wormDied();
 }
 
@@ -91,7 +92,7 @@ Worm.prototype.getDirectionFromOutput = function (tensor) {
 }
 
 Worm.prototype.getInputVector = function () {
-    return this.game.grid.cells.flat().map(c => c.getValue());
+    return this.game.grid.cells.flat().map(c => c.value);
 }
 
 Object.defineProperties(Worm.prototype, {
