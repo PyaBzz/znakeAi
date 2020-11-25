@@ -93,21 +93,6 @@ ModelService.prototype.clone = function (sourceModel) {
     return clone;
 }
 
-// ModelService.prototype.mutateBias = function (models) {  // Is this of any use?
-//     let me = this;
-//     let rand = new Random();
-//     return models.map(item => {
-//         let model = tf.sequential();
-//         model.add(tf.layers.dense({
-//             units: me.inputLayerSize,
-//             inputShape: [me.inputVectorSize],
-//             activation: 'sigmoid',
-//             kernelInitializer: 'leCunNormal',
-//             useBias: true,
-//             biasInitializer: tf.initializers.constant({ value: rand.getInRange(-2, 2), }),
-//         }));
-//         model.add(tf.layers.dense({ units: 4 }));
-
-//         return model;
-//     });
-// }
+ModelService.prototype.mutateBias = function (model) {
+    //Todo: Implement
+}

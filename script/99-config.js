@@ -15,15 +15,13 @@ znakeConfig = {
         pause: ' ',
     },
     ai: {
-        layerSizes: [100, 60, 4],
+        layerSizes: [100, 60, 4],  // Only even numbers
         population: 40,
-        reproducingPopulation: 20,
+        reproducingPopulation: 20, // Half of the population
     }
 }
 
-//Todo: Lifetime isn't a valid score for worms that circulate all the time! Correct this
-//Todo: Give information about head cell to the worm
-//Todo: Select input values and activation function that preserve information e.g -1 and -10 generate the same output for ReLU
+//Todo: Lifetime is an invalid score for worms that steer circularly all the time!
 //Todo: Check if both weights and biases are mutated
 //Todo: Make sure bias and activation are the ones used in flappy bird
 //Todo: Reduce output paths to 3 for "Forward", "Left", "Right"
