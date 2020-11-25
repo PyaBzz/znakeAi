@@ -5,6 +5,7 @@ znakeConfig = {
     numberOfFoodCellsAtOnce: 10,
     worm: {
         maxAge: 40,
+        targetLength: 6,
     },
     grid: {
         height: 20,  // cells >= 4

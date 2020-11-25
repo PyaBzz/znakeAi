@@ -80,9 +80,8 @@ Worm.prototype.disappear = function (nextHeadCell) {
 }
 
 Worm.prototype.die = function (nextHeadCell) {
-    this.game.ai.currentModelDied(this.length, this.age);
     this.sections.doToAll(s => s.beBlank());
-    this.game.wormDied();
+    this.game.ai.currentModelDied(this.length, this.age);
 }
 
 Worm.prototype.getDirectionFromOutput = function (tensor) {
