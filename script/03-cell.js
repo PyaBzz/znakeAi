@@ -29,12 +29,12 @@ Cell.prototype.beObstacle = function () {
     this.element.className = 'obstacle';
 }
 
-Cell.prototype.getValue = function () {
+Cell.prototype.getValue = function () {  //Todo: Change this to a key-value lookup
     if (this.isFood)
         return 10;
     if (this.isBlank)
         return 0;
-    if (this.isDeadly)
+    if (this.isDeadly)  //Todo: Assign head -2, deadly -1, blank 0, food 1
         return -10;
 }
 
