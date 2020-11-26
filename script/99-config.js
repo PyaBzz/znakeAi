@@ -19,6 +19,7 @@ znakeConfig = {
         population: 60,
         reproducingPopulation: 30, // Half of the population
         activation: activationEnum.relu,
+        kernelInit: kernelInitEnum.randomNormal,
     }
 }
 

@@ -1,0 +1,31 @@
+activationEnum = Object.freeze({
+    "linear": "linear",
+    "elu": "elu",
+    "selu": "selu",
+    "relu": "relu",
+    "relu6": "relu6",
+    "sigmoid": "sigmoid",
+    "hardSigmoid": "hardSigmoid",
+    "softmax": "softmax",
+    "softplus": "softplus",
+    "softsign": "softsign",
+    "tanh": "tanh",
+});
+
+kernelInitEnum = Object.freeze({
+    "zeros": "zeros",
+    "ones": "ones",
+    "constant": "constant",
+    "identity": "identity",
+    "glorotNormal": "glorotNormal",
+    "glorotUniform": "glorotUniform",
+    "heNormal": "heNormal",
+    "heUniform": "heUniform",
+    "leCunNormal": "leCunNormal",
+    "leCunUniform": "leCunUniform",
+    "orthogonal": "orthogonal",
+    "randomNormal": "randomNormal",
+    "randomUniform": "randomUniform",
+    "truncatedNormal": "truncatedNormal",
+    "varianceScaling": "varianceScaling",
+});

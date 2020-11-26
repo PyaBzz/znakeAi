@@ -1,9 +1,8 @@
-activationEnum = Object.freeze({ "linear": "linear", "elu": "elu", "selu": "selu", "relu": "relu", "relu6": "relu6", "sigmoid": "sigmoid", "hardSigmoid": "hardSigmoid", "softmax": "softmax", "softplus": "softplus", "softsign": "softsign", "tanh": "tanh" });
-
 ModelService = function (game) {
     this.game = game;
     this.layerSizes = game.config.ai.layerSizes;
     this.activation = game.config.ai.activation;
+    this.kernelInit = game.config.ai.kernelInit;
     this.inputVectorSize = game.grid.width * game.grid.height;
 }
 
@@ -21,7 +20,7 @@ ModelService.prototype.createModel = function () {
                 activation: this.activation,
                 kernelInitializer: 'leCunNormal',
                 useBias: true,
-                biasInitializer: 'randomNormal',
+                biasInitializer: this.kernelInit,
             }));
         else
             model.add(tf.layers.dense({
@@ -29,7 +28,7 @@ ModelService.prototype.createModel = function () {
                 activation: this.activation,
                 kernelInitializer: 'leCunNormal',
                 useBias: true,
-                biasInitializer: 'randomNormal',
+                biasInitializer: this.kernelInit,
             }));
     }
     // const optimiser = tf.train.sgd(0.1);
