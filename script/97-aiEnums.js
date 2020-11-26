@@ -12,7 +12,7 @@ activationEnum = Object.freeze({
     "tanh": "tanh",
 });
 
-kernelInitEnum = Object.freeze({
+initialiserEnum = Object.freeze({
     "zeros": "zeros",
     "ones": "ones",
     "constant": "constant",

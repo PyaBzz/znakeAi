@@ -3,6 +3,8 @@ ModelService = function (game) {
     this.layerSizes = game.config.ai.layerSizes;
     this.activation = game.config.ai.activation;
     this.kernelInit = game.config.ai.kernelInit;
+    this.useBias = game.config.ai.useBias;
+    this.biasInit = game.config.ai.biasInit;
     this.inputVectorSize = game.grid.width * game.grid.height;
 }
 
@@ -18,17 +20,17 @@ ModelService.prototype.createModel = function () {
                 units: layerSize,
                 inputShape: [this.inputVectorSize],
                 activation: this.activation,
-                kernelInitializer: 'leCunNormal',
-                useBias: true,
-                biasInitializer: this.kernelInit,
+                kernelInitializer: this.kernelInit,
+                useBias: this.useBias,
+                biasInitializer: this.biasInit,
             }));
         else
             model.add(tf.layers.dense({
                 units: layerSize,
                 activation: this.activation,
-                kernelInitializer: 'leCunNormal',
-                useBias: true,
-                biasInitializer: this.kernelInit,
+                kernelInitializer: this.kernelInit,
+                useBias: this.useBias,
+                biasInitializer: this.biasInit,
             }));
     }
     // const optimiser = tf.train.sgd(0.1);
