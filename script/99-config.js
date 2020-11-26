@@ -2,22 +2,22 @@ znakeConfig = {
     devMode: true,
     stepTime: 20,  // milliseconds
     startAtCentre: true,
-    numberOfFoodCellsAtOnce: 10,
+    numberOfFoodCellsAtOnce: 1,
     worm: {
         maxAge: 40,
         targetLength: 6,
     },
     grid: {
-        height: 20,  // cells >= 4
-        width: 20,  // cells >= 4
+        height: 8,  // Only even numbers greater than 4
+        width: 8,  // Only even numbers greater than 4
     },
     keys: {
         pause: ' ',
     },
     ai: {
         layerSizes: [100, 60, 4],  // Only even numbers
-        population: 40,
-        reproducingPopulation: 20, // Half of the population
+        population: 60,
+        reproducingPopulation: 30, // Half of the population
     }
 }
 
