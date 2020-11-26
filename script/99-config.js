@@ -8,8 +8,8 @@ znakeConfig = {
         targetLength: 6,
     },
     grid: {
-        height: 8,  // Only even numbers greater than 4
-        width: 8,  // Only even numbers greater than 4
+        height: 6,  // Only even numbers greater than 4
+        width: 6,  // Only even numbers greater than 4
     },
     keys: {
         pause: ' ',

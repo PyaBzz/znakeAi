@@ -94,5 +94,5 @@ ModelService.prototype.clone = function (sourceModel) {
 }
 
 ModelService.prototype.mutateBias = function (model) {
-    //Todo: Implement
+    //Todo: Implement and use instead of introducing random worms every generation
 }
