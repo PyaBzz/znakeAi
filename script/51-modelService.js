@@ -6,6 +6,11 @@ ModelService = function (game) {
     this.useBias = game.config.ai.useBias;
     this.biasInit = game.config.ai.biasInit;
     this.inputVectorSize = game.grid.width * game.grid.height;
+
+    // let test = tf.ones([2, 2]);
+    // let noised = this.addNoise(test);
+    // test.print();
+    // noised.print();
 }
 
 ModelService.prototype.initialise = function () {
@@ -85,6 +90,25 @@ ModelService.prototype.mix = function (tensorA, tensorB) {
     });
 }
 
+ModelService.prototype.mutate = function (model) {
+    //Todo: Should we tidy() here?
+    const mutant = this.clone(model);
+    for (let i = 0; i < model.layers.length; i++) {
+        const originalLayer = model.layers[i];
+        const mutatedLayer = mutant.layers[i];
+
+        const originalWeights = originalLayer.getWeights();
+        const originalCoefficients = originalWeights[0];
+        const originalBiases = originalWeights[1];
+
+        const mutatedCoefficients = this.addNoise(originalCoefficients);
+        const mutatedBiases = this.addNoise(originalBiases);
+
+        mutatedLayer.setWeights([mutatedCoefficients, mutatedBiases]);
+    }
+    return mutant;
+}
+
 ModelService.prototype.clone = function (sourceModel) {
     //Todo: Should we tidy() here?
     let clone = this.createModel();
@@ -97,6 +121,9 @@ ModelService.prototype.clone = function (sourceModel) {
     return clone;
 }
 
-ModelService.prototype.mutateBias = function (model) {
-    //Todo: Implement and use instead of introducing random worms every generation
+ModelService.prototype.addNoise = function (tensor) {
+    const shape = tensor.shape;
+    let noiseTensor = tf.truncatedNormal(shape, 0, 0.4);
+    // noiseTensor.print();
+    return tf.add(tensor, noiseTensor);
 }

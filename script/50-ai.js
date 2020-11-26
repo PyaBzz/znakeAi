@@ -44,11 +44,12 @@ Ai.prototype.populateNextGeneration = function () {
     let winners = this.getTheBest();
     winners.shuffle();
     let offspring = this.modelService.getOffsprings(winners);
-    // const mutatedWinners = this.modelService.mutateBias(winners);
-    // const mutatedWinners = [this.modelService.createModel(), this.modelService.createModel()];
-    this.generation = [...offspring, ...winners];
-    for (i = this.generation.length; i < this.population; i++)
-        this.generation[i] = this.modelService.createModel();
+    winners.shuffle();
+    let mutatingWinners = winners.clone(0, offspring.length); //This is 1/4 of the population
+    let mutatedWinners = mutatingWinners.map(m => this.modelService.mutate(m))
+    this.generation = [...offspring, ...winners, ...mutatedWinners];
+    // for (i = this.generation.length; i < this.population; i++)
+    //     this.generation[i] = this.modelService.createModel();
     this.currentModelIndex = 0;
     this.currentModel = this.generation[0];
     this.generationNumber++;
