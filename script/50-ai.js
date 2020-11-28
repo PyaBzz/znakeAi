@@ -57,5 +57,5 @@ Ai.prototype.populateNextGeneration = function () {
 }
 
 Ai.prototype.getTheBest = function () {
-    return this.generation.getTop(m => m.age + m.wormLength * this.game.config.worm.maxAge / 2, this.reproducingPopulation);
+    return this.generation.getTop(m => m.age + m.wormLength * this.game.config.worm.maxAge / 2, this.reproducingPopulation).items;
 }

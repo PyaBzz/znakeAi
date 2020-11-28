@@ -86,7 +86,7 @@ Worm.prototype.die = function (nextHeadCell) {
 
 Worm.prototype.getDirectionFromOutput = function (tensor) {
     let array = tensor.arraySync()[0];
-    let indexOfMax = array.getMax()[0];
+    let indexOfMax = array.getMax().index;
     return indexOfMax + 1;  // because directions start from 1
 }
 
