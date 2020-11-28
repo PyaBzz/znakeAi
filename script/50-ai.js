@@ -1,6 +1,5 @@
 Ai = function (game) {
     this.game = game;
-    this.runLoopId = 0;
     this.generation = [];
     this.generationNumber = 1;
     this.population = this.game.config.ai.population;

@@ -1,7 +1,6 @@
 Game = function (znakeConf) {
 	this.importConfig(znakeConf);
 	this.initialise();
-	this.loopId = 0;
 }
 
 Game.prototype.importConfig = function (znakeConf) {
@@ -15,7 +14,6 @@ Game.prototype.importConfig = function (znakeConf) {
 }
 
 Game.prototype.initialise = function () {
-	this.stepTime = this.config.stepTime;
 	this.mouse = new Mouse(this);
 	this.grid = new Grid(this, document.getElementById('grid-container'));
 	this.infoboard = new InfoBoard(this);
@@ -24,6 +22,8 @@ Game.prototype.initialise = function () {
 	this.feeder = new Feeder(this);
 	this.button = new Button(this, document.getElementById('button'));
 	this.ai = new Ai(this);
+	let me = this;
+	this.intervaller = new Intervaller(() => me.worm.step(), me.config.stepTime);
 }
 
 Game.prototype.splashClicked = function () {
@@ -52,15 +52,11 @@ Game.prototype.restart = function () {
 }
 
 Game.prototype.run = function () {
-	this.runLoopId++;
-	let me = this;
-	this.runLoopHandle = setInterval(function () {
-		me.worm.step();
-	}, me.stepTime);
+	this.intervaller.run();
 }
 
 Game.prototype.stopRunning = function () {
-	clearInterval(this.runLoopHandle);
+	this.intervaller.stop();
 }
 
 Game.prototype.togglePause = function () {
@@ -87,10 +83,3 @@ Game.prototype.foodEaten = function () {
 	this.infoboard.updateScore(this.worm.length);
 	this.feeder.dropFood();
 }
-
-Object.defineProperties(Game.prototype, {
-	loopHandle: {
-		get: function () { return this['runningLoop' + this.loopId]; },
-		set: function (val) { this['runningLoop' + this.loopId] = val; }
-	},
-});
