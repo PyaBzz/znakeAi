@@ -76,11 +76,11 @@ Worm.prototype.moveTail = function () {
 }
 
 Worm.prototype.disappear = function (nextHeadCell) {
-    this.sections.doToAll(s => s.beBlank());
+    this.sections.forEach(s => s.beBlank());
 }
 
 Worm.prototype.die = function (nextHeadCell) {
-    this.sections.doToAll(s => s.beBlank());
+    this.sections.forEach(s => s.beBlank());
     this.game.ai.currentModelDied(this.length, this.age);
 }
 
