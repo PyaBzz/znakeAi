@@ -23,9 +23,11 @@
     <script src="../bazJS/random.js"></script>
     <script src="../bazJS/variables.js"></script>
     <script src="../bazJS/intervaller.js"></script>
+    <script src="../bazJS/infoboard/infoboard.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis"></script>
     <link href="znakeAi.css" rel="stylesheet">
+    <link href="../bazJS/infoboard/infoboard.css" rel="stylesheet">
     <title>Znake Ai</title>
 </head>
 
@@ -48,12 +50,7 @@
 
     <div class='fullwidth-row'>
         <div id='grid-container'></div>
-        <div class='spread-elements info' id='stats'>
-            <b class='info-label'>Score: <span class='info-text' id='score'>0</span></b>
-            <br>
-            <b class='info-label'>Age: <span class='info-text' id='age'>0</span></b>
-            <br>
-            <b class='info-label'>Generation: <span class='info-text' id='generation'>0</span></b></div>
+        <div class='spread-elements' id='stats'></div>
     </div>
 
 </body>

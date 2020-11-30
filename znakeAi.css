@@ -43,18 +43,7 @@ body {
 #znake-title {
   color: darkgrey;
 }
-.info {
-  color: darkgrey;
-  font-size: 12px;
-}
-.info-label {
-  color: green;
-  font-size: 14px;
-}
-.info-text {
-  color: yellowgreen;
-  font-size: 24px;
-}
+
 #button {
   background-color: dimgrey;
   font-size: 14px;

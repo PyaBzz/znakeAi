@@ -11,7 +11,7 @@ Worm = function (game) {
         this.game.feeder.dropFood();
     this.currentDirection = directionEnum.right;
     this.directionFuncs = {};
-    this.game.infoboard.updateScore(this.length);//Todo: Not worm's concern
+    this.game.infoboard.setScore(this.length);//Todo: Not worm's concern
     this.inputVectorSize = this.game.grid.width * this.game.grid.height;
     this.brain = this.game.ai.getNextModel();
 }
@@ -37,7 +37,7 @@ Worm.prototype.step = function () {
         this.moveHeadTo(nextCell);
         this.moveTail();
     }
-    this.game.infoboard.updateAge(this.age);
+    this.game.infoboard.setAge(this.age);
     if (this.age === this.maxAge)
         this.die();
 }
