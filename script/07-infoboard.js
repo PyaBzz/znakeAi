@@ -1,4 +1,4 @@
-InfoBoard = function (game) {
+InfoBoard = function (game) { //Todo: Use infoboard from bazJS
     this.game = game;
     this.score = document.getElementById('score');
     this.age = document.getElementById('age');

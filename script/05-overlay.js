@@ -36,7 +36,7 @@ Overlay.prototype.popDown = function () {
     this.element.classList.replace('popup', 'popdown');
 }
 
-Object.defineProperties(Overlay.prototype, {
+Object.defineProperties(Overlay.prototype, { //Todo: Keep references to elements instead of finding in DOM everytime
     line1: {
         get: function () { return document.getElementById('overlay-line1').innerText },
         set: function (val) { document.getElementById('overlay-line1').innerText = val; }
