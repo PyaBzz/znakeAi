@@ -33,6 +33,7 @@ Game.prototype.initialise = function () {
 
 Game.prototype.splashClicked = function () {
 	this.worm = new Worm(this);
+	this.infoboard.set(infoboardKeysEnum.Score, this.worm.length);
 }
 
 Game.prototype.start = function () {
@@ -52,6 +53,7 @@ Game.prototype.restart = function () {
 	this.stepTime = this.config.stepTime;
 	this.worm.disappear();
 	this.worm = new Worm(this);
+	this.infoboard.set(infoboardKeysEnum.Score, this.worm.length);
 	this.control.setForRunning();
 	this.run();
 }
