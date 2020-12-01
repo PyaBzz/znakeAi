@@ -32,7 +32,7 @@ Grid.prototype.getStartCell = function () {
     if (this.game.config.startAtCentre)
         return this.getCentreCell();
     else
-        return this.cells[1][1]; //Todo: Logically find the first blank cell
+        return this.getBlankCells()[0];
 }
 
 Grid.prototype.getCentreCell = function () {
