@@ -16,7 +16,12 @@ Game.prototype.importConfig = function (znakeConf) {
 Game.prototype.initialise = function () {
 	this.mouse = new Mouse(this);
 	this.grid = new Grid(this, document.getElementById('grid-container'));
-	this.infoboard = new Infoboard("stats", ["Score", 0], ["Age", 0], ["Generation", 0]);
+	this.infoboard = new Infoboard(
+		"stats",
+		[infoboardKeysEnum.Score, 0],
+		[infoboardKeysEnum.Age, 0],
+		[infoboardKeysEnum.Generation, 0]
+	);
 	this.control = new Control(this);
 	this.overlay = new Overlay(this);
 	this.feeder = new Feeder(this);
@@ -80,6 +85,6 @@ Game.prototype.wormDied = function () {
 }
 
 Game.prototype.foodEaten = function () {
-	this.infoboard.setScore(this.worm.length);
+	this.infoboard.set(infoboardKeysEnum.Score, this.worm.length);
 	this.feeder.dropFood();
 }

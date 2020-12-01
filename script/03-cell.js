@@ -1,5 +1,5 @@
-cellTypeEnum = Object.freeze({ "head": "head", "worm": "worm", "obstacle": "obstacle", "blank": "blank", "food": "food" });
-cellValueEnum = Object.freeze({ "head": -2, "worm": -1, "obstacle": -1, "blank": 0, "food": 2 });
+cellTypeEnum = Object.freeze({ head: "head", worm: "worm", obstacle: "obstacle", blank: "blank", food: "food" });
+cellValueEnum = Object.freeze({ head: -2, worm: -1, obstacle: -1, blank: 0, food: 2 });
 
 Cell = function (rowNumber, colNumber) {
     this.element = document.createElement('td');

@@ -6,7 +6,7 @@ Ai = function (game) {
     this.reproducingPopulation = this.game.config.ai.reproducingPopulation;
     this.inputVectorSize = this.game.grid.width * this.game.grid.height;
     this.modelService = new ModelService(game);
-    this.game.infoboard.setGeneration(this.generationNumber);
+    this.game.infoboard.set(infoboardKeysEnum.Generation, this.generationNumber);
     this.initialise();
 }
 
@@ -52,7 +52,7 @@ Ai.prototype.populateNextGeneration = function () {
     this.currentModelIndex = 0;
     this.currentModel = this.generation[0];
     this.generationNumber++;
-    this.game.infoboard.setGeneration(this.generationNumber);
+    this.game.infoboard.set(infoboardKeysEnum.Generation, this.generationNumber);
 }
 
 Ai.prototype.getTheBest = function () {

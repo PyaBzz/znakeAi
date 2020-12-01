@@ -25,6 +25,8 @@ znakeConfig = {
     }
 }
 
+infoboardKeysEnum = Object.freeze({ Score: "Score", Age: "Age", Generation: "Generation" });
+
 //Todo: Add more info to the infoboard
 //Todo: Reduce output paths to 3 for "Forward", "Left", "Right" but then lifetime is an invalid score for worms that steer circularly all the time!
 //Todo: Experiment with model save, load, etc.
