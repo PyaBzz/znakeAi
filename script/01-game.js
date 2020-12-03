@@ -27,12 +27,11 @@ Game.prototype.initialise = function () {
 	this.feeder = new Feeder(this);
 	this.button = new Button(this, document.getElementById('button'));
 	this.ai = new Ai(this);
-	let me = this;
-	this.intervaller = new Intervaller(() => me.worm.step(), me.config.stepTime);
 }
 
 Game.prototype.onSplashClicked = function () {
-	this.worm = new Worm(this);
+	let brain = this.ai.getNextModel();
+	this.worm = new Worm(this, brain);
 	this.infoboard.set(infoboardKeysEnum.Score, this.worm.length);
 }
 
@@ -52,18 +51,19 @@ Game.prototype.restart = function () {
 	}
 	this.stepTime = this.config.stepTime;
 	this.worm.disappear();
-	this.worm = new Worm(this);
+	let brain = this.ai.getNextModel();
+	this.worm = new Worm(this, brain);
 	this.infoboard.set(infoboardKeysEnum.Score, this.worm.length);
 	this.control.setForRunning();
 	this.run();
 }
 
 Game.prototype.run = function () {
-	this.intervaller.run();
+	this.worm.run();
 }
 
 Game.prototype.stopRunning = function () {
-	this.intervaller.stop();
+	this.worm.stopRunning();
 }
 
 Game.prototype.togglePause = function () {
@@ -80,10 +80,18 @@ Game.prototype.togglePause = function () {
 	}
 }
 
+Game.prototype.onStepTaken = function () {
+	this.infoboard.set(infoboardKeysEnum.Age, this.worm.age);
+}
+
 Game.prototype.onWormDied = function () {
-	this.stopRunning();
 	this.control.disable();
-	this.restart();
+	this.stopRunning();
+	this.ai.currentModelDied(this.worm);
+	if (this.worm.length >= this.config.worm.targetLength) {
+		alert("Target reached!");
+	} else
+		this.restart();
 }
 
 Game.prototype.onFoodEaten = function () {

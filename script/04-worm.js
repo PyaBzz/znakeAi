@@ -1,18 +1,31 @@
-Worm = function (game) {
+Worm = function (game, brain) {
     this.game = game;
+    this.brain = brain;
+    this.grid = this.game.grid;
+    this.feeder = this.game.feeder;
     this.maxAge = this.game.config.worm.maxAge;
     this.age = 0;
     this.sections = [];
-    let origin = this.game.grid.getStartCell();
+    let origin = this.grid.getStartCell();
     let originIsFood = origin.isFood;
     this.sections.push(origin);
     this.head.beHead();
     if (originIsFood)
-        this.game.feeder.dropFood();
+        this.feeder.dropFood();
     this.currentDirection = directionEnum.right;
     this.directionFuncs = {};
-    this.inputVectorSize = this.game.grid.width * this.game.grid.height;
-    this.brain = this.game.ai.getNextModel();
+    this.inputVectorSize = this.grid.width * this.grid.height;
+    this.stepTime = this.game.config.stepTime;
+    let me = this;
+    this.intervaller = new Intervaller(() => me.step(), me.stepTime);
+}
+
+Worm.prototype.run = function () {
+    this.intervaller.run();
+}
+
+Worm.prototype.stopRunning = function () {
+    this.intervaller.stop();
 }
 
 Worm.prototype.step = function () {
@@ -23,7 +36,7 @@ Worm.prototype.step = function () {
     } else {
         //
     }
-    let nextCell = this.game.grid.getNextCell(this.head, this.currentDirection);
+    let nextCell = this.grid.getNextCell(this.head, this.currentDirection);
 
     if (nextCell.isDeadly) {
         this.die();
@@ -36,7 +49,7 @@ Worm.prototype.step = function () {
         this.moveHeadTo(nextCell);
         this.moveTail();
     }
-    this.game.infoboard.set(infoboardKeysEnum.Age, this.age);
+    this.game.onStepTaken();
     if (this.age === this.maxAge)
         this.die();
 }
@@ -80,7 +93,7 @@ Worm.prototype.disappear = function (nextHeadCell) {
 
 Worm.prototype.die = function (nextHeadCell) {
     this.sections.forEach(s => s.beBlank());
-    this.game.ai.currentModelDied(this.length, this.age);
+    this.game.onWormDied();
 }
 
 Worm.prototype.getDirectionFromOutput = function (tensor) {
@@ -90,7 +103,7 @@ Worm.prototype.getDirectionFromOutput = function (tensor) {
 }
 
 Worm.prototype.getInputVector = function () {
-    return this.game.grid.cells.flat().map(c => c.value);
+    return this.grid.cells.flat().map(c => c.value);
 }
 
 Object.defineProperties(Worm.prototype, {

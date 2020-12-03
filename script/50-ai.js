@@ -29,14 +29,9 @@ Ai.prototype.getNextModel = function () {
     }
 }
 
-Ai.prototype.currentModelDied = function (length, age) {
-    this.currentModel.wormLength = length;
-    this.currentModel.age = age;
-    if (length >= this.game.config.worm.targetLength) {
-        this.game.stopRunning();
-        alert("Target reached!");
-    } else
-        this.game.onWormDied();
+Ai.prototype.currentModelDied = function (worm) {
+    this.currentModel.wormLength = worm.length;
+    this.currentModel.age = worm.age;
 }
 
 Ai.prototype.populateNextGeneration = function () {
