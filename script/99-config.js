@@ -29,7 +29,10 @@ infoboardKeysEnum = Object.freeze({
     Score: "Score",
     Age: "Age",
     WormNo: "Worm No",
-    Generation: "Generation"
+    Generation: "Generation",
+    TotalWorms: "Total Worms",
+    AverageAge: "Average Age",
+    AverageScore: "Average Score",
 });
 
 //Todo: Add more info to the infoboard

@@ -22,6 +22,9 @@ Game.prototype.initialise = function () {
 		[infoboardKeysEnum.Age, 0],
 		[infoboardKeysEnum.WormNo, "1 /" + this.config.ai.population],
 		[infoboardKeysEnum.Generation, 1],
+		[infoboardKeysEnum.TotalWorms, 1],
+		[infoboardKeysEnum.AverageAge, 0],
+		[infoboardKeysEnum.AverageScore, 0],
 	);
 	this.control = new Control(this);
 	this.overlay = new Overlay(this);
@@ -94,6 +97,9 @@ Game.prototype.onWormDied = function () {
 	this.control.disable();
 	this.worm.stopRunning();
 	this.ai.currentModelDied(this.worm);
+	this.infoboard.set(infoboardKeysEnum.TotalWorms, this.ai.totalModels);
+	this.infoboard.set(infoboardKeysEnum.AverageScore, this.ai.averageScore.toFixed(2));
+	this.infoboard.set(infoboardKeysEnum.AverageAge, this.ai.averageAge.toFixed(2));
 	if (this.worm.length >= this.config.worm.targetLength) {
 		alert("Target reached!");
 	} else

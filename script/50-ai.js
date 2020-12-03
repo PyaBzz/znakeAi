@@ -5,6 +5,9 @@ Ai = function (game) {
     this.inputVectorSize = this.game.grid.width * this.game.grid.height;
     this.modelService = new ModelService(game);
     this.populateFirstGeneration();
+    this.totalModels = 0;
+    this.totalAge = 0;
+    this.totalScore = 0;
 }
 
 Ai.prototype.getNextModel = function () {
@@ -12,6 +15,7 @@ Ai.prototype.getNextModel = function () {
         this.populateNextGeneration();
 
     this.currentModel = this.generation[this.nextModelIndex];
+    this.totalModels++;
     this.nextModelIndex++;
     this.game.onNewModel();
     return this.currentModel;
@@ -41,10 +45,17 @@ Ai.prototype.populateNextGeneration = function () {
 }
 
 Ai.prototype.currentModelDied = function (worm) {
-    this.currentModel.wormLength = worm.length;
     this.currentModel.age = worm.age;
+    this.totalAge += worm.age;
+    this.currentModel.wormLength = worm.length;
+    this.totalScore += worm.length;
 }
 
 Ai.prototype.getTheBest = function () {
     return this.generation.getTop(m => m.age + m.wormLength * this.game.config.worm.maxAge / 2, this.reproducingPopulation).items;
 }
+
+Object.defineProperties(Ai.prototype, {
+    averageAge: { get: function () { return this.totalAge / this.totalModels } },
+    averageScore: { get: function () { return this.totalScore / this.totalModels } },
+});
