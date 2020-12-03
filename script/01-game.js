@@ -31,7 +31,7 @@ Game.prototype.initialise = function () {
 	this.intervaller = new Intervaller(() => me.worm.step(), me.config.stepTime);
 }
 
-Game.prototype.splashClicked = function () {
+Game.prototype.onSplashClicked = function () {
 	this.worm = new Worm(this);
 	this.infoboard.set(infoboardKeysEnum.Score, this.worm.length);
 }
@@ -80,13 +80,13 @@ Game.prototype.togglePause = function () {
 	}
 }
 
-Game.prototype.wormDied = function () {
+Game.prototype.onWormDied = function () {
 	this.stopRunning();
 	this.control.disable();
 	this.restart();
 }
 
-Game.prototype.foodEaten = function () {
+Game.prototype.onFoodEaten = function () {
 	this.infoboard.set(infoboardKeysEnum.Score, this.worm.length);
 	this.feeder.dropFood();
 }

@@ -36,7 +36,7 @@ Ai.prototype.currentModelDied = function (length, age) {
         this.game.stopRunning();
         alert("Target reached!");
     } else
-        this.game.wormDied();
+        this.game.onWormDied();
 }
 
 Ai.prototype.populateNextGeneration = function () {

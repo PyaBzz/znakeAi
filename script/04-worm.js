@@ -30,7 +30,7 @@ Worm.prototype.step = function () {
     }
     else if (nextCell.isFood) {
         this.moveHeadTo(nextCell);
-        this.game.foodEaten();
+        this.game.onFoodEaten();
     }
     else {
         this.moveHeadTo(nextCell);
