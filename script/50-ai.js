@@ -4,37 +4,24 @@ Ai = function (game) {
     this.reproducingPopulation = this.game.config.ai.reproducingPopulation;
     this.inputVectorSize = this.game.grid.width * this.game.grid.height;
     this.modelService = new ModelService(game);
+    this.populateFirstGeneration();
 }
 
 Ai.prototype.getNextModel = function () {
-    let thisIsTheFirstGeneration = isUndefined(this.generation);
-    if (thisIsTheFirstGeneration) {
-        this.populateFirstGeneration();
-    } else {
-        this.currentModelIndex++;
-        if (this.currentModelIndex < this.population) {
-            this.currentModel = this.generation[this.currentModelIndex];
-        }
-        else {
-            this.populateNextGeneration();
-        }
-    }
-    return this.currentModel;
-}
+    if (this.nextModelIndex === this.population)
+        this.populateNextGeneration();
 
-Ai.prototype.currentModelDied = function (worm) {
-    this.currentModel.wormLength = worm.length;
-    this.currentModel.age = worm.age;
+    this.currentModel = this.generation[this.nextModelIndex];
+    this.nextModelIndex++;
+    return this.currentModel;
 }
 
 Ai.prototype.populateFirstGeneration = function () {
     this.generation = [];
-    this.generationNumber = 1;
     for (let i = 0; i < this.population; i++)
         this.generation.push(this.modelService.createModel());
-    this.currentModelIndex = 0;
-    this.currentModel = this.generation[0];
-    this.game.onNewGeneration();
+    this.generationNumber = 1;
+    this.nextModelIndex = 0;
 }
 
 Ai.prototype.populateNextGeneration = function () {
@@ -47,10 +34,14 @@ Ai.prototype.populateNextGeneration = function () {
     this.generation = [...offspring, ...winners, ...mutatedWinners];
     // for (i = this.generation.length; i < this.population; i++)
     //     this.generation[i] = this.modelService.createModel();
-    this.currentModelIndex = 0;
-    this.currentModel = this.generation[0];
     this.generationNumber++;
+    this.nextModelIndex = 0;
     this.game.onNewGeneration();
+}
+
+Ai.prototype.currentModelDied = function (worm) {
+    this.currentModel.wormLength = worm.length;
+    this.currentModel.age = worm.age;
 }
 
 Ai.prototype.getTheBest = function () {

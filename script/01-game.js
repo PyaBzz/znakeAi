@@ -20,7 +20,7 @@ Game.prototype.initialise = function () {
 		"stats",
 		[infoboardKeysEnum.Score, 0],
 		[infoboardKeysEnum.Age, 0],
-		[infoboardKeysEnum.Generation, 0]
+		[infoboardKeysEnum.Generation, 1]
 	);
 	this.control = new Control(this);
 	this.overlay = new Overlay(this);
