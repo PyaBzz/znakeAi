@@ -72,6 +72,10 @@ Game.prototype.togglePause = function () {
 	}
 }
 
+Game.prototype.onNewGeneration = function () {
+	this.infoboard.set(infoboardKeysEnum.Generation, this.ai.generationNumber);
+}
+
 Game.prototype.onStepTaken = function () {
 	this.infoboard.set(infoboardKeysEnum.Age, this.worm.age);
 }

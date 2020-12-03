@@ -1,37 +1,40 @@
 Ai = function (game) {
     this.game = game;
-    this.generation = [];
-    this.generationNumber = 1;
     this.population = this.game.config.ai.population;
     this.reproducingPopulation = this.game.config.ai.reproducingPopulation;
     this.inputVectorSize = this.game.grid.width * this.game.grid.height;
     this.modelService = new ModelService(game);
-    this.game.infoboard.set(infoboardKeysEnum.Generation, this.generationNumber);
-    this.initialise();
-}
-
-Ai.prototype.initialise = function () {
-    for (let i = 0; i < this.population; i++)
-        this.generation.push(this.modelService.createModel());
-    this.currentModelIndex = 0;
-    this.currentModel = this.generation[0];
 }
 
 Ai.prototype.getNextModel = function () {
-    this.currentModelIndex++;
-    if (this.currentModelIndex < this.population) {
-        this.currentModel = this.generation[this.currentModelIndex];
-        return this.currentModel;
+    let thisIsTheFirstGeneration = isUndefined(this.generation);
+    if (thisIsTheFirstGeneration) {
+        this.populateFirstGeneration();
+    } else {
+        this.currentModelIndex++;
+        if (this.currentModelIndex < this.population) {
+            this.currentModel = this.generation[this.currentModelIndex];
+        }
+        else {
+            this.populateNextGeneration();
+        }
     }
-    else {
-        this.populateNextGeneration();
-        return this.currentModel;
-    }
+    return this.currentModel;
 }
 
 Ai.prototype.currentModelDied = function (worm) {
     this.currentModel.wormLength = worm.length;
     this.currentModel.age = worm.age;
+}
+
+Ai.prototype.populateFirstGeneration = function () {
+    this.generation = [];
+    this.generationNumber = 1;
+    for (let i = 0; i < this.population; i++)
+        this.generation.push(this.modelService.createModel());
+    this.currentModelIndex = 0;
+    this.currentModel = this.generation[0];
+    this.game.onNewGeneration();
 }
 
 Ai.prototype.populateNextGeneration = function () {
@@ -47,7 +50,7 @@ Ai.prototype.populateNextGeneration = function () {
     this.currentModelIndex = 0;
     this.currentModel = this.generation[0];
     this.generationNumber++;
-    this.game.infoboard.set(infoboardKeysEnum.Generation, this.generationNumber);
+    this.game.onNewGeneration();
 }
 
 Ai.prototype.getTheBest = function () {
