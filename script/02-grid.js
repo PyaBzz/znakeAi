@@ -11,7 +11,7 @@ Grid = function (game, container) {
         this.cells.push([]);
         for (let col = 0; col < this.width; col++) {
             let newCell = new Cell(row, col);
-            if (col == 0 || col == this.lastColIndex || row == 0 || row == this.lastRowIndex) newCell.beObstacle();
+            if (col == 0 || col == this.lastColIndex || row == 0 || row == this.lastRowIndex) newCell.beWall();
             newRow.appendChild(newCell.element);
             this.cells[row].push(newCell);
         }
@@ -58,7 +58,7 @@ Grid.prototype.bindHandlers = function () {
         switch (clickEvent.which) {
             case 1: clickEvent.target.cell.beFood(); break;  // left click
             case 2: clickEvent.target.cell.beBlank(); break;  // middle click
-            case 3: clickEvent.target.cell.beObstacle(); break;  // right click
+            case 3: clickEvent.target.cell.beWall(); break;  // right click
             default: break;
         }
     });

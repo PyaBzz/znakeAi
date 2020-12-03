@@ -1,7 +1,7 @@
 :root {
   --worm-colour: yellowgreen;
   --food-colour: yellow;
-  --obstacle-colour: orangered;
+  --wall-colour: orangered;
   --corner-percentage: 20%;
   --cell-dimension: 20px;
 }
@@ -124,8 +124,8 @@ td {
   width: var(--cell-dimension);
   height: var(--cell-dimension);
 }
-td.obstacle {
-  background-color: var(--obstacle-colour);
+td.wall {
+  background-color: var(--wall-colour);
 }
 td.worm {
   background-color: var(--worm-colour);
