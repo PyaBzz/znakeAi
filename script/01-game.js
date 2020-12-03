@@ -98,8 +98,8 @@ Game.prototype.onWormDied = function () {
 	this.worm.stopRunning();
 	this.ai.currentModelDied(this.worm);
 	this.infoboard.set(infoboardKeysEnum.TotalWorms, this.ai.totalModels);
-	this.infoboard.set(infoboardKeysEnum.AverageScore, this.ai.averageScore.toFixed(2));
-	this.infoboard.set(infoboardKeysEnum.AverageAge, this.ai.averageAge.toFixed(2));
+	this.infoboard.set(infoboardKeysEnum.AverageScore, this.ai.averageScore.toFixed(3));
+	this.infoboard.set(infoboardKeysEnum.AverageAge, this.ai.averageAge.toFixed(3));
 	if (this.worm.length >= this.config.worm.targetLength) {
 		alert("Target reached!");
 	} else
