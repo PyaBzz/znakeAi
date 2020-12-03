@@ -25,7 +25,12 @@ znakeConfig = {
     }
 }
 
-infoboardKeysEnum = Object.freeze({ Score: "Score", Age: "Age", Generation: "Generation" });
+infoboardKeysEnum = Object.freeze({
+    Score: "Score",
+    Age: "Age",
+    WormNo: "Worm No",
+    Generation: "Generation"
+});
 
 //Todo: Add more info to the infoboard
 //Todo: Add download of generation stats to the UI

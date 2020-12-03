@@ -20,7 +20,8 @@ Game.prototype.initialise = function () {
 		"stats",
 		[infoboardKeysEnum.Score, 0],
 		[infoboardKeysEnum.Age, 0],
-		[infoboardKeysEnum.Generation, 1]
+		[infoboardKeysEnum.WormNo, "1 /" + this.config.ai.population],
+		[infoboardKeysEnum.Generation, 1],
 	);
 	this.control = new Control(this);
 	this.overlay = new Overlay(this);
@@ -70,6 +71,10 @@ Game.prototype.togglePause = function () {
 		this.isPaused = true;
 		this.overlay.popUp();
 	}
+}
+
+Game.prototype.onNewModel = function () {
+	this.infoboard.set(infoboardKeysEnum.WormNo, this.ai.nextModelIndex + " /" + this.config.ai.population);
 }
 
 Game.prototype.onNewGeneration = function () {

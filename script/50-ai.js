@@ -13,6 +13,7 @@ Ai.prototype.getNextModel = function () {
 
     this.currentModel = this.generation[this.nextModelIndex];
     this.nextModelIndex++;
+    this.game.onNewModel();
     return this.currentModel;
 }
 
