@@ -1,6 +1,6 @@
 znakeConfig = {
     devMode: true,
-    stepTime: 2,  // milliseconds
+    stepTime: 1,  // milliseconds
     startAtCentre: true,
     numberOfFoodCellsAtOnce: 1,
     worm: {
