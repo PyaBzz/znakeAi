@@ -39,7 +39,7 @@ Game.prototype.start = function () {
 	this.button.beRestartButton();
 	this.control.setForRunning()
 	this.feeder.dropFoodInitial();
-	this.run();
+	this.worm.run();
 }
 
 Game.prototype.restart = function () {
@@ -47,7 +47,7 @@ Game.prototype.restart = function () {
 		this.overlay.popDown();
 		this.isPaused = false;
 	} else {
-		this.stopRunning();
+		this.worm.stopRunning();
 	}
 	this.stepTime = this.config.stepTime;
 	this.worm.disappear();
@@ -55,26 +55,18 @@ Game.prototype.restart = function () {
 	this.worm = new Worm(this, brain);
 	this.infoboard.set(infoboardKeysEnum.Score, this.worm.length);
 	this.control.setForRunning();
-	this.run();
-}
-
-Game.prototype.run = function () {
 	this.worm.run();
-}
-
-Game.prototype.stopRunning = function () {
-	this.worm.stopRunning();
 }
 
 Game.prototype.togglePause = function () {
 	if (this.isPaused) {
-		this.run();
+		this.worm.run();
 		this.isPaused = false;
 		this.control.setForRunning();
 		this.overlay.popDown();
 	}
 	else {
-		this.stopRunning();
+		this.worm.stopRunning();
 		this.isPaused = true;
 		this.overlay.popUp();
 	}
@@ -84,17 +76,17 @@ Game.prototype.onStepTaken = function () {
 	this.infoboard.set(infoboardKeysEnum.Age, this.worm.age);
 }
 
+Game.prototype.onFoodEaten = function () {
+	this.infoboard.set(infoboardKeysEnum.Score, this.worm.length);
+	this.feeder.dropFood();
+}
+
 Game.prototype.onWormDied = function () {
 	this.control.disable();
-	this.stopRunning();
+	this.worm.stopRunning();
 	this.ai.currentModelDied(this.worm);
 	if (this.worm.length >= this.config.worm.targetLength) {
 		alert("Target reached!");
 	} else
 		this.restart();
-}
-
-Game.prototype.onFoodEaten = function () {
-	this.infoboard.set(infoboardKeysEnum.Score, this.worm.length);
-	this.feeder.dropFood();
 }
