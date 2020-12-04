@@ -35,7 +35,8 @@ infoboardKeysEnum = Object.freeze({
     AverageScore: "Average Score",
 });
 
-//Todo: Add more info to the infoboard
+//Todo: Add minAge, maxAge, minScore and maxScore to a new infoboard because average values converge very slowly
+//Todo: Change cell values to reflect their distance to the food cell!
 //Todo: Add download of generation stats to the UI
 //Todo: Reduce output paths to 3 for "Forward", "Left", "Right" but then lifetime is an invalid score for worms that steer circularly all the time!
 //Todo: Experiment with model save, load, etc.
