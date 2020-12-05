@@ -18,6 +18,7 @@ Cell.prototype.beWorm = function () {
 
 Cell.prototype.beHead = function () {
     this.type = cellTypeEnum.head;
+    this.grid.head = this;
     this.element.className = 'worm';
 }
 
@@ -44,11 +45,13 @@ Cell.prototype.getDistanceTo = function (otherCell) {
 
 Cell.prototype.getValue = function () {
     if (this.isHead)
-        return -0.2;
+        return 0;
+    else if (this.isFood)
+        return 0;
     else if (this.isDeadly)
-        return 1.2;
+        return 2.4;
     else
-        return this.getDistanceTo(this.grid.foodCell)
+        return this.getDistanceTo(this.grid.head) + this.getDistanceTo(this.grid.food);
 }
 
 Object.defineProperties(Cell.prototype, {
