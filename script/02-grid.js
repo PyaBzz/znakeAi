@@ -36,8 +36,8 @@ Grid.prototype.getStartCell = function () {
 }
 
 Grid.prototype.getCentreCell = function () {
-    let row = Math.floor((this.game.config.grid.height - 1) / 2); //Because indexes are zero based
-    let col = Math.floor((this.game.config.grid.width - 1) / 2);
+    let row = Math.floor(this.lastRowIndex / 2);
+    let col = Math.floor(this.lastColIndex / 2);
     return this.cells[row][col];
 }
 

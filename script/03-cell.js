@@ -35,6 +35,12 @@ Cell.prototype.beWall = function () {
     this.element.className = 'wall';
 }
 
+Cell.prototype.getDistanceTo = function (otherCell) {
+    const horDiff = otherCell.col - this.col;
+    const verDiff = otherCell.row - this.row;
+    return Math.sqrt(Math.pow(horDiff, 2) + Math.pow(verDiff, 2));
+}
+
 Object.defineProperties(Cell.prototype, {
     isWorm: { get: function () { return this.type === cellTypeEnum.worm } },
     isFood: { get: function () { return this.type === cellTypeEnum.food } },
