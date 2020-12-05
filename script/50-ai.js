@@ -32,7 +32,7 @@ Ai.prototype.populateFirstGeneration = function () {
 
 Ai.prototype.populateNextGeneration = function () {
     this.game.onGenerationDone(this.genMinAge, this.genMaxAge, this.genMinLen, this.genMaxLen);
-    let winners = this.getTheBest();
+    let winners = this.getFittest();
     winners.shuffle();
     let offspring = this.modelService.getOffsprings(winners);
     winners.shuffle();
@@ -46,8 +46,17 @@ Ai.prototype.populateNextGeneration = function () {
     this.game.onNewGeneration();
 }
 
+Ai.prototype.getFittest = function () {
+    let me = this;
+    return this.generation.getTop(m => me.fitnessFunc(m), me.reproducingPopulation).items;
+}
+
+Ai.prototype.fitnessFunc = function (model) {
+    return model.wormAge + model.wormLength * this.game.config.worm.maxAge / 2;
+}
+
 Ai.prototype.onWormDied = function (worm) {
-    this.currentModel.age = worm.age;
+    this.currentModel.wormAge = worm.age;
     this.totalAge += worm.age;
     this.currentModel.wormLength = worm.length;
     this.totalScore += worm.length;
@@ -55,10 +64,6 @@ Ai.prototype.onWormDied = function (worm) {
     if (worm.age > this.genMaxAge) this.genMaxAge = worm.age;
     if (worm.length < this.genMinLen) this.genMinLen = worm.length;
     if (worm.length > this.genMaxLen) this.genMaxLen = worm.length;
-}
-
-Ai.prototype.getTheBest = function () {
-    return this.generation.getTop(m => m.age + m.wormLength * this.game.config.worm.maxAge / 2, this.reproducingPopulation).items;
 }
 
 Ai.prototype.resetGenerationStats = function () {
