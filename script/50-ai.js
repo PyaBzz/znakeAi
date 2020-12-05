@@ -7,7 +7,7 @@ Ai = function (game) {
     this.populateFirstGeneration();
     this.totalModels = 0;
     this.totalAge = 0;
-    this.totalScore = 0;
+    this.totalLen = 0;
 }
 
 Ai.prototype.getNextModel = function () {
@@ -59,7 +59,7 @@ Ai.prototype.onWormDied = function (worm) {
     this.currentModel.wormAge = worm.age;
     this.totalAge += worm.age;
     this.currentModel.wormLength = worm.length;
-    this.totalScore += worm.length;
+    this.totalLen += worm.length;
     if (worm.age < this.genMinAge) this.genMinAge = worm.age;
     if (worm.age > this.genMaxAge) this.genMaxAge = worm.age;
     if (worm.length < this.genMinLen) this.genMinLen = worm.length;
@@ -75,5 +75,5 @@ Ai.prototype.resetGenerationStats = function () {
 
 Object.defineProperties(Ai.prototype, {
     averageAge: { get: function () { return this.totalAge / this.totalModels } },
-    averageScore: { get: function () { return this.totalScore / this.totalModels } },
+    AverageLen: { get: function () { return this.totalLen / this.totalModels } },
 });

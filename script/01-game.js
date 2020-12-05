@@ -31,7 +31,7 @@ Game.prototype.initialise = function () {
 		[infoboardKeysEnum.genMaxLen, 0],
 		[infoboardKeysEnum.TotalWorms, 1],
 		[infoboardKeysEnum.AverageAge, 0],
-		[infoboardKeysEnum.AverageScore, 0],
+		[infoboardKeysEnum.AverageLen, 0],
 	);
 	this.control = new Control(this);
 	this.overlay = new Overlay(this);
@@ -115,7 +115,7 @@ Game.prototype.onWormDied = function () {
 	this.worm.stopRunning();
 	this.ai.onWormDied(this.worm);
 	this.evolutionInfoboard.set(infoboardKeysEnum.TotalWorms, this.ai.totalModels);
-	this.evolutionInfoboard.set(infoboardKeysEnum.AverageScore, this.ai.averageScore.toFixed(3));
+	this.evolutionInfoboard.set(infoboardKeysEnum.AverageLen, this.ai.AverageLen.toFixed(3));
 	this.evolutionInfoboard.set(infoboardKeysEnum.AverageAge, this.ai.averageAge.toFixed(3));
 	if (this.worm.length >= this.config.worm.targetLength) {
 		alert("Target reached!");
