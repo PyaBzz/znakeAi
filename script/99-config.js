@@ -35,8 +35,8 @@ infoboardKeysEnum = Object.freeze({
     AverageScore: "Average Score",
     genMinAge: "Gen. Min Age",
     genMaxAge: "Gen. Max Age",
-    genMinScore: "Gen. Min Score",
-    genMaxScore: "Gen. Max Score",
+    genMinLen: "Gen. Min Score",
+    genMaxLen: "Gen. Max Score",
 });
 
 //Todo: Add minAge, maxAge, minScore and maxScore to a new infoboard because average values converge very slowly

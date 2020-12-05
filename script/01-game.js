@@ -27,8 +27,8 @@ Game.prototype.initialise = function () {
 		"evolution-stats",
 		[infoboardKeysEnum.genMinAge, 0],
 		[infoboardKeysEnum.genMaxAge, 0],
-		[infoboardKeysEnum.genMinScore, 0],
-		[infoboardKeysEnum.genMaxScore, 0],
+		[infoboardKeysEnum.genMinLen, 0],
+		[infoboardKeysEnum.genMaxLen, 0],
 		[infoboardKeysEnum.TotalWorms, 1],
 		[infoboardKeysEnum.AverageAge, 0],
 		[infoboardKeysEnum.AverageScore, 0],
@@ -90,11 +90,11 @@ Game.prototype.onNewModel = function () {
 	this.generationInfoboard.set(infoboardKeysEnum.WormNo, this.ai.nextModelIndex + " /" + this.config.ai.population);
 }
 
-Game.prototype.onGenerationDone = function (genMinAge, genMaxAge, genMinScore, genMaxScore) {
+Game.prototype.onGenerationDone = function (genMinAge, genMaxAge, genMinLen, genMaxLen) {
 	this.evolutionInfoboard.set(infoboardKeysEnum.genMinAge, genMinAge);
 	this.evolutionInfoboard.set(infoboardKeysEnum.genMaxAge, genMaxAge);
-	this.evolutionInfoboard.set(infoboardKeysEnum.genMinScore, genMinScore);
-	this.evolutionInfoboard.set(infoboardKeysEnum.genMaxScore, genMaxScore);
+	this.evolutionInfoboard.set(infoboardKeysEnum.genMinLen, genMinLen);
+	this.evolutionInfoboard.set(infoboardKeysEnum.genMaxLen, genMaxLen);
 }
 
 Game.prototype.onNewGeneration = function () {
