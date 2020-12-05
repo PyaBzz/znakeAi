@@ -42,7 +42,10 @@ Game.prototype.onSplashClicked = function () {
 Game.prototype.start = function () {
 	this.button.beRestartButton();
 	this.control.setForRunning()
-	this.feeder.dropFoodInitial();
+	// this.feeder.dropFoodInitial();
+	this.feeder.dropFood();
+	// this.visualiser = new Visualiser(this);
+	// this.visualiser.visualiseGrid();
 	this.worm.run();
 }
 
