@@ -16,12 +16,19 @@ Game.prototype.importConfig = function (znakeConf) {
 Game.prototype.initialise = function () {
 	this.mouse = new Mouse(this);
 	this.grid = new Grid(this, document.getElementById('grid-container'));
-	this.infoboard = new Infoboard(
-		"stats",
+	this.generationInfoboard = new Infoboard(
+		"generation-stats",
 		[infoboardKeysEnum.Score, 0],
 		[infoboardKeysEnum.Age, 0],
 		[infoboardKeysEnum.WormNo, "1 /" + this.config.ai.population],
 		[infoboardKeysEnum.Generation, 1],
+	);
+	this.evolutionInfoboard = new Infoboard(
+		"evolution-stats",
+		[infoboardKeysEnum.genMinAge, 0],
+		[infoboardKeysEnum.genMaxAge, 0],
+		[infoboardKeysEnum.genMinScore, 0],
+		[infoboardKeysEnum.genMaxScore, 0],
 		[infoboardKeysEnum.TotalWorms, 1],
 		[infoboardKeysEnum.AverageAge, 0],
 		[infoboardKeysEnum.AverageScore, 0],
@@ -36,7 +43,7 @@ Game.prototype.initialise = function () {
 Game.prototype.onSplashClicked = function () {
 	let brain = this.ai.getNextModel();
 	this.worm = new Worm(this, brain);
-	this.infoboard.set(infoboardKeysEnum.Score, this.worm.length);
+	this.generationInfoboard.set(infoboardKeysEnum.Score, this.worm.length);
 }
 
 Game.prototype.start = function () {
@@ -60,7 +67,7 @@ Game.prototype.restart = function () {
 	this.worm.disappear();
 	let brain = this.ai.getNextModel();
 	this.worm = new Worm(this, brain);
-	this.infoboard.set(infoboardKeysEnum.Score, this.worm.length);
+	this.generationInfoboard.set(infoboardKeysEnum.Score, this.worm.length);
 	this.control.setForRunning();
 	this.worm.run();
 }
@@ -80,29 +87,36 @@ Game.prototype.togglePause = function () {
 }
 
 Game.prototype.onNewModel = function () {
-	this.infoboard.set(infoboardKeysEnum.WormNo, this.ai.nextModelIndex + " /" + this.config.ai.population);
+	this.generationInfoboard.set(infoboardKeysEnum.WormNo, this.ai.nextModelIndex + " /" + this.config.ai.population);
+}
+
+Game.prototype.onGenerationDone = function (genMinAge, genMaxAge, genMinScore, genMaxScore) {
+	this.evolutionInfoboard.set(infoboardKeysEnum.genMinAge, genMinAge);
+	this.evolutionInfoboard.set(infoboardKeysEnum.genMaxAge, genMaxAge);
+	this.evolutionInfoboard.set(infoboardKeysEnum.genMinScore, genMinScore);
+	this.evolutionInfoboard.set(infoboardKeysEnum.genMaxScore, genMaxScore);
 }
 
 Game.prototype.onNewGeneration = function () {
-	this.infoboard.set(infoboardKeysEnum.Generation, this.ai.generationNumber);
+	this.generationInfoboard.set(infoboardKeysEnum.Generation, this.ai.generationNumber);
 }
 
 Game.prototype.onStepTaken = function () {
-	this.infoboard.set(infoboardKeysEnum.Age, this.worm.age);
+	this.generationInfoboard.set(infoboardKeysEnum.Age, this.worm.age);
 }
 
 Game.prototype.onFoodEaten = function () {
-	this.infoboard.set(infoboardKeysEnum.Score, this.worm.length);
+	this.generationInfoboard.set(infoboardKeysEnum.Score, this.worm.length);
 	this.feeder.dropFood();
 }
 
 Game.prototype.onWormDied = function () {
 	this.control.disable();
 	this.worm.stopRunning();
-	this.ai.currentModelDied(this.worm);
-	this.infoboard.set(infoboardKeysEnum.TotalWorms, this.ai.totalModels);
-	this.infoboard.set(infoboardKeysEnum.AverageScore, this.ai.averageScore.toFixed(3));
-	this.infoboard.set(infoboardKeysEnum.AverageAge, this.ai.averageAge.toFixed(3));
+	this.ai.onWormDied(this.worm);
+	this.evolutionInfoboard.set(infoboardKeysEnum.TotalWorms, this.ai.totalModels);
+	this.evolutionInfoboard.set(infoboardKeysEnum.AverageScore, this.ai.averageScore.toFixed(3));
+	this.evolutionInfoboard.set(infoboardKeysEnum.AverageAge, this.ai.averageAge.toFixed(3));
 	if (this.worm.length >= this.config.worm.targetLength) {
 		alert("Target reached!");
 	} else
