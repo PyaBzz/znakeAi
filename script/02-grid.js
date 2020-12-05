@@ -25,10 +25,10 @@ Grid = function (game, container) {
     this.container.appendChild(this.element);
 
     this.nextCellGettingFunctions = {};
-    this.nextCellGettingFunctions[directionEnum.up] = (me, wormHead) => me.cells[wormHead.row - 1][wormHead.col];
-    this.nextCellGettingFunctions[directionEnum.right] = (me, wormHead) => me.cells[wormHead.row][wormHead.col + 1];
-    this.nextCellGettingFunctions[directionEnum.down] = (me, wormHead) => me.cells[wormHead.row + 1][wormHead.col];
-    this.nextCellGettingFunctions[directionEnum.left] = (me, wormHead) => me.cells[wormHead.row][wormHead.col - 1];
+    this.nextCellGettingFunctions[directionEnum.up] = (me, wormHead) => me.cells[wormHead.col][wormHead.row - 1];
+    this.nextCellGettingFunctions[directionEnum.right] = (me, wormHead) => me.cells[wormHead.col + 1][wormHead.row];
+    this.nextCellGettingFunctions[directionEnum.down] = (me, wormHead) => me.cells[wormHead.col][wormHead.row + 1];
+    this.nextCellGettingFunctions[directionEnum.left] = (me, wormHead) => me.cells[wormHead.col - 1][wormHead.row];
 
     this.bindHandlers();
     this.maxDistance = Math.sqrt(Math.pow(this.height, 2) + Math.pow(this.width, 2));
@@ -44,7 +44,7 @@ Grid.prototype.getStartCell = function () {
 Grid.prototype.getCentreCell = function () {
     let row = Math.floor(this.lastRowIndex / 2);
     let col = Math.floor(this.lastColIndex / 2);
-    return this.cells[row][col];
+    return this.cells[col][row];
 }
 
 Grid.prototype.getNextCell = function (wormHead, direction) {
