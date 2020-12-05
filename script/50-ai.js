@@ -44,6 +44,7 @@ Ai.prototype.populateNextGeneration = function () {
     this.generationNumber++;
     this.nextModelIndex = 0;
     this.game.onNewGeneration();
+    this.resetGenerationStats();
 }
 
 Ai.prototype.getFittest = function () {
