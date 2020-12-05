@@ -7,6 +7,7 @@ Feeder.prototype.dropFood = function () {
 	let blankCells = this.game.grid.getBlankCells();
 	let nextFoodCell = blankCells.pickRandom();
 	nextFoodCell.beFood();
+	this.game.grid.foodCell = nextFoodCell;
 }
 
 Feeder.prototype.dropFoodInitial = function () {

@@ -103,7 +103,7 @@ Worm.prototype.getDirectionFromOutput = function (tensor) {
 }
 
 Worm.prototype.getInputVector = function () {
-    return this.grid.cells.flat().map(c => c.value);
+    return this.grid.cells.flat().map(c => c.getValue());
 }
 
 Object.defineProperties(Worm.prototype, {

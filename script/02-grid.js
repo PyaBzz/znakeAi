@@ -31,6 +31,7 @@ Grid = function (game, container) {
     this.nextCellGettingFunctions[directionEnum.left] = (me, wormHead) => me.cells[wormHead.row][wormHead.col - 1];
 
     this.bindHandlers();
+    this.maxDistance = Math.sqrt(Math.pow(this.height, 2) + Math.pow(this.width, 2));
 }
 
 Grid.prototype.getStartCell = function () {
