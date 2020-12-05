@@ -53,7 +53,7 @@ Ai.prototype.getFittest = function () {
 }
 
 Ai.prototype.fitnessFunc = function (model) {
-    return model.wormAge + model.wormLength * this.game.config.worm.maxAge / 2;
+    return model.wormAge / this.game.config.worm.maxAge + model.wormLength;
 }
 
 Ai.prototype.onWormDied = function (worm) {
