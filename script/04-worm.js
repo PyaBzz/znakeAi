@@ -14,7 +14,7 @@ Worm = function (game, brain) {
         this.feeder.dropFood();
     this.currentDirection = directionEnum.right;
     this.directionFuncs = {};
-    this.inputVectorSize = this.grid.width * this.grid.height;
+    this.inputVectorSize = this.game.ai.inputVectorSize;
     this.stepTime = this.game.config.stepTime;
     let me = this;
     this.intervaller = new Intervaller(() => me.step(), me.stepTime);
@@ -44,6 +44,7 @@ Worm.prototype.step = function () {
     else if (nextCell.isFood) {
         this.moveHeadTo(nextCell);
         this.game.onFoodEaten();
+        this.moveTail();  //Disables worm growth
     }
     else {
         this.moveHeadTo(nextCell);
@@ -103,7 +104,8 @@ Worm.prototype.getDirectionFromOutput = function (tensor) {
 }
 
 Worm.prototype.getInputVector = function () {
-    return this.grid.cells.flat().map(c => c.getValue());
+    const dist = this.grid.head.getDistanceTo(this.grid.food);
+    return [dist, dist];
 }
 
 Object.defineProperties(Worm.prototype, {

@@ -1,11 +1,11 @@
-ModelService = function (game) {
+ModelService = function (game, inputVectorSize) {
     this.game = game;
     this.layerSizes = game.config.ai.layerSizes;
     this.activation = game.config.ai.activation;
     this.kernelInit = game.config.ai.kernelInit;
     this.useBias = game.config.ai.useBias;
     this.biasInit = game.config.ai.biasInit;
-    this.inputVectorSize = game.grid.width * game.grid.height;
+    this.inputVectorSize = inputVectorSize;
 }
 
 ModelService.prototype.initialise = function () {

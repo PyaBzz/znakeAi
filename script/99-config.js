@@ -15,7 +15,7 @@ znakeConfig = {
         pause: ' ',
     },
     ai: {
-        layerSizes: [100, 60, 4],  // Only even numbers
+        layerSizes: [20, 20, 4],  // Only even numbers
         population: 60,
         reproducingPopulation: 30, // Half of the population
         activation: activationEnum.relu,

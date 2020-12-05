@@ -2,8 +2,8 @@ Ai = function (game) {
     this.game = game;
     this.population = this.game.config.ai.population;
     this.reproducingPopulation = this.game.config.ai.reproducingPopulation;
-    this.inputVectorSize = this.game.grid.width * this.game.grid.height;
-    this.modelService = new ModelService(game);
+    this.inputVectorSize = 2;
+    this.modelService = new ModelService(game, this.inputVectorSize);
     this.populateFirstGeneration();
     this.totalModels = 0;
     this.totalAge = 0;
