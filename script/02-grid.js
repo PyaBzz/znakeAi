@@ -6,14 +6,19 @@ Grid = function (game, container) {
     this.element = document.createElement('table');
     this.element.id = 'grid';
     this.cells = [];
+    for (let col = 0; col < this.width; col++) {
+        this.cells.push([]);
+        for (let row = 0; row < this.height; row++) {
+            let newCell = new Cell(this, row, col);
+            if (col == 0 || col == this.lastColIndex || row == 0 || row == this.lastRowIndex) newCell.beWall();
+            this.cells[col].push(newCell);
+        }
+    }
     for (let row = 0; row < this.height; row++) {
         let newRow = document.createElement('tr');
-        this.cells.push([]);
         for (let col = 0; col < this.width; col++) {
-            let newCell = new Cell(row, col);
-            if (col == 0 || col == this.lastColIndex || row == 0 || row == this.lastRowIndex) newCell.beWall();
-            newRow.appendChild(newCell.element);
-            this.cells[row].push(newCell);
+            let cell = this.cells[col][row];
+            newRow.appendChild(cell.element);
         }
         this.element.appendChild(newRow);
     }
