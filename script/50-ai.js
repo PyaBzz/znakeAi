@@ -31,12 +31,15 @@ Ai.prototype.loadModel = async function () {
         return;
     }
 
-    this.ancestorModel = await tf.loadLayersModel(
+    tf.loadLayersModel(
         tf.io.browserFiles([
             this.jsonUpload.files[0],
             this.binUpload.files[0]
         ])
-    );
+    ).then(function (result) {
+        this.ancestorModel = result;
+        this.game.onAncestorLoad(true);
+    }).catch(err => this.game.onAncestorLoad(false))
 }
 
 Ai.prototype.getNextModel = function () {

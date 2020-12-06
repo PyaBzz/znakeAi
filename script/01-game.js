@@ -22,16 +22,17 @@ Game.prototype.initialise = function () {
 		[infoboardKeysEnum.Age, 0],
 		[infoboardKeysEnum.WormNo, "1 /" + this.config.ai.population],
 		[infoboardKeysEnum.Generation, 1],
-	);
-	this.evolutionInfoboard = new Infoboard(
-		"evolution-stats",
 		[infoboardKeysEnum.genMinAge, 0],
 		[infoboardKeysEnum.genMaxAge, 0],
 		[infoboardKeysEnum.genMinLen, 0],
 		[infoboardKeysEnum.genMaxLen, 0],
+	);
+	this.evolutionInfoboard = new Infoboard(
+		"evolution-stats",
 		[infoboardKeysEnum.TotalWorms, 1],
 		[infoboardKeysEnum.AverageAge, 0],
 		[infoboardKeysEnum.AverageLen, 0],
+		[infoboardKeysEnum.ancestor, "No"],
 	);
 	this.control = new Control(this);
 	this.overlay = new Overlay(this);
@@ -40,7 +41,11 @@ Game.prototype.initialise = function () {
 	this.ai = new Ai(this);
 }
 
-Game.prototype.onSplashClicked = function () {
+Game.prototype.onAncestorLoad = function (success) {
+	if (success)
+		this.evolutionInfoboard.set(infoboardKeysEnum.ancestor, "Yes")
+	else
+		this.evolutionInfoboard.set(infoboardKeysEnum.ancestor, "Failed!")
 }
 
 Game.prototype.start = function () {
@@ -90,10 +95,10 @@ Game.prototype.onNewModel = function () {
 }
 
 Game.prototype.onGenerationDone = function (genMinAge, genMaxAge, genMinLen, genMaxLen) {
-	this.evolutionInfoboard.set(infoboardKeysEnum.genMinAge, genMinAge);
-	this.evolutionInfoboard.set(infoboardKeysEnum.genMaxAge, genMaxAge);
-	this.evolutionInfoboard.set(infoboardKeysEnum.genMinLen, genMinLen);
-	this.evolutionInfoboard.set(infoboardKeysEnum.genMaxLen, genMaxLen);
+	this.generationInfoboard.set(infoboardKeysEnum.genMinAge, genMinAge);
+	this.generationInfoboard.set(infoboardKeysEnum.genMaxAge, genMaxAge);
+	this.generationInfoboard.set(infoboardKeysEnum.genMinLen, genMinLen);
+	this.generationInfoboard.set(infoboardKeysEnum.genMaxLen, genMaxLen);
 }
 
 Game.prototype.onNewGeneration = function () {
