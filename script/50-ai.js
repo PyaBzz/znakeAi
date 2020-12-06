@@ -31,7 +31,7 @@ Ai.prototype.loadModel = async function () {
         return;
     }
 
-    this.baseModel = await tf.loadLayersModel(
+    this.ancestorModel = await tf.loadLayersModel(
         tf.io.browserFiles([
             this.jsonUpload.files[0],
             this.binUpload.files[0]
@@ -55,9 +55,9 @@ Ai.prototype.getNextModel = function () {
 
 Ai.prototype.populateFirstGeneration = function () {
     this.generation = [];
-    if (isDefined(this.baseModel)) {
+    if (isDefined(this.ancestorModel)) {
         for (let i = 0; i < this.population; i++)
-            this.generation.push(this.modelService.clone(this.baseModel));
+            this.generation.push(this.modelService.clone(this.ancestorModel));
     } else {
         for (let i = 0; i < this.population; i++)
             this.generation.push(this.modelService.createModel());
