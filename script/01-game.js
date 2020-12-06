@@ -41,6 +41,9 @@ Game.prototype.initialise = function () {
 	this.ai = new Ai(this);
 }
 
+Game.prototype.onSplashClicked = function () {
+}
+
 Game.prototype.onAncestorLoad = function (success) {
 	if (success)
 		this.evolutionInfoboard.set(infoboardKeysEnum.ancestor, "Yes")
