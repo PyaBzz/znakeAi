@@ -4,21 +4,45 @@ Ai = function (game) {
     this.reproducingPopulation = this.game.config.ai.reproducingPopulation;
     this.inputVectorSize = 2;
     this.modelService = new ModelService(game, this.inputVectorSize);
-    this.populateFirstGeneration();
     this.totalModels = 0;
     this.totalAge = 0;
     this.totalLen = 0;
     this.bindEvents();
+    this.needsFirstPopulation = true;
 }
 
 Ai.prototype.bindEvents = function () {
     this.jsonUpload = document.getElementById('json-upload');
     this.binUpload = document.getElementById('bin-upload');
-    this.jsonUpload.onchange = function () { log("JSON file uploaded"); }
-    this.binUpload.onchange = function () { log("BIN file uploaded"); }
+    let me = this;
+    this.jsonUpload.onchange = function () { };
+    this.binUpload.onchange = function () { };
+    this.loadButton = document.getElementById('load-button');
+    this.loadButton.onclick = function () { me.loadModel() };
+}
+
+Ai.prototype.loadModel = async function () {
+    if (this.jsonUpload.files.length === 0) {
+        alert("Please select a JSON file to describe the model");
+        return;
+    }
+    if (this.binUpload.files.length === 0) {
+        alert("Please select a binary file for model weights");
+        return;
+    }
+
+    this.baseModel = await tf.loadLayersModel(
+        tf.io.browserFiles([
+            this.jsonUpload.files[0],
+            this.binUpload.files[0]
+        ])
+    );
 }
 
 Ai.prototype.getNextModel = function () {
+    if (this.needsFirstPopulation)
+        this.populateFirstGeneration();
+
     if (this.nextModelIndex === this.population)
         this.populateNextGeneration();
 
@@ -31,11 +55,18 @@ Ai.prototype.getNextModel = function () {
 
 Ai.prototype.populateFirstGeneration = function () {
     this.generation = [];
-    for (let i = 0; i < this.population; i++)
-        this.generation.push(this.modelService.createModel());
+    if (isDefined(this.baseModel)) {
+        for (let i = 0; i < this.population; i++)
+            this.generation.push(this.modelService.clone(this.baseModel));
+    } else {
+        for (let i = 0; i < this.population; i++)
+            this.generation.push(this.modelService.createModel());
+    }
+
     this.generationNumber = 1;
     this.nextModelIndex = 0;
     this.resetGenerationStats();
+    this.needsFirstPopulation = false;
 }
 
 Ai.prototype.populateNextGeneration = function () {

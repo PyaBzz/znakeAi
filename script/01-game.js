@@ -41,12 +41,12 @@ Game.prototype.initialise = function () {
 }
 
 Game.prototype.onSplashClicked = function () {
-	let brain = this.ai.getNextModel();
-	this.worm = new Worm(this, brain);
-	this.generationInfoboard.set(infoboardKeysEnum.Score, this.worm.length);
 }
 
 Game.prototype.start = function () {
+	let brain = this.ai.getNextModel();
+	this.worm = new Worm(this, brain);
+	this.generationInfoboard.set(infoboardKeysEnum.Score, this.worm.length);
 	this.button.beRestartButton();
 	this.control.setForRunning()
 	// this.feeder.dropFoodInitial();
