@@ -107,6 +107,11 @@ Game.prototype.onStepTaken = function () {
 
 Game.prototype.onFoodEaten = function () {
 	this.generationInfoboard.set(infoboardKeysEnum.Score, this.worm.length);
+	if (this.worm.length >= this.config.worm.targetLength) {
+		const shouldDownload = confirm("Target reached!\r\nWould you like to download the current AI model?");
+		if (shouldDownload)
+			game.ai.currentModel.save('downloads://znakeAi-model');
+	}
 	this.feeder.dropFood();
 }
 
@@ -117,10 +122,5 @@ Game.prototype.onWormDied = function () {
 	this.evolutionInfoboard.set(infoboardKeysEnum.TotalWorms, this.ai.totalModels);
 	this.evolutionInfoboard.set(infoboardKeysEnum.AverageLen, this.ai.AverageLen.toFixed(3));
 	this.evolutionInfoboard.set(infoboardKeysEnum.AverageAge, this.ai.averageAge.toFixed(3));
-	if (this.worm.length >= this.config.worm.targetLength) {
-		const shouldDownload = confirm("Target reached!\r\nWould you like to download the current AI model?");
-		if (shouldDownload)
-			game.ai.currentModel.save('downloads://znakeAi-model');
-	} else
-		this.restart();
+	this.restart();
 }
