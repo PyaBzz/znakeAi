@@ -4,7 +4,7 @@ znakeConfig = {
     startAtCentre: true,
     numberOfFoodCellsAtOnce: 1,
     worm: {
-        maxAge: 40,
+        maxAge: 60,
         targetLength: 6,
     },
     grid: {
@@ -15,8 +15,8 @@ znakeConfig = {
         pause: ' ',
     },
     ai: {
-        layerSizes: [20, 20, 4],  // Only even numbers
-        population: 60,
+        layerSizes: [12, 12, 4],  // Only even numbers
+        population: 20,
         reproducingPopulation: 30, // Half of the population
         activation: activationEnum.relu,
         kernelInit: initialiserEnum.leCunNormal,
@@ -39,9 +39,4 @@ infoboardKeysEnum = Object.freeze({
     genMaxLen: "Gen. Max Length",
 });
 
-//Todo: Add download of generation stats to the UI
 //Todo: Reduce output paths to 3 for "Forward", "Left", "Right" but then lifetime is an invalid score for worms that steer circularly all the time!
-//Todo: Experiment with model save, load, etc.
-//Todo: Experiment with model history, crossover, genetic algorithm, etc.
-//Todo: Use the tidy() function for model operations
-//Todo: After implementing genetic algorithm, considre adding other criterial like life time of the worm

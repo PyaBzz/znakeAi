@@ -44,7 +44,6 @@ Worm.prototype.step = function () {
     else if (nextCell.isFood) {
         this.moveHeadTo(nextCell);
         this.game.onFoodEaten();
-        this.moveTail();  //Disables worm growth
     }
     else {
         this.moveHeadTo(nextCell);
@@ -104,8 +103,9 @@ Worm.prototype.getDirectionFromOutput = function (tensor) {
 }
 
 Worm.prototype.getInputVector = function () {
-    const dist = this.grid.head.getDistanceTo(this.grid.food);
-    return [dist, dist];
+    const hor = Math.sign(this.grid.food.col - this.grid.head.col);
+    const ver = Math.sign(this.grid.food.row - this.grid.head.row);
+    return [hor, ver];
 }
 
 Object.defineProperties(Worm.prototype, {

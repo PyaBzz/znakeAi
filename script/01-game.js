@@ -119,6 +119,7 @@ Game.prototype.onWormDied = function () {
 	this.evolutionInfoboard.set(infoboardKeysEnum.AverageAge, this.ai.averageAge.toFixed(3));
 	if (this.worm.length >= this.config.worm.targetLength) {
 		alert("Target reached!");
+		game.ai.currentModel.save('downloads://znakeAi-model');
 	} else
 		this.restart();
 }
