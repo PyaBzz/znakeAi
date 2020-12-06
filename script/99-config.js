@@ -2,7 +2,6 @@ znakeConfig = {
     devMode: false,
     stepTime: 1,  // milliseconds
     startAtCentre: true,
-    numberOfFoodCellsAtOnce: 1,
     worm: {
         maxAge: 60,
         targetLength: 6,

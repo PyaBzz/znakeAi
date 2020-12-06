@@ -49,7 +49,6 @@ Game.prototype.start = function () {
 	this.generationInfoboard.set(infoboardKeysEnum.Length, this.worm.length);
 	this.button.beRestartButton();
 	this.control.setForRunning()
-	// this.feeder.dropFoodInitial();
 	this.feeder.dropFood();
 	// this.visualiser = new Visualiser(this);
 	// this.visualiser.visualiseGrid();
