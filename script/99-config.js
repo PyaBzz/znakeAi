@@ -1,5 +1,5 @@
 znakeConfig = {
-    devMode: true,
+    devMode: false,
     stepTime: 1,  // milliseconds
     startAtCentre: true,
     numberOfFoodCellsAtOnce: 1,
@@ -22,6 +22,7 @@ znakeConfig = {
         kernelInit: initialiserEnum.leCunNormal,
         useBias: true,
         biasInit: initialiserEnum.randomNormal,
+        mutationNoiseLevel: 0.01,  //Standard deviation of the normal noise
     }
 }
 
