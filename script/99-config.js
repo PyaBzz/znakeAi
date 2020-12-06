@@ -27,7 +27,7 @@ znakeConfig = {
 }
 
 infoboardKeysEnum = Object.freeze({
-    Score: "Score",
+    Length: "Length",
     Age: "Age",
     WormNo: "Worm No",
     Generation: "Generation",

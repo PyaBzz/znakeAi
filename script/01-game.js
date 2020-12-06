@@ -18,7 +18,7 @@ Game.prototype.initialise = function () {
 	this.grid = new Grid(this, document.getElementById('grid-container'));
 	this.generationInfoboard = new Infoboard(
 		"generation-stats",
-		[infoboardKeysEnum.Score, 0],
+		[infoboardKeysEnum.Length, 0],
 		[infoboardKeysEnum.Age, 0],
 		[infoboardKeysEnum.WormNo, "1 /" + this.config.ai.population],
 		[infoboardKeysEnum.Generation, 1],
@@ -46,7 +46,7 @@ Game.prototype.onSplashClicked = function () {
 Game.prototype.start = function () {
 	let brain = this.ai.getNextModel();
 	this.worm = new Worm(this, brain);
-	this.generationInfoboard.set(infoboardKeysEnum.Score, this.worm.length);
+	this.generationInfoboard.set(infoboardKeysEnum.Length, this.worm.length);
 	this.button.beRestartButton();
 	this.control.setForRunning()
 	// this.feeder.dropFoodInitial();
@@ -67,7 +67,7 @@ Game.prototype.restart = function () {
 	this.worm.disappear();
 	let brain = this.ai.getNextModel();
 	this.worm = new Worm(this, brain);
-	this.generationInfoboard.set(infoboardKeysEnum.Score, this.worm.length);
+	this.generationInfoboard.set(infoboardKeysEnum.Length, this.worm.length);
 	this.control.setForRunning();
 	this.worm.run();
 }
@@ -106,7 +106,7 @@ Game.prototype.onStepTaken = function () {
 }
 
 Game.prototype.onFoodEaten = function () {
-	this.generationInfoboard.set(infoboardKeysEnum.Score, this.worm.length);
+	this.generationInfoboard.set(infoboardKeysEnum.Length, this.worm.length);
 	if (this.worm.length >= this.config.worm.targetLength) {
 		const shouldDownload = confirm("Target reached!\r\nWould you like to download the current AI model?");
 		if (shouldDownload)
