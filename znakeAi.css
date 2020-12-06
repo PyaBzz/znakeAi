@@ -35,6 +35,12 @@ body {
 #controls-row {
   margin-top: 10px;
 }
+
+label{
+  color: green;
+  font-size: 18px;
+}
+
 .spread-elements {
   display: inline-block;
   text-align: center;

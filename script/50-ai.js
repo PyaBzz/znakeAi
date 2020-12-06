@@ -8,6 +8,14 @@ Ai = function (game) {
     this.totalModels = 0;
     this.totalAge = 0;
     this.totalLen = 0;
+    this.bindEvents();
+}
+
+Ai.prototype.bindEvents = function () {
+    this.jsonUpload = document.getElementById('json-upload');
+    this.binUpload = document.getElementById('bin-upload');
+    this.jsonUpload.onchange = function () { log("JSON file uploaded"); }
+    this.binUpload.onchange = function () { log("BIN file uploaded"); }
 }
 
 Ai.prototype.getNextModel = function () {
