@@ -121,9 +121,13 @@ Worm.prototype.getDirectionFromOutput = function (tensor) { //Todo: Reduce outpu
 }
 
 Worm.prototype.getInputVector = function () { //Todo: Add information about walls too
-    const foodDirectionHor = Math.sign(this.grid.food.col - this.head.col);
-    const foodDirectionVer = Math.sign(this.grid.food.row - this.head.row);
-    return [foodDirectionHor, foodDirectionVer];
+    const foodDiffHor = Math.sign(this.grid.food.col - this.head.col);
+    const foodDiffVer = Math.sign(this.grid.food.row - this.head.row);
+    const deathDistUp = this.head.getDistance2Death(Direction.up);
+    const deathDistRight = this.head.getDistance2Death(Direction.right);
+    const deathDistDown = this.head.getDistance2Death(Direction.down);
+    const deathDistLeft = this.head.getDistance2Death(Direction.left);
+    return [foodDiffHor, foodDiffVer, deathDistUp, deathDistRight, deathDistDown, deathDistLeft];
 }
 
 Object.defineProperties(Worm.prototype, {
