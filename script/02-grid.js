@@ -32,6 +32,7 @@ Grid = function (game, container) {
 
     this.bindHandlers();
     this.maxDistance = Math.sqrt(Math.pow(this.height, 2) + Math.pow(this.width, 2));
+    this.food = null;
 }
 
 Grid.prototype.getStartCell = function () {

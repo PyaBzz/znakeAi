@@ -103,8 +103,8 @@ Worm.prototype.getDirectionFromOutput = function (tensor) { //Todo: Reduce outpu
 }
 
 Worm.prototype.getInputVector = function () { //Todo: Add information about walls too
-    const hor = Math.sign(this.grid.food.col - this.grid.head.col);
-    const ver = Math.sign(this.grid.food.row - this.grid.head.row);
+    const hor = Math.sign(this.grid.food.col - this.head.col);
+    const ver = Math.sign(this.grid.food.row - this.head.row);
     return [hor, ver];
 }
 

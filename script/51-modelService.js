@@ -77,7 +77,7 @@ ModelService.prototype.mate = function (mother, father) {
 
 ModelService.prototype.mix = function (tensorA, tensorB) {
     return tf.tidy(() => {
-        const axis = 0;
+        const axis = 0; //Todo: Properly mix instead of half-half
         const [firstHalf, discardedA] = tf.split(tensorA, 2, axis);
         const [discardedB, secondHalf] = tf.split(tensorB, 2, axis);
         res = tf.concat([firstHalf, secondHalf], axis);

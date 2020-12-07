@@ -46,8 +46,10 @@ Ai.prototype.getNextModel = function () {
     if (this.needsFirstPopulation)
         this.populateFirstGeneration();
 
-    if (this.nextModelIndex === this.population)
+    if (this.nextModelIndex === this.population) {
+        this.game.onGenerationDone(this.genMinAge, this.genMaxAge, this.genMinLen, this.genMaxLen);
         this.populateNextGeneration();
+    }
 
     this.currentModel = this.generation[this.nextModelIndex];
     this.totalModels++;
@@ -73,14 +75,13 @@ Ai.prototype.populateFirstGeneration = function () {
 }
 
 Ai.prototype.populateNextGeneration = function () {
-    this.game.onGenerationDone(this.genMinAge, this.genMaxAge, this.genMinLen, this.genMaxLen);
-    let winners = this.getFittest();
-    winners.shuffle();
-    let offspring = this.modelService.getOffsprings(winners);
-    winners.shuffle();
-    let mutatingWinners = winners.clone(0, offspring.length); //This is 1/4 of the population
-    let mutatedWinners = mutatingWinners.map(m => this.modelService.mutate(m))
-    this.generation = [...offspring, ...winners, ...mutatedWinners];
+    let fittest = this.getFittest(); //Todo: Think about population ratios
+    fittest.shuffle();
+    let offspring = this.modelService.getOffsprings(fittest);
+    fittest.shuffle();
+    let mutatingWinners = fittest.clone(0, offspring.length);
+    let mutatedWinners = mutatingWinners.map(m => this.modelService.mutate(m));
+    this.generation = [...offspring, ...fittest, ...mutatedWinners];
     // for (i = this.generation.length; i < this.population; i++)
     //     this.generation[i] = this.modelService.createModel();
     this.generationNumber++;

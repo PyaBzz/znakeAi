@@ -18,7 +18,7 @@ Cell.prototype.beWorm = function () {
 
 Cell.prototype.beHead = function () {
     this.type = cellTypeEnum.head;
-    this.grid.head = this;
+    // this.grid.head = this;
     this.element.className = 'worm';
 }
 
