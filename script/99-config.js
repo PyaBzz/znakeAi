@@ -14,7 +14,7 @@ znakeConfig = {
         pause: ' ',
     },
     ai: {
-        layerSizes: [4],  // Only even numbers
+        layerSizes: [8, 4],  // Only even numbers
         population: 64,
         reproducingPopulation: 32, // Half of the population
         activation: NeuronActivation.linear,
@@ -26,4 +26,4 @@ znakeConfig = {
     }
 }
 
-//Todo: Add option to disable display
+//Todo: Add stat collection of convergence
