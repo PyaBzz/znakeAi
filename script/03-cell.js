@@ -36,22 +36,21 @@ Cell.prototype.beWall = function () {
     this.element.className = 'wall';
 }
 
-Cell.prototype.getDistanceTo = function (otherCell) {
-    const horDiff = otherCell.col - this.col;
-    const verDiff = otherCell.row - this.row;
-    return Math.sqrt(Math.pow(horDiff, 2) + Math.pow(verDiff, 2)) / this.grid.maxDistance; //Normalised distance
-}
+// Cell.prototype.getDistanceTo = function (otherCellType, direction) {
 
-Cell.prototype.getValue = function () {
-    if (this.isHead)
-        return 0;
-    else if (this.isFood)
-        return 0;
-    else if (this.isDeadly)
-        return 2.4;
-    else
-        return this.getDistanceTo(this.grid.head) + this.getDistanceTo(this.grid.food);
-}
+//     return Math.sqrt(Math.pow(horDiff, 2) + Math.pow(verDiff, 2)) / this.grid.maxDistance; //Normalised distance
+// }
+
+// Cell.prototype.getValue = function () { //Todo: Remove
+//     if (this.isHead)
+//         return 0;
+//     else if (this.isFood)
+//         return 0;
+//     else if (this.isDeadly)
+//         return 2.4;
+//     else
+//         return this.getDistanceTo(this.grid.head) + this.getDistanceTo(this.grid.food);
+// }
 
 Object.defineProperties(Cell.prototype, {
     isWorm: { get: function () { return this.type === CellType.worm } },

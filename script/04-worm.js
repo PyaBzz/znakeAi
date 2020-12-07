@@ -110,7 +110,14 @@ Worm.prototype.die = function (nextHeadCell) {
 Worm.prototype.getDirectionFromOutput = function (tensor) { //Todo: Reduce output paths to 3 steering directions for "Forward", "Left", "Right" respectively
     let array = tensor.arraySync()[0];
     let indexOfMax = array.getMax().index;
-    return indexOfMax + 1;  // because directions start from 1
+    if (indexOfMax === 0)
+        return Direction.up;
+    if (indexOfMax === 1)
+        return Direction.right;
+    if (indexOfMax === 2)
+        return Direction.down;
+    if (indexOfMax === 3)
+        return Direction.left;
 }
 
 Worm.prototype.getInputVector = function () { //Todo: Add information about walls too
