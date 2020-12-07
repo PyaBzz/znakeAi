@@ -6,6 +6,15 @@ Cell = function (grid, rowNumber, colNumber) {
     this.row = rowNumber;
     this.col = colNumber;
     this.type = CellType.blank;
+
+    this.upNeighbour = null;
+    this.upRightNeighbour = null;
+    this.rightNeighbour = null;
+    this.downRightNeighbour = null;
+    this.downNeighbour = null;
+    this.downLeftNeighbour = null;
+    this.leftNeighbour = null;
+    this.upLeftNeighbour = null;
 }
 
 Cell.prototype.beWorm = function () {
@@ -58,4 +67,10 @@ Object.defineProperties(Cell.prototype, {
     isBlank: { get: function () { return this.type === CellType.blank } },
     isWall: { get: function () { return this.type === CellType.wall } },
     isDeadly: { get: function () { return this.isWall || this.isWorm } },
+    neighbours: {
+        get: function () {
+            let allNeighbours = [this.upNeighbour, this.upRightNeighbour, this.rightNeighbour, this.downRightNeighbour, this.downNeighbour, this.downLeftNeighbour, this.leftNeighbour, this.upLeftNeighbour];
+            return allNeighbours.filter(function (n) { return n !== null });
+        }
+    },
 });

@@ -36,7 +36,7 @@ Worm.prototype.step = function () {
     } else {
         //
     }
-    let nextCell = this.grid.getNextCell(this.head, this.currentDirection);
+    let nextCell = this.getNextCell();
 
     if (nextCell.isDeadly) {
         this.die();
@@ -52,6 +52,17 @@ Worm.prototype.step = function () {
     this.game.onStepTaken();
     if (this.age === this.maxAge)
         this.die();
+}
+
+Worm.prototype.getNextCell = function () {
+    if (this.currentDirection === Direction.up)
+        return this.head.upNeighbour;
+    if (this.currentDirection === Direction.right)
+        return this.head.rightNeighbour;
+    if (this.currentDirection === Direction.down)
+        return this.head.downNeighbour;
+    if (this.currentDirection === Direction.left)
+        return this.head.leftNeighbour;
 }
 
 Worm.prototype.getNextDirection = function () {

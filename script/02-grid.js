@@ -12,6 +12,30 @@ Grid = function (game, container) {
             let newCell = new Cell(this, row, col);
             if (col == 0 || col == this.lastColIndex || row == 0 || row == this.lastRowIndex) newCell.beWall();
             this.cells[col].push(newCell);
+
+            // Link up-neighbour
+            if (row != 0) {
+                newCell.upNeighbour = this.cells[col][row - 1];
+                newCell.upNeighbour.downNeighbour = newCell;
+            }
+
+            // Link up-left-neighbour
+            if (col != 0 && row != 0) {
+                newCell.upLeftNeighbour = this.cells[col - 1][row - 1];
+                newCell.upLeftNeighbour.downRightNeighbour = newCell;
+            }
+
+            // Link left-neighbour
+            if (col != 0) {
+                newCell.leftNeighbour = this.cells[col - 1][row];
+                newCell.leftNeighbour.rightNeighbour = newCell;
+            }
+
+            // Link down-left-neighbour
+            if (col != 0 && row != this.lastRowIndex) {
+                newCell.downLeftNeighbour = this.cells[col - 1][row + 1];
+                newCell.downLeftNeighbour.upRightNeighbour = newCell;
+            }
         }
     }
     for (let row = 0; row < this.height; row++) {
@@ -23,12 +47,6 @@ Grid = function (game, container) {
         this.element.appendChild(newRow);
     }
     this.container.appendChild(this.element);
-
-    this.nextCellGettingFunctions = {}; //Todo: Instead of this, put neighbour references in cells like bazGrid
-    this.nextCellGettingFunctions[Direction.up] = (me, wormHead) => me.cells[wormHead.col][wormHead.row - 1];
-    this.nextCellGettingFunctions[Direction.right] = (me, wormHead) => me.cells[wormHead.col + 1][wormHead.row];
-    this.nextCellGettingFunctions[Direction.down] = (me, wormHead) => me.cells[wormHead.col][wormHead.row + 1];
-    this.nextCellGettingFunctions[Direction.left] = (me, wormHead) => me.cells[wormHead.col - 1][wormHead.row];
 
     this.bindHandlers();
     this.maxDistance = Math.sqrt(Math.pow(this.height, 2) + Math.pow(this.width, 2));
@@ -46,10 +64,6 @@ Grid.prototype.getCentreCell = function () {
     let row = Math.floor(this.lastRowIndex / 2);
     let col = Math.floor(this.lastColIndex / 2);
     return this.cells[col][row];
-}
-
-Grid.prototype.getNextCell = function (wormHead, direction) {
-    return this.nextCellGettingFunctions[direction](this, wormHead);
 }
 
 Grid.prototype.getBlankCells = function () {
