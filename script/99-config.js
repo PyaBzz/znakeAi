@@ -17,7 +17,7 @@ znakeConfig = {
         layerSizes: [4],  // Only even numbers
         population: 20,
         reproducingPopulation: 30, // Half of the population
-        activation: activationEnum.relu,
+        activation: activationEnum.linear,
         kernelInit: initialiserEnum.leCunNormal,
         useBias: true,
         biasInit: initialiserEnum.randomNormal,
