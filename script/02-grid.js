@@ -24,7 +24,7 @@ Grid = function (game, container) {
     }
     this.container.appendChild(this.element);
 
-    this.nextCellGettingFunctions = {};
+    this.nextCellGettingFunctions = {}; //Todo: Instead of this, put neighbour references in cells like bazGrid
     this.nextCellGettingFunctions[directionEnum.up] = (me, wormHead) => me.cells[wormHead.col][wormHead.row - 1];
     this.nextCellGettingFunctions[directionEnum.right] = (me, wormHead) => me.cells[wormHead.col + 1][wormHead.row];
     this.nextCellGettingFunctions[directionEnum.down] = (me, wormHead) => me.cells[wormHead.col][wormHead.row + 1];

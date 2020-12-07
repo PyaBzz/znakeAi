@@ -96,13 +96,13 @@ Worm.prototype.die = function (nextHeadCell) {
     this.game.onWormDied();
 }
 
-Worm.prototype.getDirectionFromOutput = function (tensor) {
+Worm.prototype.getDirectionFromOutput = function (tensor) { //Todo: Reduce output paths to 3 steering directions for "Forward", "Left", "Right" respectively
     let array = tensor.arraySync()[0];
     let indexOfMax = array.getMax().index;
     return indexOfMax + 1;  // because directions start from 1
 }
 
-Worm.prototype.getInputVector = function () {
+Worm.prototype.getInputVector = function () { //Todo: Add information about walls too
     const hor = Math.sign(this.grid.food.col - this.grid.head.col);
     const ver = Math.sign(this.grid.food.row - this.grid.head.row);
     return [hor, ver];

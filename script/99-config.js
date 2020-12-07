@@ -3,7 +3,7 @@ znakeConfig = {
     stepTime: 1,  // milliseconds
     startAtCentre: true,
     worm: {
-        maxAge: 60,
+        maxAge: 60,  //Todo: Instead of this, allow a number of steps between eatings equal to the total explorable area of the grid
         targetLength: 6,
     },
     grid: {
@@ -39,5 +39,3 @@ infoboardKeysEnum = Object.freeze({
     genMaxLen: "Gen. Max Length",
     ancestor: "Use Ancestor",
 });
-
-//Todo: Reduce output paths to 3 for "Forward", "Left", "Right" but then lifetime is an invalid score for worms that steer circularly all the time!
