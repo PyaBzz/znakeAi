@@ -12,7 +12,7 @@ Worm = function (game, brain) {
     this.head.beHead();
     if (originIsFood)
         this.feeder.dropFood();
-    this.currentDirection = directionEnum.right;
+    this.currentDirection = Direction.right;
     this.directionFuncs = {};
     this.inputVectorSize = this.game.ai.inputVectorSize;
     this.stepTime = this.game.config.stepTime;
@@ -69,7 +69,7 @@ Worm.prototype.shouldConsiderDirection = function (dirCode) {
     if (this.isUnicellular)
         return true;
     else {
-        if (dirCode === oppositeDirectionEnum[this.currentDirection]) // No backwards moving
+        if (dirCode === OppositeDirection[this.currentDirection]) // No backwards moving
             return false;
         else
             return true;

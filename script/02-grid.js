@@ -25,10 +25,10 @@ Grid = function (game, container) {
     this.container.appendChild(this.element);
 
     this.nextCellGettingFunctions = {}; //Todo: Instead of this, put neighbour references in cells like bazGrid
-    this.nextCellGettingFunctions[directionEnum.up] = (me, wormHead) => me.cells[wormHead.col][wormHead.row - 1];
-    this.nextCellGettingFunctions[directionEnum.right] = (me, wormHead) => me.cells[wormHead.col + 1][wormHead.row];
-    this.nextCellGettingFunctions[directionEnum.down] = (me, wormHead) => me.cells[wormHead.col][wormHead.row + 1];
-    this.nextCellGettingFunctions[directionEnum.left] = (me, wormHead) => me.cells[wormHead.col - 1][wormHead.row];
+    this.nextCellGettingFunctions[Direction.up] = (me, wormHead) => me.cells[wormHead.col][wormHead.row - 1];
+    this.nextCellGettingFunctions[Direction.right] = (me, wormHead) => me.cells[wormHead.col + 1][wormHead.row];
+    this.nextCellGettingFunctions[Direction.down] = (me, wormHead) => me.cells[wormHead.col][wormHead.row + 1];
+    this.nextCellGettingFunctions[Direction.left] = (me, wormHead) => me.cells[wormHead.col - 1][wormHead.row];
 
     this.bindHandlers();
     this.maxDistance = Math.sqrt(Math.pow(this.height, 2) + Math.pow(this.width, 2));
