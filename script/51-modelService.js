@@ -6,6 +6,7 @@ ModelService = function (game, inputVectorSize) {
     this.mutationNoiseLevel = game.config.ai.mutationNoiseLevel;
     this.useBias = game.config.ai.useBias;
     this.biasInit = game.config.ai.biasInit;
+    this.mutateBias = game.config.ai.mutateBias;
     this.inputVectorSize = inputVectorSize;
 }
 
@@ -96,8 +97,7 @@ ModelService.prototype.mutate = function (model) {
             const originalBiases = originalWeights[1];
 
             const mutatedCoefficients = this.addNoise(originalCoefficients);
-            const mutatedBiases = this.addNoise(originalBiases);
-
+            const mutatedBiases = this.mutateBias ? this.addNoise(originalBiases) : originalBiases;
             mutatedLayer.setWeights([mutatedCoefficients, mutatedBiases]);
         }
         return mutant;

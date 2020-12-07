@@ -19,7 +19,8 @@ znakeConfig = {
         reproducingPopulation: 30, // Half of the population
         activation: activationEnum.linear,
         kernelInit: initialiserEnum.leCunNormal,
-        useBias: true,  //Todo: Experiment to see if biases help at all
+        useBias: true,
+        mutateBias: true,
         biasInit: initialiserEnum.zeros,
         mutationNoiseLevel: 0.01,  //Standard deviation of the normal noise
     }
