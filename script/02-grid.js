@@ -14,20 +14,20 @@ Grid = function (game, container) {
             this.cells[col].push(newCell);
 
             if (row != 0) { // Link up-neighbour
-                newCell.neighbours.up = this.cells[col][row - 1];
-                newCell.neighbours.up.neighbours.down = newCell;
+                newCell[Direction.up] = this.cells[col][row - 1];
+                newCell[Direction.up][Direction.down] = newCell;
             }
             if (col != 0 && row != 0) { // Link up-left-neighbour
-                newCell.neighbours.upLeft = this.cells[col - 1][row - 1];
-                newCell.neighbours.upLeft.neighbours.downRight = newCell;
+                newCell.upLeft = this.cells[col - 1][row - 1];
+                newCell.upLeft.downRight = newCell;
             }
             if (col != 0) { // Link left-neighbour
-                newCell.neighbours.left = this.cells[col - 1][row];
-                newCell.neighbours.left.neighbours.right = newCell;
+                newCell[Direction.left] = this.cells[col - 1][row];
+                newCell[Direction.left][Direction.right] = newCell;
             }
             if (col != 0 && row != this.lastRowIndex) { // Link down-left-neighbour
-                newCell.neighbours.downLeft = this.cells[col - 1][row + 1];
-                newCell.neighbours.downLeft.neighbours.upRight = newCell;
+                newCell.downLeft = this.cells[col - 1][row + 1];
+                newCell.downLeft.upRight = newCell;
             }
         }
     }

@@ -56,13 +56,13 @@ Worm.prototype.step = function () {
 
 Worm.prototype.getNextCell = function () {
     if (this.currentDirection === Direction.up)
-        return this.head.neighbours.up;
+        return this.head.up;
     if (this.currentDirection === Direction.right)
-        return this.head.neighbours.right;
+        return this.head.right;
     if (this.currentDirection === Direction.down)
-        return this.head.neighbours.down;
+        return this.head.down;
     if (this.currentDirection === Direction.left)
-        return this.head.neighbours.left;
+        return this.head.left;
 }
 
 Worm.prototype.getNextDirection = function () {

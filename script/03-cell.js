@@ -6,8 +6,6 @@ Cell = function (grid, rowNumber, colNumber) {
     this.row = rowNumber;
     this.col = colNumber;
     this.type = CellType.blank;
-
-    this.neighbours = {}
 }
 
 Cell.prototype.beWorm = function () {
