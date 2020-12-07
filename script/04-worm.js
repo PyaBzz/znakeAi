@@ -56,13 +56,13 @@ Worm.prototype.step = function () {
 
 Worm.prototype.getNextCell = function () {
     if (this.currentDirection === Direction.up)
-        return this.head.upNeighbour;
+        return this.head.neighbours.up;
     if (this.currentDirection === Direction.right)
-        return this.head.rightNeighbour;
+        return this.head.neighbours.right;
     if (this.currentDirection === Direction.down)
-        return this.head.downNeighbour;
+        return this.head.neighbours.down;
     if (this.currentDirection === Direction.left)
-        return this.head.leftNeighbour;
+        return this.head.neighbours.left;
 }
 
 Worm.prototype.getNextDirection = function () {
@@ -114,9 +114,9 @@ Worm.prototype.getDirectionFromOutput = function (tensor) { //Todo: Reduce outpu
 }
 
 Worm.prototype.getInputVector = function () { //Todo: Add information about walls too
-    const hor = Math.sign(this.grid.food.col - this.head.col);
-    const ver = Math.sign(this.grid.food.row - this.head.row);
-    return [hor, ver];
+    const foodDirectionHor = Math.sign(this.grid.food.col - this.head.col);
+    const foodDirectionVer = Math.sign(this.grid.food.row - this.head.row);
+    return [foodDirectionHor, foodDirectionVer];
 }
 
 Object.defineProperties(Worm.prototype, {

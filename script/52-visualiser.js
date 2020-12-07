@@ -13,7 +13,7 @@ Visualiser.prototype.visualiseGrid = function () {
 Visualiser.prototype.getGridMatrix = function () {
     let gridCells = this.game.grid.cells;
     let values = [];
-    for (let row of gridCells)
-        values.push(row.map(c => c.getValue()));
+    for (let col of gridCells)
+        values.push(col.map(c => c.getValue()));
     return values;
 }

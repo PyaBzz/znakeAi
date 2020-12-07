@@ -13,28 +13,21 @@ Grid = function (game, container) {
             if (col == 0 || col == this.lastColIndex || row == 0 || row == this.lastRowIndex) newCell.beWall();
             this.cells[col].push(newCell);
 
-            // Link up-neighbour
-            if (row != 0) {
-                newCell.upNeighbour = this.cells[col][row - 1];
-                newCell.upNeighbour.downNeighbour = newCell;
+            if (row != 0) { // Link up-neighbour
+                newCell.neighbours.up = this.cells[col][row - 1];
+                newCell.neighbours.up.neighbours.down = newCell;
             }
-
-            // Link up-left-neighbour
-            if (col != 0 && row != 0) {
-                newCell.upLeftNeighbour = this.cells[col - 1][row - 1];
-                newCell.upLeftNeighbour.downRightNeighbour = newCell;
+            if (col != 0 && row != 0) { // Link up-left-neighbour
+                newCell.neighbours.upLeft = this.cells[col - 1][row - 1];
+                newCell.neighbours.upLeft.neighbours.downRight = newCell;
             }
-
-            // Link left-neighbour
-            if (col != 0) {
-                newCell.leftNeighbour = this.cells[col - 1][row];
-                newCell.leftNeighbour.rightNeighbour = newCell;
+            if (col != 0) { // Link left-neighbour
+                newCell.neighbours.left = this.cells[col - 1][row];
+                newCell.neighbours.left.neighbours.right = newCell;
             }
-
-            // Link down-left-neighbour
-            if (col != 0 && row != this.lastRowIndex) {
-                newCell.downLeftNeighbour = this.cells[col - 1][row + 1];
-                newCell.downLeftNeighbour.upRightNeighbour = newCell;
+            if (col != 0 && row != this.lastRowIndex) { // Link down-left-neighbour
+                newCell.neighbours.downLeft = this.cells[col - 1][row + 1];
+                newCell.neighbours.downLeft.neighbours.upRight = newCell;
             }
         }
     }
@@ -54,10 +47,7 @@ Grid = function (game, container) {
 }
 
 Grid.prototype.getStartCell = function () {
-    if (this.game.config.startAtCentre)
-        return this.getCentreCell();
-    else
-        return this.getBlankCells()[0];
+    return this.game.config.startAtCentre ? this.getCentreCell() : this.getBlankCells()[0];
 }
 
 Grid.prototype.getCentreCell = function () {
