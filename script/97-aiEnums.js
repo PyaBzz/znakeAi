@@ -21,7 +21,7 @@ initialiserEnum = Object.freeze({
     glorotUniform: "glorotUniform",
     heNormal: "heNormal",
     heUniform: "heUniform",
-    leCunNormal: "leCunNormal",
+    leCunNormal: "leCunNormal", //A variation of truncated normal, better for higher layers
     leCunUniform: "leCunUniform",
     orthogonal: "orthogonal",
     randomNormal: "randomNormal",

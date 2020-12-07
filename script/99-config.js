@@ -3,7 +3,7 @@ znakeConfig = {
     stepTime: 1,  // milliseconds
     startAtCentre: true,
     worm: {
-        maxAge: 60,  //Todo: Instead of this, allow a number of steps between eatings equal to the total explorable area of the grid
+        maxAge: 60,  //Todo: Instead of this, allow a number of steps between eatings equal to the total explorable area of the grid then lifetime becomes a good score!
         targetLength: 6,
     },
     grid: {
@@ -19,8 +19,8 @@ znakeConfig = {
         reproducingPopulation: 30, // Half of the population
         activation: activationEnum.linear,
         kernelInit: initialiserEnum.leCunNormal,
-        useBias: true,
-        biasInit: initialiserEnum.randomNormal,
+        useBias: true,  //Todo: Experiment to see if biases help at all
+        biasInit: initialiserEnum.zeros,
         mutationNoiseLevel: 0.01,  //Standard deviation of the normal noise
     }
 }
