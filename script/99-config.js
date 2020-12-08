@@ -4,7 +4,7 @@ znakeConfig = {
     slowStepTime: 100,  // milliseconds
     startAtCentre: true,
     worm: {
-        targetLength: 16,
+        targetLength: 30,
     },
     grid: {
         height: 16,  // Only even numbers greater than 4
