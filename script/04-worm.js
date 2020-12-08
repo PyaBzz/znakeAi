@@ -16,13 +16,23 @@ Worm = function (game, brain) {
     this.currentDirection = Direction.right;
     this.directionFuncs = {};
     this.inputVectorSize = this.game.ai.inputVectorSize;
-    this.stepTime = this.game.config.stepTime;
+    this.fastStepTime = this.game.config.fastStepTime;
+    this.slowStepTime = this.game.config.slowStepTime;
+    this.defaultStepTime = this.game.config.defaultStepTime;
     let me = this;
-    this.intervaller = new Intervaller(() => me.step(), me.stepTime);
+    this.intervaller = new Intervaller(() => me.step(), me.defaultStepTime);
 }
 
 Worm.prototype.run = function () {
     this.intervaller.run();
+}
+
+Worm.prototype.speedUp = function () {
+    this.intervaller.setPeriod(this.fastStepTime);
+}
+
+Worm.prototype.slowDown = function () {
+    this.intervaller.setPeriod(this.slowStepTime);
 }
 
 Worm.prototype.stopRunning = function () {

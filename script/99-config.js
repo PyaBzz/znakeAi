@@ -1,6 +1,7 @@
 znakeConfig = {
     devMode: false,
-    stepTime: 1,  // milliseconds
+    fastStepTime: 1,  // milliseconds
+    slowStepTime: 100,  // milliseconds
     startAtCentre: true,
     worm: {
         targetLength: 16,

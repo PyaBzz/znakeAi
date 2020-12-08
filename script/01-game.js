@@ -11,6 +11,7 @@ Game.prototype.importConfig = function (znakeConf) {
 		throw "Grid height must be at least 4"
 	if (this.config.grid.width < 4)
 		throw "Grid width must be at least 4"
+	this.config.defaultStepTime = znakeConf.fastStepTime;
 }
 
 Game.prototype.initialise = function () {
@@ -42,7 +43,6 @@ Game.prototype.initialise = function () {
 	this.button = new Button(this, document.getElementById('button'));
 	this.ai = new Ai(this);
 }
-//Todo: Add UI checkbox to slow down for watching
 Game.prototype.onSplashClicked = function () {
 }
 
@@ -63,6 +63,7 @@ Game.prototype.start = function () {
 	// this.visualiser = new Visualiser(this);
 	// this.visualiser.visualiseGrid();
 	this.worm.run();
+	this.bindEvents();
 }
 
 Game.prototype.restart = function () {
@@ -72,7 +73,7 @@ Game.prototype.restart = function () {
 	} else {
 		this.worm.stopRunning();
 	}
-	this.stepTime = this.config.stepTime;
+	this.fastStepTime = this.config.fastStepTime;
 	this.worm.disappear();
 	let brain = this.ai.getNextModel();
 	this.worm = new Worm(this, brain);
@@ -93,6 +94,21 @@ Game.prototype.togglePause = function () {
 		this.isPaused = true;
 		this.overlay.popUp();
 	}
+}
+
+Game.prototype.bindEvents = function () {
+	this.speedTickbox = document.getElementById('speed-tickbox');
+	let me = this;
+	this.speedTickbox.onchange = function () {
+		if (me.speedTickbox.checked) {
+			me.config.defaultStepTime = me.config.slowStepTime;
+			me.worm.slowDown();
+		}
+		else {
+			me.config.defaultStepTime = me.config.fastStepTime;
+			me.worm.speedUp();
+		}
+	};
 }
 
 Game.prototype.onNewModel = function () {
