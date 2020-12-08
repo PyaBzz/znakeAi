@@ -29,10 +29,11 @@ Game.prototype.initialise = function () {
 	);
 	this.evolutionInfoboard = new Infoboard(
 		"evolution-stats",
+		[InfoboardKey.ancestor, "No"],
+		[InfoboardKey.maxStepsToFood, this.grid.playableCellCount],
+		[InfoboardKey.TotalWorms, 1],
 		[InfoboardKey.AverageAge, 0],
 		[InfoboardKey.AverageLen, 0],
-		[InfoboardKey.TotalWorms, 1],
-		[InfoboardKey.ancestor, "No"],
 	);
 	this.control = new Control(this);
 	this.overlay = new Overlay(this);

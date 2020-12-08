@@ -3,7 +3,7 @@ Worm = function (game, brain) {
     this.brain = brain;
     this.grid = this.game.grid;
     this.feeder = this.game.feeder;
-    this.stepsBetweenMeals = this.grid.playableCellCount;
+    this.maxStepsToFood = this.grid.playableCellCount;
     this.stepsSinceLastMeal = 0;
     this.age = 0;
     this.sections = [];
@@ -53,7 +53,7 @@ Worm.prototype.step = function () {
         this.moveHeadTo(nextCell);
         this.moveTail();
     }
-    if (this.stepsSinceLastMeal === this.stepsBetweenMeals)
+    if (this.stepsSinceLastMeal === this.maxStepsToFood)
         this.die();
 }
 
