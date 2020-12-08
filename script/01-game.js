@@ -30,6 +30,7 @@ Game.prototype.initialise = function () {
 	this.evolutionInfoboard = new Infoboard(
 		"evolution-stats",
 		[InfoboardKey.ancestor, "No"],
+		[InfoboardKey.targetLength, this.config.worm.targetLength],
 		[InfoboardKey.maxStepsToFood, this.grid.playableCellCount],
 		[InfoboardKey.TotalWorms, 1],
 		[InfoboardKey.AverageAge, 0],
@@ -41,7 +42,7 @@ Game.prototype.initialise = function () {
 	this.button = new Button(this, document.getElementById('button'));
 	this.ai = new Ai(this);
 }
-
+//Todo: Add UI checkbox to slow down for watching
 Game.prototype.onSplashClicked = function () {
 }
 
@@ -116,7 +117,7 @@ Game.prototype.onStepTaken = function () {
 Game.prototype.onFoodEaten = function () {
 	this.generationInfoboard.set(InfoboardKey.Length, this.worm.length);
 	if (this.worm.length >= this.config.worm.targetLength) {
-		const shouldDownload = confirm("Target reached!\r\nWould you like to download the current AI model?");
+		const shouldDownload = confirm("Target length of " + this.config.worm.targetLength + " reached!\r\nWould you like to download the current AI model?");
 		if (shouldDownload)
 			game.ai.currentModel.save('downloads://znakeAi-model');
 	}

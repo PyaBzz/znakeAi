@@ -48,6 +48,7 @@ InfoboardKey = Object.freeze({
     genMaxAge: "Last Gen. Max Age",
     genMinLen: "Last Gen. Min Length",
     genMaxLen: "Last Gen. Max Length",
-    ancestor: "Use Ancestor",
+    ancestor: "Import Ancestor",
     maxStepsToFood: "Max Steps To Food",
+    targetLength: "Target Length",
 });
