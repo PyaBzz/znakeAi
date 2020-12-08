@@ -18,20 +18,20 @@ Game.prototype.initialise = function () {
 	this.grid = new Grid(this, document.getElementById('grid-container'));
 	this.generationInfoboard = new Infoboard(
 		"generation-stats",
-		[InfoboardKey.Length, 0],
 		[InfoboardKey.Age, 0],
+		[InfoboardKey.Length, 0],
 		[InfoboardKey.WormNo, "1 /" + this.config.ai.population],
 		[InfoboardKey.Generation, 1],
-		[InfoboardKey.genMinAge, 0],
 		[InfoboardKey.genMaxAge, 0],
-		[InfoboardKey.genMinLen, 0],
+		[InfoboardKey.genMinAge, 0],
 		[InfoboardKey.genMaxLen, 0],
+		[InfoboardKey.genMinLen, 0],
 	);
 	this.evolutionInfoboard = new Infoboard(
 		"evolution-stats",
-		[InfoboardKey.TotalWorms, 1],
 		[InfoboardKey.AverageAge, 0],
 		[InfoboardKey.AverageLen, 0],
+		[InfoboardKey.TotalWorms, 1],
 		[InfoboardKey.ancestor, "No"],
 	);
 	this.control = new Control(this);
