@@ -44,9 +44,9 @@ InfoboardKey = Object.freeze({
     TotalWorms: "Total Worms",
     AverageAge: "Average Age",
     AverageLen: "Average Length",
-    genMinAge: "Gen. Min Age",
-    genMaxAge: "Gen. Max Age",
-    genMinLen: "Gen. Min Length",
-    genMaxLen: "Gen. Max Length",
+    genMinAge: "Last Gen. Min Age",
+    genMaxAge: "Last Gen. Max Age",
+    genMinLen: "Last Gen. Min Length",
+    genMaxLen: "Last Gen. Max Length",
     ancestor: "Use Ancestor",
 });

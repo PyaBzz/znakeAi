@@ -3,7 +3,8 @@ Worm = function (game, brain) {
     this.brain = brain;
     this.grid = this.game.grid;
     this.feeder = this.game.feeder;
-    this.maxAge = this.game.config.worm.maxAge;
+    this.stepsBetweenMeals = this.grid.playableCellCount;
+    this.stepsSinceLastMeal = 0;
     this.age = 0;
     this.sections = [];
     let origin = this.grid.getStartCell();
@@ -30,6 +31,8 @@ Worm.prototype.stopRunning = function () {
 
 Worm.prototype.step = function () {
     this.age++;
+    this.stepsSinceLastMeal++;
+    this.game.onStepTaken();
     let direction = this.getNextDirection();
     if (this.shouldConsiderDirection(direction)) {
         this.currentDirection = direction;
@@ -43,14 +46,14 @@ Worm.prototype.step = function () {
     }
     else if (nextCell.isFood) {
         this.moveHeadTo(nextCell);
+        this.stepsSinceLastMeal = 0;
         this.game.onFoodEaten();
     }
     else {
         this.moveHeadTo(nextCell);
         this.moveTail();
     }
-    this.game.onStepTaken();
-    if (this.age === this.maxAge)
+    if (this.stepsSinceLastMeal === this.stepsBetweenMeals)
         this.die();
 }
 

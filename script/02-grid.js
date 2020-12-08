@@ -78,4 +78,5 @@ Grid.prototype.bindHandlers = function () {
 Object.defineProperties(Grid.prototype, {
     lastRowIndex: { get: function () { return this.height - 1 } },
     lastColIndex: { get: function () { return this.width - 1 } },
+    playableCellCount: { get: function () { return (this.width - 2) * (this.height - 2) } },
 });

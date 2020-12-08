@@ -3,8 +3,7 @@ znakeConfig = {
     stepTime: 1,  // milliseconds
     startAtCentre: true,
     worm: {
-        maxAge: 60,  //Todo: Instead of this, allow a number of steps between eatings equal to the total explorable area of the grid then lifetime becomes a good score!
-        targetLength: 6,
+        targetLength: 16,
     },
     grid: {
         height: 16,  // Only even numbers greater than 4

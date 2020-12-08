@@ -96,7 +96,7 @@ Ai.prototype.getFittest = function () {
 }
 
 Ai.prototype.fitnessFunc = function (model) {
-    return model.wormAge / this.game.config.worm.maxAge + model.wormLength;
+    return model.wormAge + model.wormLength * this.game.grid.playableCellCount;
 }
 
 Ai.prototype.onWormDied = function (worm) {
@@ -111,9 +111,9 @@ Ai.prototype.onWormDied = function (worm) {
 }
 
 Ai.prototype.resetGenerationStats = function () {
-    this.genMinAge = this.game.config.worm.maxAge;
+    this.genMinAge = Number.MAX_VALUE;
     this.genMaxAge = 0;
-    this.genMinLen = this.game.config.worm.targetLength;
+    this.genMinLen = Number.MAX_VALUE;
     this.genMaxLen = 0;
 }
 
