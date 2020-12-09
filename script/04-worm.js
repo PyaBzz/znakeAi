@@ -118,14 +118,14 @@ Worm.prototype.getDirectionFromOutput = function (tensor) { //Todo: Reduce outpu
         return Direction.left;
 }
 
-Worm.prototype.getInputVector = function () { //Todo: Should inputs be in a similar range?
-    const foodDiffHor = Math.sign(this.grid.food.col - this.head.col);
-    const foodDiffVer = Math.sign(this.grid.food.row - this.head.row);
-    const deathDistUp = this.head.getDistance2Death(Direction.up);
-    const deathDistRight = this.head.getDistance2Death(Direction.right);
-    const deathDistDown = this.head.getDistance2Death(Direction.down);
-    const deathDistLeft = this.head.getDistance2Death(Direction.left);
-    return [foodDiffHor, foodDiffVer, deathDistUp, deathDistRight, deathDistDown, deathDistLeft];
+Worm.prototype.getInputVector = function () {
+    const foodSignalHor = this.grid.food.col - this.head.col;
+    const foodSignalVer = this.grid.food.row - this.head.row;
+    const deathSignalHor = this.head.getDistance2Death(Direction.right)
+        - this.head.getDistance2Death(Direction.left);
+    const deathSignalVer = this.head.getDistance2Death(Direction.up)
+        - this.head.getDistance2Death(Direction.down);
+    return [foodSignalHor, foodSignalVer, deathSignalHor, deathSignalVer];
 }
 
 Object.defineProperties(Worm.prototype, {

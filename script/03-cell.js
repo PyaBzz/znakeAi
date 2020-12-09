@@ -41,7 +41,7 @@ Cell.prototype.getDistance2Death = function (direc) {
         cellCount++;
         runner = runner[direc];
     }
-    return cellCount / this.grid.maxDistance; //Normalise distance, no diagonal yet
+    return cellCount; //No diagonal yet
 }
 
 Object.defineProperties(Cell.prototype, {
