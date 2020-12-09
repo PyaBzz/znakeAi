@@ -50,7 +50,7 @@ ModelService.prototype.getOffsprings = function (parentWorms) {
     return children;
 }
 
-ModelService.prototype.mate = function (mother, father) {
+ModelService.prototype.mate = function (mother, father) { //Todo: Does mating do any good?
     return tf.tidy(() => {
         let offspring = this.clone(mother);
         for (let i = 0; i < mother.layers.length; i++) {
