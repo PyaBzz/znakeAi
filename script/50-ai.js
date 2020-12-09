@@ -117,7 +117,7 @@ Ai.prototype.resetGenerationStats = function () {
     this.genMaxLen = 0;
 }
 
-Object.defineProperties(Ai.prototype, {
+Object.defineProperties(Ai.prototype, { //Todo: Refactor a stat object
     averageAge: { get: function () { return this.totalAge / this.totalModels } },
     AverageLen: { get: function () { return this.totalLen / this.totalModels } },
 });
