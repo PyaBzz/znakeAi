@@ -44,11 +44,7 @@ Worm.prototype.step = function () {
     this.stepsSinceLastMeal++;
     this.game.onStepTaken();
     let direction = this.getNextDirection();
-    if (this.shouldConsiderDirection(direction)) {
-        this.currentDirection = direction;
-    } else {
-        //
-    }
+    this.currentDirection = direction;
     let nextCell = this.getNextCell();
 
     if (nextCell.isDeadly) {
@@ -87,17 +83,6 @@ Worm.prototype.getNextDirection = function () {
     });
     let direction = this.getDirectionFromOutput(modelOutput);
     return direction;
-}
-
-Worm.prototype.shouldConsiderDirection = function (dirCode) {
-    if (this.isUnicellular)
-        return true;
-    else {
-        if (dirCode === OppositeDirection[this.currentDirection]) // No backwards moving
-            return false;
-        else
-            return true;
-    }
 }
 
 Worm.prototype.moveHeadTo = function (nextHeadCell) {
