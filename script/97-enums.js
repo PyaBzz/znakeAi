@@ -52,3 +52,17 @@ InfoboardKey = Object.freeze({
     maxStepsToFood: "Max Steps To Food",
     targetLength: "Target Length",
 });
+
+StatKey = Object.freeze({
+    Length: "Length",
+    Age: "Age",
+    WormNo: "Worm No",
+    Generation: "Generation",
+    TotalWorms: "Total Worms",
+    AverageAge: "Average Age",
+    AverageLen: "Average Length",
+    genMinAge: "Last Gen. Min Age",
+    genMaxAge: "Last Gen. Max Age",
+    genMinLen: "Last Gen. Min Length",
+    genMaxLen: "Last Gen. Max Length",
+});

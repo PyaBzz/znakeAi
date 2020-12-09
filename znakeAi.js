@@ -1,3 +1,3 @@
 onload = function () {
-		game = new Game(znakeConfig);
+	game = new Game(znakeConfig);
 }
