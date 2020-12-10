@@ -22,7 +22,7 @@ znakeConfig = {
         useBias: true, //Todo: Enable the modelService to run without biases
         mutateBias: true,
         biasInit: NeuronInitialiser.zeros,
-        mutationRandomness: 0.04,  //Standard deviation of the normal noise
+        mutationRandomness: 0.1,  //Standard deviation of the normal noise
     }
 }
 
