@@ -22,7 +22,7 @@ znakeConfig = {
         useBias: true,
         mutateBias: true,
         biasInit: NeuronInitialiser.zeros,
-        mutationNoiseLevel: 0.01,  //Standard deviation of the normal noise
+        mutationNoiseLevel: 0.04,  //Standard deviation of the normal noise
     }
 }
 
