@@ -42,7 +42,7 @@ Grid = function (game, container) {
     this.container.appendChild(this.element);
 
     this.bindHandlers();
-    this.maxDistance = Math.sqrt(Math.pow(this.height, 2) + Math.pow(this.width, 2));
+    this.maxDistance = Math.sqrt(Math.pow(this.maxDistanceHor, 2) + Math.pow(this.maxDistanceVer, 2));
     this.food = null;
 }
 
@@ -78,5 +78,7 @@ Grid.prototype.bindHandlers = function () {
 Object.defineProperties(Grid.prototype, {
     lastRowIndex: { get: function () { return this.height - 1 } },
     lastColIndex: { get: function () { return this.width - 1 } },
+    maxDistanceVer: { get: function () { return this.height - 1 } },
+    maxDistanceHor: { get: function () { return this.width - 1 } },
     playableCellCount: { get: function () { return (this.width - 2) * (this.height - 2) } },
 });
