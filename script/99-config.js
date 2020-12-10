@@ -26,4 +26,5 @@ znakeConfig = {
     }
 }
 
+//Todo: Refactor all classes to ES6 notation
 //Todo: Add stat collection of convergence
