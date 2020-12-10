@@ -3,7 +3,7 @@ ModelService = function (game, inputVectorSize) {
     this.layerSizes = game.config.ai.layerSizes;
     this.activation = game.config.ai.activation;
     this.kernelInit = game.config.ai.kernelInit;
-    this.mutationRandomness = game.config.ai.mutationRandomness;
+    this.mutationDiversity = game.config.ai.mutationDiversity;
     this.useBias = game.config.ai.useBias;
     this.biasInit = game.config.ai.biasInit;
     this.mutateBias = game.config.ai.mutateBias;
@@ -120,7 +120,7 @@ ModelService.prototype.clone = function (sourceModel) {
 ModelService.prototype.addNoise = function (tensor) {
     return tf.tidy(() => {
         const shape = tensor.shape;
-        let noiseTensor = tf.truncatedNormal(shape, 0, this.mutationRandomness);
+        let noiseTensor = tf.truncatedNormal(shape, 0, this.mutationDiversity);
         return tf.add(tensor, noiseTensor);
     });
 }
