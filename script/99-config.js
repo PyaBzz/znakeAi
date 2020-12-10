@@ -19,10 +19,10 @@ znakeConfig = {
         reproducingPopulation: 16, // Half of the population
         activation: NeuronActivation.linear,
         kernelInit: NeuronInitialiser.leCunNormal,
-        useBias: true,
+        useBias: true, //Todo: Enable the modelService to run without biases
         mutateBias: true,
         biasInit: NeuronInitialiser.zeros,
-        mutationNoiseLevel: 0.04,  //Standard deviation of the normal noise
+        mutationRandomness: 0.04,  //Standard deviation of the normal noise
     }
 }
 
