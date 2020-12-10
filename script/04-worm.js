@@ -118,7 +118,7 @@ Worm.prototype.getDirectionFromOutput = function (tensor) { //Todo: Reduce outpu
         return Direction.left;
 }
 
-Worm.prototype.getInputVector = function () {
+Worm.prototype.getInputVector = function () {//Todo: Add diagonal sight
     const foodSignalHor = Math.sign(this.grid.food.col - this.head.col);
     const foodSignalVer = Math.sign(this.grid.food.row - this.head.row);
     const deathSignalUp = - 1 / this.head.getDistance2Death(Direction.up);
