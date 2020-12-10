@@ -119,13 +119,13 @@ Worm.prototype.getDirectionFromOutput = function (tensor) { //Todo: Reduce outpu
 }
 
 Worm.prototype.getInputVector = function () {
-    const foodSignalHor = this.grid.food.col - this.head.col;
-    const foodSignalVer = this.grid.food.row - this.head.row;
-    const deathSignalHor = this.head.getDistance2Death(Direction.right)
-        - this.head.getDistance2Death(Direction.left);
-    const deathSignalVer = this.head.getDistance2Death(Direction.up)
-        - this.head.getDistance2Death(Direction.down);
-    return [foodSignalHor, foodSignalVer, deathSignalHor, deathSignalVer];
+    const foodSignalHor = Math.sign(this.grid.food.col - this.head.col);
+    const foodSignalVer = Math.sign(this.grid.food.row - this.head.row);
+    const deathSignalUp = - 1 / this.head.getDistance2Death(Direction.up);
+    const deathSignalRight = - 1 / this.head.getDistance2Death(Direction.right);
+    const deathSignalDown = - 1 / this.head.getDistance2Death(Direction.down);
+    const deathSignalLeft = - 1 / this.head.getDistance2Death(Direction.left);
+    return [foodSignalHor, foodSignalVer, deathSignalUp, deathSignalRight, deathSignalDown, deathSignalLeft];
 }
 
 Object.defineProperties(Worm.prototype, {
