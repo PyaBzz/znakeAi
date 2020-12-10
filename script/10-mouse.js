@@ -1,29 +1,31 @@
-Mouse = function (game) {
-	document.oncontextmenu = (clickEvent) => clickEvent.preventDefault();
-	this.game = game;
-	this.attach();
-	this.tagHandlers = {};
-	this.idHandlers = {};
-}
-
-Mouse.prototype.attach = function () {
-	let me = this;
-
-	document.onmousedown = function (clickEvent) {
-		let target = clickEvent.target;
-		ifFunctionRun(me.tagHandlers[target.tagName], clickEvent);
-		ifFunctionRun(me.idHandlers[target.id], clickEvent);
+class Mouse {
+	constructor(game) {
+		document.oncontextmenu = (clickEvent) => clickEvent.preventDefault();
+		this.game = game;
+		this.attach();
+		this.tagHandlers = {};
+		this.idHandlers = {};
 	}
-}
 
-Mouse.prototype.bindByTag = function (tag, handler) {
-	this.tagHandlers[tag] = handler;
-}
+	attach() {
+		let me = this;
 
-Mouse.prototype.bindById = function (elementId, handler) {
-	this.idHandlers[elementId] = handler;
-}
+		document.onmousedown = function (clickEvent) {
+			let target = clickEvent.target;
+			ifFunctionRun(me.tagHandlers[target.tagName], clickEvent);
+			ifFunctionRun(me.idHandlers[target.id], clickEvent);
+		}
+	}
 
-Mouse.prototype.unbindAll = function () {
-	this.idHandlers = {};
-}
+	bindByTag(tag, handler) {
+		this.tagHandlers[tag] = handler;
+	}
+
+	bindById(elementId, handler) {
+		this.idHandlers[elementId] = handler;
+	}
+
+	unbindAll() {
+		this.idHandlers = {};
+	}
+} 
