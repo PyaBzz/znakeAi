@@ -119,6 +119,12 @@ Worm.prototype.getDirectionFromOutput = function (tensor) { //Todo: Reduce outpu
 }
 
 Worm.prototype.getInputVector = function () {//Todo: Add diagonal sight
+    //Todo: Use this signal but with different score func to consider unfed proximity to food as a plus
+    // const foodDiffHor = this.grid.food.col - this.head.col;
+    // const foodDiffVer = this.grid.food.row - this.head.row;
+    // const foodSignalHor = foodDiffHor === 0 ? 0 : 1 / foodDiffHor;
+    // const foodSignalVer = foodDiffVer === 0 ? 0 : 1 / foodDiffVer;
+
     const foodSignalHor = Math.sign(this.grid.food.col - this.head.col);
     const foodSignalVer = Math.sign(this.grid.food.row - this.head.row);
     const deathSignalUp = - 1 / this.head.getDistance2Death(Direction.up);
