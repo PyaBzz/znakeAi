@@ -17,7 +17,6 @@ znakeConfig = {
         layerSizes: [4],  // Only even numbers
         inputVectorSize: 6,
         population: 32,  // Only even numbers
-        reproducingPopulation: 16, // Half of the population
         activation: NeuronActivation.linear,
         kernelInit: NeuronInitialiser.leCunNormal,
         useBias: false,

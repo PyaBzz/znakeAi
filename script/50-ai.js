@@ -2,7 +2,7 @@ class Ai {
     constructor(game) {
         this.game = game;
         this.population = this.game.config.ai.population;
-        this.reproducingPopulation = this.game.config.ai.reproducingPopulation;
+        this.mutantPopulation = this.population / 2;
         this.inputVectorSize = game.config.ai.inputVectorSize;
         this.modelService = new ModelService(game, this.inputVectorSize);
         this.totalModels = 0;
@@ -80,7 +80,7 @@ class Ai {
     }
 
     populateNextGeneration() {
-        let fittest = this.getFittest(); //Todo: Think about population ratios
+        let fittest = this.getFittest();
         let toMutate = fittest.clone();
         let mutants = toMutate.map(m => this.modelService.mutate(m));
         this.generation = [...fittest, ...mutants];
@@ -92,7 +92,7 @@ class Ai {
 
     getFittest() {
         let me = this;
-        return this.generation.getTop(m => me.fitnessFunc(m), me.reproducingPopulation).items;
+        return this.generation.getTop(m => me.fitnessFunc(m), me.mutantPopulation).items;
     }
 
     fitnessFunc(model) {
