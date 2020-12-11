@@ -3,7 +3,7 @@ class Ai {
         this.game = game;
         this.population = this.game.config.ai.population;
         this.reproducingPopulation = this.game.config.ai.reproducingPopulation;
-        this.inputVectorSize = 6;//Todo: Move to worm
+        this.inputVectorSize = game.config.ai.inputVectorSize;
         this.modelService = new ModelService(game, this.inputVectorSize);
         this.totalModels = 0;
         this.totalAge = 0;

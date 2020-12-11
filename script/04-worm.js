@@ -16,7 +16,7 @@ class Worm {
             this.feeder.dropFood();
         this.currentDirection = Direction.right;
         this.directionFuncs = {};
-        this.inputVectorSize = this.game.ai.inputVectorSize;
+        this.inputVectorSize = this.game.config.ai.inputVectorSize;
         this.fastStepTime = this.game.config.fastStepTime;
         this.slowStepTime = this.game.config.slowStepTime;
         this.defaultStepTime = this.game.config.defaultStepTime;

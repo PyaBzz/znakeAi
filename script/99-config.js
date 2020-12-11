@@ -15,6 +15,7 @@ znakeConfig = {
     },
     ai: {
         layerSizes: [4],  // Only even numbers
+        inputVectorSize: 6,
         population: 32,
         reproducingPopulation: 16, // Half of the population
         activation: NeuronActivation.linear,
