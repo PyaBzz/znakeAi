@@ -94,12 +94,17 @@ class ModelService {
                 const mutatedLayer = mutant.layers[i];
 
                 const originalWeights = originalLayer.getWeights();
-                const originalCoefficients = originalWeights[0];
-                const originalBiases = originalWeights[1];
-
-                const mutatedCoefficients = this.addNoise(originalCoefficients);
-                const mutatedBiases = this.mutateBias ? this.addNoise(originalBiases) : originalBiases;
-                mutatedLayer.setWeights([mutatedCoefficients, mutatedBiases]);
+                if (this.useBias) {
+                    const originalCoefficients = originalWeights[0];
+                    const originalBiases = originalWeights[1];
+                    const mutatedCoefficients = this.addNoise(originalCoefficients);
+                    const mutatedBiases = this.addNoise(originalBiases);
+                    mutatedLayer.setWeights([mutatedCoefficients, mutatedBiases]);
+                } else {
+                    const originalCoefficients = originalWeights[0];
+                    const mutatedCoefficients = this.addNoise(originalCoefficients);
+                    mutatedLayer.setWeights([mutatedCoefficients]);
+                }
             }
             return mutant;
         });
