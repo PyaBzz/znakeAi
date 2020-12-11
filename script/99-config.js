@@ -7,8 +7,8 @@ znakeConfig = {
         targetLength: 30, //Todo: Add other target criteria like generation number, average length, etc.
     },
     grid: {
-        height: 10,  // Only even numbers greater than 4
-        width: 10,  // Only even numbers greater than 4
+        height: 11,  // Greater than 4
+        width: 11,  // Greater than 4
     },
     keys: {
         pause: ' ',

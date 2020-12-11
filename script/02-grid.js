@@ -68,6 +68,26 @@ class Grid {
         return flatArrayOfCells.filter((cell, index) => cell.isBlank);
     }
 
+    getBlankCellsAround(root, diff) {
+        let result = [];
+        if (root.isBlank)
+            result.push(root);
+        const rootCol = root.col;
+        const rootRow = root.row;
+        const minCol = Math.max(rootCol - diff, 0);
+        const maxCol = Math.min(rootCol + diff, this.lastColIndex);
+        const minRow = Math.max(rootRow - diff, 0);
+        const maxRow = Math.min(rootRow + diff, this.lastRowIndex);
+        for (let col = minCol; col <= maxCol; col++) {
+            for (let row = minRow; row <= maxRow; row++) {
+                const neighbour = this.cells[col][row];
+                if (neighbour.isBlank)
+                    result.push(neighbour);
+            }
+        }
+        return result;
+    }
+
     bindHandlers() { //Todo: Move to mouse
         if (this.game.config.devMode !== true)
             return;
