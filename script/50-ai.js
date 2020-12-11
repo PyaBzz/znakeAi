@@ -81,16 +81,9 @@ class Ai {
 
     populateNextGeneration() {
         let fittest = this.getFittest(); //Todo: Think about population ratios
-        // fittest.shuffle();
-        // let offspring = this.modelService.getOffsprings(fittest);
-        // fittest.shuffle();
-        // let mutatingWinners = fittest.clone(0, offspring.length);
-        let mutatingWinners = fittest.clone();
-        let mutatedWinners = mutatingWinners.map(m => this.modelService.mutate(m));
-        // this.generation = [...offspring, ...fittest, ...mutatedWinners];
-        this.generation = [...fittest, ...mutatedWinners]; //Todo: Make naming consistent
-        // for (i = this.generation.length; i < this.population; i++)
-        //     this.generation[i] = this.modelService.create();
+        let toMutate = fittest.clone();
+        let mutants = toMutate.map(m => this.modelService.mutate(m));
+        this.generation = [...fittest, ...mutants];
         this.generationNumber++;
         this.nextModelIndex = 0;
         this.game.onNewGeneration();
