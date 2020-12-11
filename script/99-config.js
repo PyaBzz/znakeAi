@@ -16,12 +16,11 @@ znakeConfig = {
     ai: {
         layerSizes: [4],  // Only even numbers
         inputVectorSize: 6,
-        population: 32,
+        population: 32,  // Only even numbers
         reproducingPopulation: 16, // Half of the population
         activation: NeuronActivation.linear,
         kernelInit: NeuronInitialiser.leCunNormal,
         useBias: false,
-        mutateBias: true,
         biasInit: NeuronInitialiser.zeros,
         mutationDiversity: 0.1,  //Standard deviation of the normal noise
     }

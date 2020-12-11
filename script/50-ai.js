@@ -70,7 +70,7 @@ class Ai {
                 this.generation.push(this.modelService.clone(this.ancestorModel));
         } else {
             for (let i = 0; i < this.population; i++)
-                this.generation.push(this.modelService.createModel());
+                this.generation.push(this.modelService.create());
         }
 
         this.generationNumber = 1;
@@ -90,7 +90,7 @@ class Ai {
         // this.generation = [...offspring, ...fittest, ...mutatedWinners];
         this.generation = [...fittest, ...mutatedWinners]; //Todo: Make naming consistent
         // for (i = this.generation.length; i < this.population; i++)
-        //     this.generation[i] = this.modelService.createModel();
+        //     this.generation[i] = this.modelService.create();
         this.generationNumber++;
         this.nextModelIndex = 0;
         this.game.onNewGeneration();

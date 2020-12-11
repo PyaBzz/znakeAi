@@ -68,7 +68,7 @@ class Grid {
         return flatArrayOfCells.filter((cell, index) => cell.isBlank);
     }
 
-    bindHandlers() {
+    bindHandlers() { //Todo: Move to mouse
         if (this.game.config.devMode !== true)
             return;
         let me = this;
