@@ -112,7 +112,7 @@ class Worm {
         this.game.onWormDied();
     }
 
-    getDirectionFromOutput(tensor) { //Todo: Reduce output paths to 3 stepping directions for "Forward", "Left", "Right"
+    getDirectionFromOutput(tensor) { //Todo: Should reduce output paths to 3 stepping directions? "Forward", "Left", "Right"
         let array = tensor.arraySync()[0];
         let indexOfMax = array.getMax().index;
         if (indexOfMax === 0)
@@ -126,15 +126,31 @@ class Worm {
     }
 
     getInputVector() {//Todo: Add diagonal sight to notice food in corners
-        //Todo: Use a score func to reward proximity to food even if unsuccessful
+        let result = [];
         const foodDiffHor = this.grid.food.col - this.head.col;
         const foodDiffVer = this.grid.food.row - this.head.row;
         const foodSignalHor = foodDiffHor === 0 ? 0 : 1 / foodDiffHor;
+        result.push(foodSignalHor);
         const foodSignalVer = foodDiffVer === 0 ? 0 : 1 / foodDiffVer;
-        const deathSignalUp = - 1 / this.head.getDistance2Death(Direction.up);
-        const deathSignalRight = - 1 / this.head.getDistance2Death(Direction.right);
-        const deathSignalDown = - 1 / this.head.getDistance2Death(Direction.down);
-        const deathSignalLeft = - 1 / this.head.getDistance2Death(Direction.left);
-        return [foodSignalHor, foodSignalVer, deathSignalUp, deathSignalRight, deathSignalDown, deathSignalLeft];
+        result.push(foodSignalVer);
+
+        let deathVector = this.head.getDiff2Death(Direction.up);
+        const deathSignalUp = - 1 / bazMath.amplitude(deathVector);
+        result.push(deathSignalUp);
+        // const deathSignalUpRight = -1 / this.head.getDiff2Death()
+
+        deathVector = this.head.getDiff2Death(Direction.right);
+        const deathSignalRight = - 1 / bazMath.amplitude(deathVector);
+        result.push(deathSignalRight);
+
+        deathVector = this.head.getDiff2Death(Direction.down);
+        const deathSignalDown = - 1 / bazMath.amplitude(deathVector);
+        result.push(deathSignalDown);
+
+        deathVector = this.head.getDiff2Death(Direction.left);
+        const deathSignalLeft = - 1 / bazMath.amplitude(deathVector);
+        result.push(deathSignalLeft);
+
+        return result;
     }
 }

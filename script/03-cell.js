@@ -42,13 +42,23 @@ class Cell {
         this.element.className = 'wall';
     }
 
-    getDistance2Death(direc) {
-        let cellCount = 1;
-        let runner = this[direc];
-        while (runner.isDeadly === false) {
-            cellCount++;
-            runner = runner[direc];
+    getDiff2Death(direc1, direc2) {
+        direc2 = direc2 || null;
+        let diffDir1 = 1;
+        let diffDir2 = 0;
+        let runner = this[direc1];
+        if (direc2 !== null) {
+            diffDir2 = 1;
+            runner = runner[direc2];
         }
-        return cellCount; //No diagonal yet
+        while (runner.isDeadly === false) {
+            diffDir1++;
+            runner = runner[direc1];
+            if (direc2 !== null) {
+                runner = runner[direc2];
+                diffDir2++;
+            }
+        }
+        return [diffDir1, diffDir2];
     }
 }
