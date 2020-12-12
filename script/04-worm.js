@@ -125,7 +125,7 @@ class Worm {
             return Direction.left;
     }
 
-    getInputVector() {//Todo: Add diagonal sight to notice food in corners
+    getInputVector() {
         let result = [];
         const foodDiffHor = this.grid.food.col - this.head.col;
         const foodDiffVer = this.grid.food.row - this.head.row;
@@ -137,19 +137,34 @@ class Worm {
         let deathVector = this.head.getDiff2Death(Direction.up);
         const deathSignalUp = - 1 / bazMath.amplitude(deathVector);
         result.push(deathSignalUp);
-        // const deathSignalUpRight = -1 / this.head.getDiff2Death()
+
+        deathVector = this.head.getDiff2Death(Direction.up, Direction.right);
+        const deathSignalUpRight = - 1 / bazMath.amplitude(deathVector);
+        result.push(deathSignalUpRight);
 
         deathVector = this.head.getDiff2Death(Direction.right);
         const deathSignalRight = - 1 / bazMath.amplitude(deathVector);
         result.push(deathSignalRight);
 
+        deathVector = this.head.getDiff2Death(Direction.right, Direction.down);
+        const deathSignalDownRight = - 1 / bazMath.amplitude(deathVector);
+        result.push(deathSignalDownRight);
+
         deathVector = this.head.getDiff2Death(Direction.down);
         const deathSignalDown = - 1 / bazMath.amplitude(deathVector);
         result.push(deathSignalDown);
 
+        deathVector = this.head.getDiff2Death(Direction.down, Direction.left);
+        const deathSignalDownLeft = - 1 / bazMath.amplitude(deathVector);
+        result.push(deathSignalDownLeft);
+
         deathVector = this.head.getDiff2Death(Direction.left);
         const deathSignalLeft = - 1 / bazMath.amplitude(deathVector);
         result.push(deathSignalLeft);
+
+        deathVector = this.head.getDiff2Death(Direction.left, Direction.up);
+        const deathSignalUpLeft = - 1 / bazMath.amplitude(deathVector);
+        result.push(deathSignalUpLeft);
 
         return result;
     }

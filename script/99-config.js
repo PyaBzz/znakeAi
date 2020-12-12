@@ -15,7 +15,7 @@ znakeConfig = {
     },
     ai: {
         layerSizes: [4],  // Only even numbers
-        inputVectorSize: 6,
+        inputVectorSize: 10,
         population: 32,  // Only even numbers
         activation: NeuronActivation.linear,
         kernelInit: NeuronInitialiser.leCunNormal,
