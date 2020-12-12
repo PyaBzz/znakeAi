@@ -22,7 +22,7 @@ class Game {
 			"generation-stats",
 			[InfoboardKey.Age, 0],
 			[InfoboardKey.Length, 0],
-			[InfoboardKey.WormNo, "1 /" + this.config.ai.population],
+			[InfoboardKey.WormNo, `1 / ${this.config.ai.population}`],
 			[InfoboardKey.Generation, 1],
 			[InfoboardKey.genMaxAge, 0],
 			[InfoboardKey.genMinAge, 0],
@@ -113,7 +113,7 @@ class Game {
 	}
 
 	onNewModel() {
-		this.generationInfoboard.set(InfoboardKey.WormNo, this.ai.nextModelIndex + " /" + this.config.ai.population);
+		this.generationInfoboard.set(InfoboardKey.WormNo, `${this.ai.nextModelIndex} / ${this.config.ai.population}`);
 	}
 
 	onGenerationDone(genMinAge, genMaxAge, genMinLen, genMaxLen) {
@@ -134,7 +134,7 @@ class Game {
 	onFoodEaten() {
 		this.generationInfoboard.set(InfoboardKey.Length, this.worm.length);
 		if (this.worm.length >= this.config.worm.targetLength) {
-			const shouldDownload = confirm("Target length of " + this.config.worm.targetLength + " reached!\r\nWould you like to download the current AI model?");
+			const shouldDownload = confirm(`Target length of ${this.config.worm.targetLength} reached!\nWould you like to download the current AI model`);
 			if (shouldDownload)
 				game.ai.currentModel.save('downloads://znakeAi-model');
 		}
