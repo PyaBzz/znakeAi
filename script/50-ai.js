@@ -19,7 +19,7 @@ class Ai {
 
     //Todo: Refactor a stat object
     get averageAge() { return this.totalAge / this.totalModels }
-    get AverageLen() { return this.totalLen / this.totalModels }
+    get averageLen() { return this.totalLen / this.totalModels }
 
     bindEvents() {
         this.jsonUpload = document.getElementById('json-upload');
@@ -104,15 +104,15 @@ class Ai {
         return model.wormAge + (model.wormLength - 1) * this.#playableCellCount;
     }
 
-    onWormDied(worm) {
-        this.currentModel.wormAge = worm.age;
-        this.totalAge += worm.age;
-        this.currentModel.wormLength = worm.length;
-        this.totalLen += worm.length;
-        if (worm.age < this.genMinAge) this.genMinAge = worm.age;
-        if (worm.age > this.genMaxAge) this.genMaxAge = worm.age;
-        if (worm.length < this.genMinLen) this.genMinLen = worm.length;
-        if (worm.length > this.genMaxLen) this.genMaxLen = worm.length;
+    onWormDied(age, len) {
+        this.currentModel.wormAge = age;
+        this.totalAge += age;
+        this.currentModel.wormLength = len;
+        this.totalLen += len;
+        if (age < this.genMinAge) this.genMinAge = age;
+        if (age > this.genMaxAge) this.genMaxAge = age;
+        if (len < this.genMinLen) this.genMinLen = len;
+        if (len > this.genMaxLen) this.genMaxLen = len;
     }
 
     resetGenerationStats() {

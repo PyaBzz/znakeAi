@@ -5,10 +5,9 @@ class Feeder {
 		this.#grid = grid;
 	}
 
-	dropFood(diffFromCentre = 1) {
+	dropFood(spread = 1) {
 		let centre = this.#grid.getCentreCell();
-		// let diff = Math.floor(this.game.ai.AverageLen) || 1; //Todo: Transfer this from game
-		let blankCells = this.#grid.getBlankCellsAround(centre, diffFromCentre);
+		let blankCells = this.#grid.getBlankCellsAround(centre, spread);
 		let nextFoodCell = blankCells.pickRandom();
 		nextFoodCell.beFood();
 		this.#grid.food = nextFoodCell;

@@ -8,6 +8,7 @@ class Game {
 	#control;
 	#overlay;
 	#isPaused = false;
+	#worm;
 
 	constructor(znakeConf) {
 		let me = this;
@@ -24,7 +25,7 @@ class Game {
 			document.getElementById("generation-stats"),
 			{
 				[InfoKey.Age]: 0,
-				[InfoKey.Length]: 0,
+				[InfoKey.Length]: 1,
 				[InfoKey.WormNo]: `1 / ${this.#config.ai.population}`,
 				[InfoKey.Generation]: 1,
 				[InfoKey.genMaxAge]: 0,
@@ -103,7 +104,7 @@ class Game {
 
 	#start() {
 		let brain = this.ai.getNextModel();
-		this.worm = new Worm(
+		this.#worm = new Worm(
 			brain,
 			this.#config.ai.inputVectorSize,
 			this.#grid,
@@ -116,12 +117,11 @@ class Game {
 				onWormDied: (...args) => this.#onWormDied(...args),
 			});
 
-		this.#generationInfoboard.set({ [InfoKey.Length]: this.worm.length });
 		this.#button.bind("Restart");
-		this.feeder.dropFood();
+		this.feeder.dropFood(); //Todo: make feeder private
 		// this.visualiser = new Visualiser(this);
 		// this.visualiser.visualiseGrid();
-		this.worm.run();
+		this.#worm.run();
 		this.bindEvents();
 	}
 
@@ -130,11 +130,11 @@ class Game {
 			this.#overlay.popDown();
 			this.isPaused = false;
 		} else {
-			this.worm.stop();
+			this.#worm.stop();
 		}
-		this.worm.disappear();
+		this.#worm.disappear();
 		let brain = this.ai.getNextModel();
-		this.worm = new Worm(
+		this.#worm = new Worm(
 			brain,
 			this.#config.ai.inputVectorSize,
 			this.#grid,
@@ -146,18 +146,18 @@ class Game {
 				onFoodEaten: (...args) => this.#onFoodEaten(...args),
 				onWormDied: (...args) => this.#onWormDied(...args),
 			});
-		this.#generationInfoboard.set({ [InfoKey.Length]: this.worm.length });
-		this.worm.run();
+		this.#generationInfoboard.set({ [InfoKey.Length]: 1 });
+		this.#worm.run();
 	}
 
 	#togglePause() {
 		if (this.isPaused) {
-			this.worm.run();
+			this.#worm.run();
 			this.isPaused = false;
 			this.#overlay.popDown();
 		}
 		else {
-			this.worm.stop();
+			this.#worm.stop();
 			this.isPaused = true;
 			this.#overlay.popUp();
 		}
@@ -168,10 +168,10 @@ class Game {
 		let me = this;
 		this.speedTickbox.onchange = function () {
 			if (me.speedTickbox.checked) {
-				me.worm.slowDown();
+				me.#worm.slowDown();
 			}
 			else {
-				me.worm.speedUp();
+				me.#worm.speedUp();
 			}
 		};
 	}
@@ -198,26 +198,27 @@ class Game {
 		this.#generationInfoboard.set({ [InfoKey.Generation]: this.ai.generationNumber });
 	}
 
-	#onStepTaken() {
-		this.#generationInfoboard.set({ [InfoKey.Age]: this.worm.age });
+	#onStepTaken(age) {
+		this.#generationInfoboard.set({ [InfoKey.Age]: age });
 	}
 
-	#onFoodEaten(age) {
-		this.#generationInfoboard.set({ [InfoKey.Length]: age });
-		if (this.worm.length >= this.#config.worm.targetLength) {
+	#onFoodEaten(len) {
+		// this.#generationInfoboard.set({ [InfoKey.Length]: age });
+		if (len >= this.#config.worm.targetLength) {
 			const shouldDownload = confirm(`Target length of ${this.#config.worm.targetLength} reached!\nWould you like to download the current AI model`);
 			if (shouldDownload)
 				game.ai.currentModel.save('downloads://znakeAi-model');
 		}
-		this.feeder.dropFood();
+		const foodSpread = Math.floor(this.ai.averageLen);
+		this.feeder.dropFood(foodSpread);
 	}
 
-	#onWormDied() {
-		this.worm.stop();
-		this.ai.onWormDied(this.worm);
+	#onWormDied(age, len) {
+		this.#worm.stop();
+		this.ai.onWormDied(age, len);
 		this.#evolutionInfoboard.set({
 			[InfoKey.TotalWorms]: this.ai.totalModels,
-			[InfoKey.AverageLen]: this.ai.AverageLen.toFixed(3),
+			[InfoKey.AverageLen]: this.ai.averageLen.toFixed(3),
 			[InfoKey.AverageAge]: this.ai.averageAge.toFixed(3),
 		});
 		this.#restart();

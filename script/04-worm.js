@@ -5,52 +5,54 @@ class Worm {
     #stepTime;
     #intervaller;
     #gameCallbacks = {};
+    #sections = [];
+    #maxStepsToFood;
+    #direction = null;
+    #stepsSinceLastMeal = 0;
+    #age = 0;
 
     constructor(brain, inputVectorSize, grid, startAtCentre, stepTime, gameCallbacks) {
         this.#brain = brain;
         this.#grid = grid;
         copyProperties(gameCallbacks, this.#gameCallbacks);
-        this.sections = [];
-        let origin = grid.getStartCell(startAtCentre);
-        let originWasFood = origin.isFood;
-        this.sections.push(origin);
-        this.head.beHead();
-        this.direction = {
+        const origin = grid.getStartCell(startAtCentre);
+        const originWasFood = origin.isFood;
+        this.#sections.push(origin);
+        this.#head.beHead();
+        this.#direction = {
             queue: [Direction.right],
             current: Direction.right,
             lastInput: Direction.right,
         };
-        this.age = 0;
         let me = this;
 
         this.#intervaller = new Intervaller(() => {
-            me.step();
-            me.#gameCallbacks.onStepTaken(me.age);
+            me.#step();
+            me.#gameCallbacks.onStepTaken(me.#age);
         }, stepTime.fast);
 
         this.#stepTime = stepTime;
         this.#inputVectorSize = inputVectorSize;
-        this.maxStepsToFood = grid.playableCellCount;
-        this.stepsSinceLastMeal = 0;
+        this.#maxStepsToFood = grid.playableCellCount;
         this.#gameCallbacks.onWormBorn(originWasFood);
     }
 
-    get head() { return this.sections[0] }
-    get tail() { return this.sections.last }
-    get length() { return this.sections.length }
-    get isUnicellular() { return this.length === 1 }
-    get isMulticellular() { return this.length !== 1 }
+    get #head() { return this.#sections[0] }
+    get #tail() { return this.#sections.last }
+    get #length() { return this.#sections.length }
+    get #isUnicellular() { return this.#length === 1 }
+    get #isMulticellular() { return this.#length !== 1 }
 
     run() {
         this.#intervaller.run();
     }
 
-    step() {
-        this.age++;
-        this.stepsSinceLastMeal++;
+    #step() {
+        this.#age++;
+        this.#stepsSinceLastMeal++;
         this.#gameCallbacks.onStepTaken();
-        let direction = this.getNextDirection();
-        this.currentDirection = direction;
+        const dir = this.getNextDirection();
+        this.#direction.current = dir;
         let nextCell = this.getNextCell();
 
         if (nextCell.isDeadly) {
@@ -58,23 +60,23 @@ class Worm {
         }
         else if (nextCell.isFood) {
             this.moveHeadTo(nextCell);
-            this.stepsSinceLastMeal = 0;
-            this.#gameCallbacks.onFoodEaten(this.length);
+            this.#stepsSinceLastMeal = 0;
+            this.#gameCallbacks.onFoodEaten(this.#length);
         }
         else {
             this.moveHeadTo(nextCell);
             this.moveTail();
         }
-        if (this.stepsSinceLastMeal === this.maxStepsToFood)
+        if (this.#stepsSinceLastMeal === this.#maxStepsToFood)
             this.die();
     }
 
     speedUp() {
-        this.#intervaller.setPeriod(this.stepTime.fast);
+        this.#intervaller.setPeriod(this.#stepTime.fast);
     }
 
     slowDown() {
-        this.#intervaller.setPeriod(this.stepTime.slow);
+        this.#intervaller.setPeriod(this.#stepTime.slow);
     }
 
     stop() {
@@ -82,14 +84,14 @@ class Worm {
     }
 
     getNextCell() {
-        if (this.currentDirection === Direction.up)
-            return this.head.up;
-        if (this.currentDirection === Direction.right)
-            return this.head.right;
-        if (this.currentDirection === Direction.down)
-            return this.head.down;
-        if (this.currentDirection === Direction.left)
-            return this.head.left;
+        if (this.#direction.current === Direction.up)
+            return this.#head.up;
+        if (this.#direction.current === Direction.right)
+            return this.#head.right;
+        if (this.#direction.current === Direction.down)
+            return this.#head.down;
+        if (this.#direction.current === Direction.left)
+            return this.#head.left;
     }
 
     getNextDirection() {
@@ -99,28 +101,27 @@ class Worm {
             let inputTensor = tf.tensor(inputVector, [1, me.#inputVectorSize]);
             return me.#brain.predict(inputTensor, { batchSize: 1 });
         });
-        let direction = this.getDirectionFromOutput(modelOutput);
-        return direction;
+        return this.getDirectionFromOutput(modelOutput);
     }
 
     moveHeadTo(nextHeadCell) {
-        this.head.beWorm();
-        this.sections.addToFront(nextHeadCell);
-        this.head.beHead();
+        this.#head.beWorm();
+        this.#sections.addToFront(nextHeadCell);
+        this.#head.beHead();
     }
 
     moveTail() {
-        this.tail.beBlank();
-        this.sections.takeLastOut();
+        this.#tail.beBlank();
+        this.#sections.takeLastOut();
     }
 
     disappear() {
-        this.sections.forEach(s => s.beBlank());
+        this.#sections.forEach(s => s.beBlank());
     }
 
     die() {
         this.disappear();
-        this.#gameCallbacks.onWormDied();
+        this.#gameCallbacks.onWormDied(this.#age, this.#length);
     }
 
     getDirectionFromOutput(tensor) { //Todo: Should reduce output paths to 3 stepping directions? "Forward", "Left", "Right"
@@ -138,42 +139,42 @@ class Worm {
 
     getInputVector() {
         let result = [];
-        const foodDiffHor = this.#grid.food.col - this.head.col;
-        const foodDiffVer = this.#grid.food.row - this.head.row;
+        const foodDiffHor = this.#grid.food.col - this.#head.col;
+        const foodDiffVer = this.#grid.food.row - this.#head.row;
         const foodSignalHor = foodDiffHor === 0 ? 0 : 1 / foodDiffHor;
         result.push(foodSignalHor);
         const foodSignalVer = foodDiffVer === 0 ? 0 : 1 / foodDiffVer;
         result.push(foodSignalVer);
 
-        let deathVector = this.head.getDiff2Death(Direction.up);
+        let deathVector = this.#head.getDiff2Death(Direction.up);
         const deathSignalUp = - 1 / bazMath.amplitude(deathVector);
         result.push(deathSignalUp);
 
-        deathVector = this.head.getDiff2Death(Direction.up, Direction.right);
+        deathVector = this.#head.getDiff2Death(Direction.up, Direction.right);
         const deathSignalUpRight = - 1 / bazMath.amplitude(deathVector);
         result.push(deathSignalUpRight);
 
-        deathVector = this.head.getDiff2Death(Direction.right);
+        deathVector = this.#head.getDiff2Death(Direction.right);
         const deathSignalRight = - 1 / bazMath.amplitude(deathVector);
         result.push(deathSignalRight);
 
-        deathVector = this.head.getDiff2Death(Direction.right, Direction.down);
+        deathVector = this.#head.getDiff2Death(Direction.right, Direction.down);
         const deathSignalDownRight = - 1 / bazMath.amplitude(deathVector);
         result.push(deathSignalDownRight);
 
-        deathVector = this.head.getDiff2Death(Direction.down);
+        deathVector = this.#head.getDiff2Death(Direction.down);
         const deathSignalDown = - 1 / bazMath.amplitude(deathVector);
         result.push(deathSignalDown);
 
-        deathVector = this.head.getDiff2Death(Direction.down, Direction.left);
+        deathVector = this.#head.getDiff2Death(Direction.down, Direction.left);
         const deathSignalDownLeft = - 1 / bazMath.amplitude(deathVector);
         result.push(deathSignalDownLeft);
 
-        deathVector = this.head.getDiff2Death(Direction.left);
+        deathVector = this.#head.getDiff2Death(Direction.left);
         const deathSignalLeft = - 1 / bazMath.amplitude(deathVector);
         result.push(deathSignalLeft);
 
-        deathVector = this.head.getDiff2Death(Direction.left, Direction.up);
+        deathVector = this.#head.getDiff2Death(Direction.left, Direction.up);
         const deathSignalUpLeft = - 1 / bazMath.amplitude(deathVector);
         result.push(deathSignalUpLeft);
 
