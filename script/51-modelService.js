@@ -1,13 +1,12 @@
 class ModelService {
-    constructor(game, inputVectorSize) {
-        this.game = game;
-        this.layerSizes = game.config.ai.layerSizes;
-        this.activation = game.config.ai.activation;
-        this.kernelInit = game.config.ai.kernelInit;
-        this.mutationDiversity = game.config.ai.mutationDiversity;
-        this.useBias = game.config.ai.useBias;
-        this.biasInit = game.config.ai.biasInit;
-        this.inputVectorSize = inputVectorSize;
+    constructor(config) {
+        this.layerSizes = config.layerSizes;
+        this.activation = config.activation;
+        this.kernelInit = config.kernelInit;
+        this.mutationDiversity = config.mutationDiversity;
+        this.useBias = config.useBias;
+        this.biasInit = config.biasInit;
+        this.inputVectorSize = config.inputVectorSize;
     }
 
     create() {

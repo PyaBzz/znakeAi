@@ -1,29 +1,31 @@
 class Game {
+	#config = {};
+	#mouse;
+	#grid;
+	#button;
+	#generationInfoboard;
+	#evolutionInfoboard;
+	#control;
+	#overlay;
+	#isPaused = false;
+
 	constructor(znakeConf) {
-		this.importConfig(znakeConf);
-		this.initialise();
-	}
+		let me = this;
+		this.#importConfig(znakeConf);
+		this.#mouse = new Mouse(this);
 
-	importConfig(znakeConf) {
-		this.config = {}
-		for (let key in znakeConf)
-			this.config[key] = znakeConf[key];
-		if (this.config.grid.height < 4)
-			throw "Grid height must be at least 4"
-		if (this.config.grid.width < 4)
-			throw "Grid width must be at least 4"
-		this.config.defaultStepTime = znakeConf.fastStepTime;
-	}
+		this.#grid = new Grid(
+			document.getElementById('grid-container'),
+			this.#config.grid,
+			(...args) => this.#mouse.bindByTag(...args),
+			this.#config.devMode);
 
-	initialise() {
-		this.mouse = new Mouse(this);
-		this.grid = new Grid(this, document.getElementById('grid-container'));
-		this.generationInfoboard = new Infoboard(
+		this.#generationInfoboard = new Infoboard(
 			document.getElementById("generation-stats"),
 			{
 				[InfoKey.Age]: 0,
 				[InfoKey.Length]: 0,
-				[InfoKey.WormNo]: `1 / ${this.config.ai.population}`,
+				[InfoKey.WormNo]: `1 / ${this.#config.ai.population}`,
 				[InfoKey.Generation]: 1,
 				[InfoKey.genMaxAge]: 0,
 				[InfoKey.genMinAge]: 0,
@@ -31,39 +33,91 @@ class Game {
 				[InfoKey.genMinLen]: 0,
 			}
 		);
-		this.evolutionInfoboard = new Infoboard(
+		this.#evolutionInfoboard = new Infoboard(
 			document.getElementById("evolution-stats"),
 			{
 				[InfoKey.ancestor]: "No",
-				[InfoKey.targetLength]: this.config.worm.targetLength,
-				[InfoKey.maxStepsToFood]: this.grid.playableCellCount,
+				[InfoKey.targetLength]: this.#config.worm.targetLength,
+				[InfoKey.maxStepsToFood]: this.#grid.playableCellCount,
 				[InfoKey.TotalWorms]: 1,
 				[InfoKey.AverageAge]: 0,
 				[InfoKey.AverageLen]: 0,
 			}
 		);
-		this.control = new Control(this);
-		this.overlay = new Overlay(this);
-		this.feeder = new Feeder(this);
-		this.button = new Button(this, document.getElementById('button'));
-		this.ai = new Ai(this);
-	}
-	onSplashClicked() {
+
+		this.#control = new Control(() => this.#togglePause(), this.#config.keys);
+
+		this.#overlay = new Overlay(document.getElementById('body'),
+			() => {
+				me.#overlay.popDown();
+				me.#overlay.unbindHandler();
+				me.#overlay.beTranslucent();
+				me.#overlay.line1 = "PAUSE";
+				me.#overlay.line2 = "";
+				me.#overlay.line3 = "";
+				me.#onSplashClicked();
+			},
+			{
+				line1: "Znake",
+				line2: this.#config.devMode ? "Developer mode" : "",
+				line3: "Click me!",
+			});
+
+		this.feeder = new Feeder(this.#grid);
+
+		this.#button = new MultiFuncButton(document.getElementById('button'),
+			{
+				Start: () => me.#start(),
+				Restart: () => me.#restart()
+			});
+
+		this.ai = new Ai(
+			this.#config.ai,
+			this.#grid.playableCellCount,
+			{
+				onAncestorLoad: (...args) => this.#onAncestorLoad(...args),
+				onGenerationDone: (...args) => this.#onGenerationDone(...args),
+				onNewModel: (...args) => this.#onNewModel(...args),
+				onNewGeneration: (...args) => this.#onNewGeneration(...args),
+			});
 	}
 
-	onAncestorLoad(success) {
+	#importConfig(znakeConf) {
+		for (let key in znakeConf)
+			this.#config[key] = znakeConf[key];
+		if (this.#config.grid.height < 4)
+			throw "Grid height must be at least 4"
+		if (this.#config.grid.width < 4)
+			throw "Grid width must be at least 4"
+	}
+
+	#onSplashClicked() {
+	}
+
+	#onAncestorLoad(success) {
 		if (success)
-			this.evolutionInfoboard.set({ [InfoKey.ancestor]: "Yes" });
+			this.#evolutionInfoboard.set({ [InfoKey.ancestor]: "Yes" });
 		else
-			this.evolutionInfoboard.set({ [InfoKey.ancestor]: "Failed!" });
+			this.#evolutionInfoboard.set({ [InfoKey.ancestor]: "Failed!" });
 	}
 
-	start() {
+	#start() {
 		let brain = this.ai.getNextModel();
-		this.worm = new Worm(this, brain);
-		this.generationInfoboard.set({ [InfoKey.Length]: this.worm.length });
-		this.button.beRestartButton();
-		this.control.setForRunning()
+		this.worm = new Worm(
+			brain,
+			this.#config.ai.inputVectorSize,
+			this.#grid,
+			this.#config.startAtCentre,
+			this.#config.stepTime,
+			{
+				onWormBorn: (...args) => this.#onWormBorn(...args),
+				onStepTaken: (...args) => this.#onStepTaken(...args),
+				onFoodEaten: (...args) => this.#onFoodEaten(...args),
+				onWormDied: (...args) => this.#onWormDied(...args),
+			});
+
+		this.#generationInfoboard.set({ [InfoKey.Length]: this.worm.length });
+		this.#button.bind("Restart");
 		this.feeder.dropFood();
 		// this.visualiser = new Visualiser(this);
 		// this.visualiser.visualiseGrid();
@@ -71,33 +125,41 @@ class Game {
 		this.bindEvents();
 	}
 
-	restart() {
+	#restart() {
 		if (this.isPaused) {
-			this.overlay.popDown();
+			this.#overlay.popDown();
 			this.isPaused = false;
 		} else {
-			this.worm.stopRunning();
+			this.worm.stop();
 		}
-		this.fastStepTime = this.config.fastStepTime;
 		this.worm.disappear();
 		let brain = this.ai.getNextModel();
-		this.worm = new Worm(this, brain);
-		this.generationInfoboard.set({ [InfoKey.Length]: this.worm.length });
-		this.control.setForRunning();
+		this.worm = new Worm(
+			brain,
+			this.#config.ai.inputVectorSize,
+			this.#grid,
+			this.#config.startAtCentre,
+			this.#config.stepTime,
+			{
+				onWormBorn: (...args) => this.#onWormBorn(...args),
+				onStepTaken: (...args) => this.#onStepTaken(...args),
+				onFoodEaten: (...args) => this.#onFoodEaten(...args),
+				onWormDied: (...args) => this.#onWormDied(...args),
+			});
+		this.#generationInfoboard.set({ [InfoKey.Length]: this.worm.length });
 		this.worm.run();
 	}
 
-	togglePause() {
+	#togglePause() {
 		if (this.isPaused) {
 			this.worm.run();
 			this.isPaused = false;
-			this.control.setForRunning();
-			this.overlay.popDown();
+			this.#overlay.popDown();
 		}
 		else {
-			this.worm.stopRunning();
+			this.worm.stop();
 			this.isPaused = true;
-			this.overlay.popUp();
+			this.#overlay.popUp();
 		}
 	}
 
@@ -106,22 +168,25 @@ class Game {
 		let me = this;
 		this.speedTickbox.onchange = function () {
 			if (me.speedTickbox.checked) {
-				me.config.defaultStepTime = me.config.slowStepTime;
 				me.worm.slowDown();
 			}
 			else {
-				me.config.defaultStepTime = me.config.fastStepTime;
 				me.worm.speedUp();
 			}
 		};
 	}
 
-	onNewModel() {
-		this.generationInfoboard.set({ [InfoKey.WormNo]: `${this.ai.nextModelIndex} / ${this.config.ai.population}` });
+	#onNewModel() {
+		this.#generationInfoboard.set({ [InfoKey.WormNo]: `${this.ai.nextModelIndex} / ${this.#config.ai.population}` });
 	}
 
-	onGenerationDone(genMinAge, genMaxAge, genMinLen, genMaxLen) {
-		this.generationInfoboard.set({
+	#onWormBorn(replacedFoodCell = false) {
+		if (replacedFoodCell)
+			this.feeder.dropFood();
+	}
+
+	#onGenerationDone(genMinAge, genMaxAge, genMinLen, genMaxLen) {
+		this.#generationInfoboard.set({
 			[InfoKey.genMinAge]: genMinAge,
 			[InfoKey.genMaxAge]: genMaxAge,
 			[InfoKey.genMinLen]: genMinLen,
@@ -129,33 +194,32 @@ class Game {
 		});
 	}
 
-	onNewGeneration() {
-		this.generationInfoboard.set({ [InfoKey.Generation]: this.ai.generationNumber });
+	#onNewGeneration() {
+		this.#generationInfoboard.set({ [InfoKey.Generation]: this.ai.generationNumber });
 	}
 
-	onStepTaken() {
-		this.generationInfoboard.set({ [InfoKey.Age]: this.worm.age });
+	#onStepTaken() {
+		this.#generationInfoboard.set({ [InfoKey.Age]: this.worm.age });
 	}
 
-	onFoodEaten() {
-		this.generationInfoboard.set({ [InfoKey.Length]: this.worm.length });
-		if (this.worm.length >= this.config.worm.targetLength) {
-			const shouldDownload = confirm(`Target length of ${this.config.worm.targetLength} reached!\nWould you like to download the current AI model`);
+	#onFoodEaten(age) {
+		this.#generationInfoboard.set({ [InfoKey.Length]: age });
+		if (this.worm.length >= this.#config.worm.targetLength) {
+			const shouldDownload = confirm(`Target length of ${this.#config.worm.targetLength} reached!\nWould you like to download the current AI model`);
 			if (shouldDownload)
 				game.ai.currentModel.save('downloads://znakeAi-model');
 		}
 		this.feeder.dropFood();
 	}
 
-	onWormDied() {
-		this.control.disable();
-		this.worm.stopRunning();
+	#onWormDied() {
+		this.worm.stop();
 		this.ai.onWormDied(this.worm);
-		this.evolutionInfoboard.set({
+		this.#evolutionInfoboard.set({
 			[InfoKey.TotalWorms]: this.ai.totalModels,
 			[InfoKey.AverageLen]: this.ai.AverageLen.toFixed(3),
 			[InfoKey.AverageAge]: this.ai.averageAge.toFixed(3),
 		});
-		this.restart();
+		this.#restart();
 	}
 }

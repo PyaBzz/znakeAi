@@ -1,27 +1,38 @@
 class Worm {
-    constructor(game, brain) {
-        this.game = game;
-        this.brain = brain;
-        this.grid = this.game.grid;
-        this.feeder = this.game.feeder;
-        this.maxStepsToFood = this.grid.playableCellCount;
-        this.stepsSinceLastMeal = 0;
-        this.age = 0;
+    #brain;
+    #inputVectorSize;
+    #grid;
+    #stepTime;
+    #intervaller;
+    #gameCallbacks = {};
+
+    constructor(brain, inputVectorSize, grid, startAtCentre, stepTime, gameCallbacks) {
+        this.#brain = brain;
+        this.#grid = grid;
+        copyProperties(gameCallbacks, this.#gameCallbacks);
         this.sections = [];
-        let origin = this.grid.getStartCell();
-        let originIsFood = origin.isFood;
+        let origin = grid.getStartCell(startAtCentre);
+        let originWasFood = origin.isFood;
         this.sections.push(origin);
         this.head.beHead();
-        if (originIsFood)
-            this.feeder.dropFood();
-        this.currentDirection = Direction.right;
-        this.directionFuncs = {};
-        this.inputVectorSize = this.game.config.ai.inputVectorSize;
-        this.fastStepTime = this.game.config.fastStepTime;
-        this.slowStepTime = this.game.config.slowStepTime;
-        this.defaultStepTime = this.game.config.defaultStepTime;
+        this.direction = {
+            queue: [Direction.right],
+            current: Direction.right,
+            lastInput: Direction.right,
+        };
+        this.age = 0;
         let me = this;
-        this.intervaller = new Intervaller(() => me.step(), me.defaultStepTime);
+
+        this.#intervaller = new Intervaller(() => {
+            me.step();
+            me.#gameCallbacks.onStepTaken(me.age);
+        }, stepTime.fast);
+
+        this.#stepTime = stepTime;
+        this.#inputVectorSize = inputVectorSize;
+        this.maxStepsToFood = grid.playableCellCount;
+        this.stepsSinceLastMeal = 0;
+        this.#gameCallbacks.onWormBorn(originWasFood);
     }
 
     get head() { return this.sections[0] }
@@ -31,25 +42,13 @@ class Worm {
     get isMulticellular() { return this.length !== 1 }
 
     run() {
-        this.intervaller.run();
-    }
-
-    speedUp() {
-        this.intervaller.setPeriod(this.fastStepTime);
-    }
-
-    slowDown() {
-        this.intervaller.setPeriod(this.slowStepTime);
-    }
-
-    stopRunning() {
-        this.intervaller.stop();
+        this.#intervaller.run();
     }
 
     step() {
         this.age++;
         this.stepsSinceLastMeal++;
-        this.game.onStepTaken();
+        this.#gameCallbacks.onStepTaken();
         let direction = this.getNextDirection();
         this.currentDirection = direction;
         let nextCell = this.getNextCell();
@@ -60,7 +59,7 @@ class Worm {
         else if (nextCell.isFood) {
             this.moveHeadTo(nextCell);
             this.stepsSinceLastMeal = 0;
-            this.game.onFoodEaten();
+            this.#gameCallbacks.onFoodEaten(this.length);
         }
         else {
             this.moveHeadTo(nextCell);
@@ -68,6 +67,18 @@ class Worm {
         }
         if (this.stepsSinceLastMeal === this.maxStepsToFood)
             this.die();
+    }
+
+    speedUp() {
+        this.#intervaller.setPeriod(this.stepTime.fast);
+    }
+
+    slowDown() {
+        this.#intervaller.setPeriod(this.stepTime.slow);
+    }
+
+    stop() {
+        this.#intervaller.stop();
     }
 
     getNextCell() {
@@ -85,8 +96,8 @@ class Worm {
         let me = this;
         let inputVector = this.getInputVector();
         let modelOutput = tf.tidy(() => {
-            let inputTensor = tf.tensor(inputVector, [1, me.inputVectorSize]);
-            return me.brain.predict(inputTensor, { batchSize: 1 });
+            let inputTensor = tf.tensor(inputVector, [1, me.#inputVectorSize]);
+            return me.#brain.predict(inputTensor, { batchSize: 1 });
         });
         let direction = this.getDirectionFromOutput(modelOutput);
         return direction;
@@ -103,13 +114,13 @@ class Worm {
         this.sections.takeLastOut();
     }
 
-    disappear(nextHeadCell) {
+    disappear() {
         this.sections.forEach(s => s.beBlank());
     }
 
-    die(nextHeadCell) {
-        this.sections.forEach(s => s.beBlank());
-        this.game.onWormDied();
+    die() {
+        this.disappear();
+        this.#gameCallbacks.onWormDied();
     }
 
     getDirectionFromOutput(tensor) { //Todo: Should reduce output paths to 3 stepping directions? "Forward", "Left", "Right"
@@ -127,8 +138,8 @@ class Worm {
 
     getInputVector() {
         let result = [];
-        const foodDiffHor = this.grid.food.col - this.head.col;
-        const foodDiffVer = this.grid.food.row - this.head.row;
+        const foodDiffHor = this.#grid.food.col - this.head.col;
+        const foodDiffVer = this.#grid.food.row - this.head.row;
         const foodSignalHor = foodDiffHor === 0 ? 0 : 1 / foodDiffHor;
         result.push(foodSignalHor);
         const foodSignalVer = foodDiffVer === 0 ? 0 : 1 / foodDiffVer;

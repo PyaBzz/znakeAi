@@ -1,5 +1,4 @@
 Direction = Object.freeze({ up: "up", right: "right", down: "down", left: "left" });
-OppositeDirection = Object.freeze({ up: "down", right: "left", down: "up", left: "right" });
 
 CellType = Object.freeze({ head: "head", worm: "worm", wall: "wall", blank: "blank", food: "food" });
 CellValue = Object.freeze({ head: -2, worm: -1, wall: -1, blank: 0, food: 2 });

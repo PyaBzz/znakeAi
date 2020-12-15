@@ -1,11 +1,10 @@
 class Grid {
-    constructor(game, container) {
-        this.game = game;
-        this.container = container;
-        this.height = this.game.config.grid.height;
-        this.width = this.game.config.grid.width;
+    constructor(parent, config, mouseBindFunc, devMode) {
+        this.container = parent;
+        this.height = config.height;
+        this.width = config.width;
         this.element = document.createElement('table');
-        this.element.id = 'grid';
+        this.element.id = 'grid'; //Todo: Why?
         this.cells = [];
         for (let col = 0; col < this.width; col++) {
             this.cells.push([]);
@@ -42,7 +41,16 @@ class Grid {
         }
         this.container.appendChild(this.element);
 
-        this.bindHandlers();
+        if (devMode) {
+            mouseBindFunc('TD', (clickEvent) => {
+                switch (clickEvent.which) {
+                    case 1: clickEvent.target.cell.beFood(); break;  // left click
+                    case 2: clickEvent.target.cell.beBlank(); break;  // middle click
+                    case 3: clickEvent.target.cell.beWall(); break;  // right click
+                    default: break;
+                }
+            });
+        }
         this.maxDistance = Math.sqrt(Math.pow(this.maxDistanceHor, 2) + Math.pow(this.maxDistanceVer, 2));
         this.food = null;
     }
@@ -53,8 +61,8 @@ class Grid {
     get maxDistanceHor() { return this.width - 1 }
     get playableCellCount() { return (this.width - 2) * (this.height - 2) }
 
-    getStartCell() {
-        return this.game.config.startAtCentre ? this.getCentreCell() : this.getBlankCells()[0];
+    getStartCell(atCentre = false) {
+        return atCentre ? this.getCentreCell() : this.getBlankCells()[0];
     }
 
     getCentreCell() {
@@ -86,19 +94,5 @@ class Grid {
             }
         }
         return result;
-    }
-
-    bindHandlers() { //Todo: Move to mouse
-        if (this.game.config.devMode !== true)
-            return;
-        let me = this;
-        this.game.mouse.bindByTag('TD', (clickEvent) => {
-            switch (clickEvent.which) {
-                case 1: clickEvent.target.cell.beFood(); break;  // left click
-                case 2: clickEvent.target.cell.beBlank(); break;  // middle click
-                case 3: clickEvent.target.cell.beWall(); break;  // right click
-                default: break;
-            }
-        });
     }
 }

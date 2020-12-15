@@ -1,7 +1,9 @@
 znakeConfig = {
     devMode: false,
-    fastStepTime: 1,  // milliseconds
-    slowStepTime: 100,  // milliseconds
+    stepTime: {
+        fast: 1,  // milliseconds
+        slow: 100,  // milliseconds
+    },
     startAtCentre: true,
     worm: {
         targetLength: 30, //Todo: Add other target criteria like generation number, average length, etc.

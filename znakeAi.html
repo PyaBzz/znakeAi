@@ -7,8 +7,6 @@
     <script src="script/02-grid.js"></script>
     <script src="script/03-cell.js"></script>
     <script src="script/04-worm.js"></script>
-    <script src="script/05-overlay.js"></script>
-    <script src="script/08-button.js"></script>
     <script src="script/09-control.js"></script>
     <script src="script/10-mouse.js"></script>
     <script src="script/11-feeder.js"></script>
@@ -24,11 +22,14 @@
     <script src="../bazJS/bazMath.js"></script>
     <script src="../bazJS/variables.js"></script>
     <script src="../bazJS/intervaller.js"></script>
+    <script src="../bazJS/multiFuncButton.js"></script>
     <script src="../bazJS/infoboard/infoboard.js"></script>
+    <script src="../bazJS/overlay/overlay.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis"></script>
     <link href="znakeAi.css" rel="stylesheet">
     <link href="../bazJS/infoboard/infoboard.css" rel="stylesheet">
+    <link href="../bazJS/overlay/overlay.css" rel="stylesheet">
     <title>Znake Ai</title>
 </head>
 
@@ -38,14 +39,8 @@
         <p class='spread-elements' id='znake-title'>Znake Ai</p>
     </header>
 
-    <div id='overlay' class='overlay popdown'>
-        <b id='overlay-line1'>Znake Ai</b>
-        <b id='overlay-line2'></b>
-        <b id='overlay-line3'>Click me!</b>
-    </div>
-
     <div class='fullwidth-row' id='controls-row'>
-        <button class='spread-elements target' id='button'>Start</button>
+        <button class='spread-elements' id='button'></button>
         <div class='spread-elements info'>Space bar to pause/unpause.</div>
     </div>
 

@@ -1,24 +1,21 @@
 class Control {
-	constructor(game) {
-		this.game = game;
-		this.funcs = [];
+	#pauseFunc;
+	#mapping;
+
+	constructor(gamePauseFunc, config) {
+		this.#pauseFunc = gamePauseFunc;
 		this.bind();
-	}
-
-	setForRunning() {
-		let me = this;
-		this.funcs[this.game.config.keys.pause.charCodeAt(0)] = () => me.game.togglePause();
-	}
-
-	disable() {
-		for (let key in this.funcs)
-			this.funcs[key] = function () { };
+		this.#mapping = {
+			[config.pause.charCodeAt(0)]: 0,
+		};
 	}
 
 	bind() {
 		let me = this;
 		document.onkeydown = function (keyDownEvent) {
-			ifFunctionRun(me.funcs[keyDownEvent.keyCode]);
+			const action = me.#mapping[keyDownEvent.keyCode];
+			if (action === 0)
+				me.#pauseFunc();
 		}
 	}
 }

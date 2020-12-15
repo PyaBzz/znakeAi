@@ -1,14 +1,16 @@
 class Feeder {
-	constructor(game) {
-		this.game = game;
+	#grid;
+
+	constructor(grid) {
+		this.#grid = grid;
 	}
 
-	dropFood() {
-		let centre = this.game.grid.getCentreCell();
-		let diff = Math.floor(this.game.ai.AverageLen) || 1;
-		let blankCells = this.game.grid.getBlankCellsAround(centre, diff);
+	dropFood(diffFromCentre = 1) {
+		let centre = this.#grid.getCentreCell();
+		// let diff = Math.floor(this.game.ai.AverageLen) || 1; //Todo: Transfer this from game
+		let blankCells = this.#grid.getBlankCellsAround(centre, diffFromCentre);
 		let nextFoodCell = blankCells.pickRandom();
 		nextFoodCell.beFood();
-		this.game.grid.food = nextFoodCell;
+		this.#grid.food = nextFoodCell;
 	}
 }

@@ -1,10 +1,15 @@
 class Ai {
-    constructor(game) {
-        this.game = game;
-        this.population = this.game.config.ai.population;
+    #gameCallbacks = {};
+    #playableCellCount;
+
+    constructor(config, playableCellCount, gameCallbacks) {
+        this.#playableCellCount = playableCellCount;
+        copyProperties(gameCallbacks, this.#gameCallbacks);
+
+        this.population = config.population;
         this.mutantPopulation = this.population / 2;
-        this.inputVectorSize = game.config.ai.inputVectorSize;
-        this.modelService = new ModelService(game, this.inputVectorSize);
+        this.inputVectorSize = config.inputVectorSize;
+        this.modelService = new ModelService(config);
         this.totalModels = 0;
         this.totalAge = 0;
         this.totalLen = 0;
@@ -43,8 +48,8 @@ class Ai {
             ])
         ).then(function (result) {
             this.ancestorModel = result;
-            this.game.onAncestorLoad(true);
-        }).catch(err => this.game.onAncestorLoad(false))
+            this.#gameCallbacks.onAncestorLoad(true);
+        }).catch(err => this.#gameCallbacks.onAncestorLoad(false))
     }
 
     getNextModel() {
@@ -52,14 +57,14 @@ class Ai {
             this.populateFirstGeneration();
 
         if (this.nextModelIndex === this.population) {
-            this.game.onGenerationDone(this.genMinAge, this.genMaxAge, this.genMinLen, this.genMaxLen);
+            this.#gameCallbacks.onGenerationDone(this.genMinAge, this.genMaxAge, this.genMinLen, this.genMaxLen);
             this.populateNextGeneration();
         }
 
         this.currentModel = this.generation[this.nextModelIndex];
         this.totalModels++;
         this.nextModelIndex++;
-        this.game.onNewModel();
+        this.#gameCallbacks.onNewModel();
         return this.currentModel;
     }
 
@@ -86,7 +91,7 @@ class Ai {
         this.generation = [...fittest, ...mutants];
         this.generationNumber++;
         this.nextModelIndex = 0;
-        this.game.onNewGeneration();
+        this.#gameCallbacks.onNewGeneration();
         this.resetGenerationStats();
     }
 
@@ -96,7 +101,7 @@ class Ai {
     }
 
     fitnessFunc(model) {
-        return model.wormAge + (model.wormLength - 1) * this.game.grid.playableCellCount;
+        return model.wormAge + (model.wormLength - 1) * this.#playableCellCount;
     }
 
     onWormDied(worm) {
