@@ -19,24 +19,28 @@ class Game {
 		this.mouse = new Mouse(this);
 		this.grid = new Grid(this, document.getElementById('grid-container'));
 		this.generationInfoboard = new Infoboard(
-			"generation-stats",
-			[InfoboardKey.Age, 0],
-			[InfoboardKey.Length, 0],
-			[InfoboardKey.WormNo, `1 / ${this.config.ai.population}`],
-			[InfoboardKey.Generation, 1],
-			[InfoboardKey.genMaxAge, 0],
-			[InfoboardKey.genMinAge, 0],
-			[InfoboardKey.genMaxLen, 0],
-			[InfoboardKey.genMinLen, 0],
+			document.getElementById("generation-stats"),
+			{
+				[InfoKey.Age]: 0,
+				[InfoKey.Length]: 0,
+				[InfoKey.WormNo]: `1 / ${this.config.ai.population}`,
+				[InfoKey.Generation]: 1,
+				[InfoKey.genMaxAge]: 0,
+				[InfoKey.genMinAge]: 0,
+				[InfoKey.genMaxLen]: 0,
+				[InfoKey.genMinLen]: 0,
+			}
 		);
 		this.evolutionInfoboard = new Infoboard(
-			"evolution-stats",
-			[InfoboardKey.ancestor, "No"],
-			[InfoboardKey.targetLength, this.config.worm.targetLength],
-			[InfoboardKey.maxStepsToFood, this.grid.playableCellCount],
-			[InfoboardKey.TotalWorms, 1],
-			[InfoboardKey.AverageAge, 0],
-			[InfoboardKey.AverageLen, 0],
+			document.getElementById("evolution-stats"),
+			{
+				[InfoKey.ancestor]: "No",
+				[InfoKey.targetLength]: this.config.worm.targetLength,
+				[InfoKey.maxStepsToFood]: this.grid.playableCellCount,
+				[InfoKey.TotalWorms]: 1,
+				[InfoKey.AverageAge]: 0,
+				[InfoKey.AverageLen]: 0,
+			}
 		);
 		this.control = new Control(this);
 		this.overlay = new Overlay(this);
@@ -49,15 +53,15 @@ class Game {
 
 	onAncestorLoad(success) {
 		if (success)
-			this.evolutionInfoboard.set(InfoboardKey.ancestor, "Yes")
+			this.evolutionInfoboard.set({ [InfoKey.ancestor]: "Yes" });
 		else
-			this.evolutionInfoboard.set(InfoboardKey.ancestor, "Failed!")
+			this.evolutionInfoboard.set({ [InfoKey.ancestor]: "Failed!" });
 	}
 
 	start() {
 		let brain = this.ai.getNextModel();
 		this.worm = new Worm(this, brain);
-		this.generationInfoboard.set(InfoboardKey.Length, this.worm.length);
+		this.generationInfoboard.set({ [InfoKey.Length]: this.worm.length });
 		this.button.beRestartButton();
 		this.control.setForRunning()
 		this.feeder.dropFood();
@@ -78,7 +82,7 @@ class Game {
 		this.worm.disappear();
 		let brain = this.ai.getNextModel();
 		this.worm = new Worm(this, brain);
-		this.generationInfoboard.set(InfoboardKey.Length, this.worm.length);
+		this.generationInfoboard.set({ [InfoKey.Length]: this.worm.length });
 		this.control.setForRunning();
 		this.worm.run();
 	}
@@ -113,26 +117,28 @@ class Game {
 	}
 
 	onNewModel() {
-		this.generationInfoboard.set(InfoboardKey.WormNo, `${this.ai.nextModelIndex} / ${this.config.ai.population}`);
+		this.generationInfoboard.set({ [InfoKey.WormNo]: `${this.ai.nextModelIndex} / ${this.config.ai.population}` });
 	}
 
 	onGenerationDone(genMinAge, genMaxAge, genMinLen, genMaxLen) {
-		this.generationInfoboard.set(InfoboardKey.genMinAge, genMinAge);
-		this.generationInfoboard.set(InfoboardKey.genMaxAge, genMaxAge);
-		this.generationInfoboard.set(InfoboardKey.genMinLen, genMinLen);
-		this.generationInfoboard.set(InfoboardKey.genMaxLen, genMaxLen);
+		this.generationInfoboard.set({
+			[InfoKey.genMinAge]: genMinAge,
+			[InfoKey.genMaxAge]: genMaxAge,
+			[InfoKey.genMinLen]: genMinLen,
+			[InfoKey.genMaxLen]: genMaxLen,
+		});
 	}
 
 	onNewGeneration() {
-		this.generationInfoboard.set(InfoboardKey.Generation, this.ai.generationNumber);
+		this.generationInfoboard.set({ [InfoKey.Generation]: this.ai.generationNumber });
 	}
 
 	onStepTaken() {
-		this.generationInfoboard.set(InfoboardKey.Age, this.worm.age);
+		this.generationInfoboard.set({ [InfoKey.Age]: this.worm.age });
 	}
 
 	onFoodEaten() {
-		this.generationInfoboard.set(InfoboardKey.Length, this.worm.length);
+		this.generationInfoboard.set({ [InfoKey.Length]: this.worm.length });
 		if (this.worm.length >= this.config.worm.targetLength) {
 			const shouldDownload = confirm(`Target length of ${this.config.worm.targetLength} reached!\nWould you like to download the current AI model`);
 			if (shouldDownload)
@@ -145,9 +151,11 @@ class Game {
 		this.control.disable();
 		this.worm.stopRunning();
 		this.ai.onWormDied(this.worm);
-		this.evolutionInfoboard.set(InfoboardKey.TotalWorms, this.ai.totalModels);
-		this.evolutionInfoboard.set(InfoboardKey.AverageLen, this.ai.AverageLen.toFixed(3));
-		this.evolutionInfoboard.set(InfoboardKey.AverageAge, this.ai.averageAge.toFixed(3));
+		this.evolutionInfoboard.set({
+			[InfoKey.TotalWorms]: this.ai.totalModels,
+			[InfoKey.AverageLen]: this.ai.AverageLen.toFixed(3),
+			[InfoKey.AverageAge]: this.ai.averageAge.toFixed(3),
+		});
 		this.restart();
 	}
 }

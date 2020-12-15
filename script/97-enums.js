@@ -36,7 +36,7 @@ NeuronInitialiser = Object.freeze({
     varianceScaling: "varianceScaling",
 });
 
-InfoboardKey = Object.freeze({
+InfoKey = Object.freeze({
     Length: "Length",
     Age: "Age",
     WormNo: "Worm No",
