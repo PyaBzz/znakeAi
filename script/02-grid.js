@@ -4,7 +4,6 @@ class Grid {
         this.height = config.height;
         this.width = config.width;
         this.element = document.createElement('table');
-        this.element.id = 'grid'; //Todo: Why?
         this.cells = [];
         for (let col = 0; col < this.width; col++) {
             this.cells.push([]);

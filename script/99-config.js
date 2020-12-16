@@ -24,6 +24,7 @@ znakeConfig = {
         useBias: false,
         biasInit: NeuronInitialiser.zeros,
         mutationDiversity: 0.1,  //Standard deviation of the normal noise
+        downloadPath: 'downloads://znakeAi-model',
     }
 }
 

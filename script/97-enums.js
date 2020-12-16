@@ -1,6 +1,6 @@
 Direction = Object.freeze({ up: "up", right: "right", down: "down", left: "left" });
 
-CellType = Object.freeze({ head: "head", worm: "worm", wall: "wall", blank: "blank", food: "food" });
+CellType = Object.freeze({ head: "head", worm: "worm", wall: "wall", blank: "blank", food: "food" }); //Todo: Move to cell as static prop
 CellValue = Object.freeze({ head: -2, worm: -1, wall: -1, blank: 0, food: 2 });
 
 NeuronActivation = Object.freeze({

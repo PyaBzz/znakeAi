@@ -15,14 +15,17 @@ class Ai {
     #generation = [];
     #generationNumber;
     #nextModelIndex;
+    #currentModel;
+    #downloadPath;
 
-    constructor(config, playableCellCount, gameCallbacks) {
+    constructor(aiConfig, playableCellCount, gameCallbacks) {
         this.#playableCellCount = playableCellCount;
         copyProperties(gameCallbacks, this.#gameCallbacks);
 
-        this.#population = config.population;
+        this.#population = aiConfig.population;
+        this.#downloadPath = aiConfig.downloadPath;
         this.#mutantPopulation = this.#population / 2;
-        this.#modelService = new ModelService(config);
+        this.#modelService = new ModelService(aiConfig);
         this.bindEvents();
         this.#needsFirstPopulation = true;
     }
@@ -54,15 +57,22 @@ class Ai {
             return;
         }
 
+        const me = this;
         tf.loadLayersModel(
             tf.io.browserFiles([
                 this.#jsonUpload.files[0],
                 this.#binUpload.files[0]
             ])
-        ).then(function (result) {
-            this.#ancestorModel = result;
-            this.#gameCallbacks.onAncestorLoad(true);
-        }).catch(err => this.#gameCallbacks.onAncestorLoad(false))
+        ).then(result => {
+            me.#ancestorModel = result;
+            me.#gameCallbacks.onAncestorLoad(true);
+        }).catch(err => {
+            me.#gameCallbacks.onAncestorLoad(false)
+        });
+    }
+
+    saveModel() {
+        this.#currentModel.save(this.#downloadPath);
     }
 
     getNextModel() {
@@ -74,11 +84,11 @@ class Ai {
             this.populateNextGeneration();
         }
 
-        this.currentModel = this.#generation[this.#nextModelIndex];
+        this.#currentModel = this.#generation[this.#nextModelIndex];
         this.#totalModels++;
         this.#nextModelIndex++;
         this.#gameCallbacks.onNewModel();
-        return this.currentModel;
+        return this.#currentModel;
     }
 
     populateFirstGeneration() {
@@ -117,9 +127,9 @@ class Ai {
     }
 
     onWormDied(age, len) {
-        this.currentModel.wormAge = age;
+        this.#currentModel.wormAge = age;
         this.#totalAge += age;
-        this.currentModel.wormLength = len;
+        this.#currentModel.wormLength = len;
         this.#totalLen += len;
         if (age < this.genMinAge) this.genMinAge = age;
         if (age > this.genMaxAge) this.genMaxAge = age;

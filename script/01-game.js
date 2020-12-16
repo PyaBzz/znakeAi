@@ -9,6 +9,7 @@ class Game {
 	#overlay;
 	#isPaused = false;
 	#worm;
+	#feeder;
 	#ai;
 
 	constructor(znakeConf) {
@@ -65,7 +66,7 @@ class Game {
 				line3: "Click me!",
 			});
 
-		this.feeder = new Feeder(this.#grid);
+		this.#feeder = new Feeder(this.#grid);
 
 		this.#button = new MultiFuncButton(document.getElementById('button'),
 			{
@@ -119,7 +120,7 @@ class Game {
 			});
 
 		this.#button.bind("Restart");
-		this.feeder.dropFood(1); //Todo: make feeder private
+		this.#feeder.dropFood(1);
 		// this.visualiser = new Visualiser(this);
 		// this.visualiser.visualiseGrid();
 		this.#worm.run();
@@ -183,7 +184,7 @@ class Game {
 
 	#onWormBorn(replacedFoodCell = false) {
 		if (replacedFoodCell)
-			this.feeder.dropFood();
+			this.#feeder.dropFood();
 	}
 
 	#onGenerationDone(genMinAge, genMaxAge, genMinLen, genMaxLen) {
@@ -207,10 +208,10 @@ class Game {
 		if (len >= this.#config.worm.targetLength) {
 			const shouldDownload = confirm(`Target length of ${this.#config.worm.targetLength} reached!\nWould you like to download the current AI model`);
 			if (shouldDownload)
-				this.#ai.currentModel.save('downloads://znakeAi-model'); //Todo: Move to ai
+				this.#ai.saveModel();
 		}
 		const foodSpread = Math.floor(this.#ai.averageLen);
-		this.feeder.dropFood(foodSpread);
+		this.#feeder.dropFood(foodSpread);
 	}
 
 	#onWormDied(age, len) {
