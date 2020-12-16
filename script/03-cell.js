@@ -1,4 +1,7 @@
 class Cell {
+    static #type = Object.freeze({ head: "head", worm: "worm", wall: "wall", blank: "blank", food: "food" });
+    // static #value = Object.freeze({ head: -2, worm: -1, wall: -1, blank: 0, food: 2 });
+
     constructor(grid, rowNumber, colNumber) {
         this.grid = grid;
         this.element = document.createElement('td');
@@ -6,39 +9,39 @@ class Cell {
         this.element.cell = this;
         this.row = rowNumber;
         this.col = colNumber;
-        this.type = CellType.blank;
+        this.type = Cell.#type.blank;
     }
 
-    get isWorm() { return this.type === CellType.worm }
-    get isHead() { return this.type === CellType.head }
-    get isFood() { return this.type === CellType.food }
-    get isBlank() { return this.type === CellType.blank }
-    get isWall() { return this.type === CellType.wall }
+    get isWorm() { return this.type === Cell.#type.worm }
+    get isHead() { return this.type === Cell.#type.head }
+    get isFood() { return this.type === Cell.#type.food }
+    get isBlank() { return this.type === Cell.#type.blank }
+    get isWall() { return this.type === Cell.#type.wall }
     get isDeadly() { return this.isWall || this.isWorm }
 
     beWorm() {
-        this.type = CellType.worm;
+        this.type = Cell.#type.worm;
         this.element.className = 'worm';
     }
 
     beHead() {
-        this.type = CellType.head;
+        this.type = Cell.#type.head;
         // this.grid.head = this;
         this.element.className = 'worm';
     }
 
     beFood() {
-        this.type = CellType.food;
+        this.type = Cell.#type.food;
         this.element.className = 'food';
     }
 
     beBlank() {
-        this.type = CellType.blank;
+        this.type = Cell.#type.blank;
         this.element.className = 'cell';
     }
 
     beWall() {
-        this.type = CellType.wall;
+        this.type = Cell.#type.wall;
         this.element.className = 'wall';
     }
 
