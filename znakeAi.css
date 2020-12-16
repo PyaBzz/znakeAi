@@ -43,9 +43,11 @@ label{
 
 .spread-elements {
   display: inline-block;
+  vertical-align: top;
   text-align: center;
   font-size: 24px;
 }
+
 #znake-title {
   color: darkgrey;
 }
@@ -59,9 +61,11 @@ label{
   border: none;
   color: black;
 }
+
 #button:focus {
   outline: none;
 }
+
 #grid-container {
   display: inline-block;
   position: relative;
