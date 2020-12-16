@@ -6,6 +6,7 @@ class Feeder {
 	}
 
 	dropFood(spread = 1) {
+		spread = Math.max(spread, 1);
 		let centre = this.#grid.getCentreCell();
 		let blankCells = this.#grid.getBlankCellsAround(centre, spread);
 		let nextFoodCell = blankCells.pickRandom();

@@ -42,7 +42,7 @@ class Cell {
         this.element.className = 'wall';
     }
 
-    getDiff2Death(direc1, direc2) {
+    getDiff2Death(direc1, direc2) {//Todo: Move to grid
         direc2 = direc2 || null;
         let diffDir1 = 1;
         let diffDir2 = 0;

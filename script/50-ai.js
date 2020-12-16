@@ -1,103 +1,112 @@
 class Ai {
     #gameCallbacks = {};
     #playableCellCount;
+    #totalModels = 0;
+    #totalAge = 0;
+    #totalLen = 0;
+    #mutantPopulation;
+    #population;
+    #modelService;
+    #needsFirstPopulation;
+    #jsonUpload;
+    #binUpload;
+    #loadButton;
+    #ancestorModel;
+    #generation = [];
+    #generationNumber;
+    #nextModelIndex;
 
     constructor(config, playableCellCount, gameCallbacks) {
         this.#playableCellCount = playableCellCount;
         copyProperties(gameCallbacks, this.#gameCallbacks);
 
-        this.population = config.population;
-        this.mutantPopulation = this.population / 2;
-        this.inputVectorSize = config.inputVectorSize;
-        this.modelService = new ModelService(config);
-        this.totalModels = 0;
-        this.totalAge = 0;
-        this.totalLen = 0;
+        this.#population = config.population;
+        this.#mutantPopulation = this.#population / 2;
+        this.#modelService = new ModelService(config);
         this.bindEvents();
-        this.needsFirstPopulation = true;
+        this.#needsFirstPopulation = true;
     }
 
     //Todo: Refactor a stat object
-    get averageAge() { return this.totalAge / this.totalModels }
-    get averageLen() { return this.totalLen / this.totalModels }
+    get averageAge() { return this.#totalAge / this.#totalModels }
+    get averageLen() { return this.#totalLen / this.#totalModels }
 
     bindEvents() {
-        this.jsonUpload = document.getElementById('json-upload');
-        this.binUpload = document.getElementById('bin-upload');
+        this.#jsonUpload = document.getElementById('json-upload');
+        this.#binUpload = document.getElementById('bin-upload');
         let me = this;
-        this.jsonUpload.onchange = function () { };
-        this.binUpload.onchange = function () { };
-        this.loadButton = document.getElementById('load-button');
-        this.loadButton.onclick = function () { me.loadModel() };
+        this.#jsonUpload.onchange = function () { };
+        this.#binUpload.onchange = function () { };
+        this.#loadButton = document.getElementById('load-button');
+        this.#loadButton.onclick = function () { me.loadModel() };
     }
 
     async loadModel() {
-        if (this.jsonUpload.files.length === 0) {
+        if (this.#jsonUpload.files.length === 0) {
             alert("Please select a JSON file to describe the model");
             return;
         }
-        if (this.binUpload.files.length === 0) {
+        if (this.#binUpload.files.length === 0) {
             alert("Please select a binary file for model weights");
             return;
         }
 
         tf.loadLayersModel(
             tf.io.browserFiles([
-                this.jsonUpload.files[0],
-                this.binUpload.files[0]
+                this.#jsonUpload.files[0],
+                this.#binUpload.files[0]
             ])
         ).then(function (result) {
-            this.ancestorModel = result;
+            this.#ancestorModel = result;
             this.#gameCallbacks.onAncestorLoad(true);
         }).catch(err => this.#gameCallbacks.onAncestorLoad(false))
     }
 
     getNextModel() {
-        if (this.needsFirstPopulation)
+        if (this.#needsFirstPopulation)
             this.populateFirstGeneration();
 
-        if (this.nextModelIndex === this.population) {
+        if (this.#nextModelIndex === this.#population) {
             this.#gameCallbacks.onGenerationDone(this.genMinAge, this.genMaxAge, this.genMinLen, this.genMaxLen);
             this.populateNextGeneration();
         }
 
-        this.currentModel = this.generation[this.nextModelIndex];
-        this.totalModels++;
-        this.nextModelIndex++;
+        this.currentModel = this.#generation[this.#nextModelIndex];
+        this.#totalModels++;
+        this.#nextModelIndex++;
         this.#gameCallbacks.onNewModel();
         return this.currentModel;
     }
 
     populateFirstGeneration() {
-        this.generation = [];
-        if (isDefined(this.ancestorModel)) {
-            for (let i = 0; i < this.population; i++)
-                this.generation.push(this.modelService.clone(this.ancestorModel));
+        if (isDefined(this.#ancestorModel)) {
+            for (let i = 0; i < this.#population; i++)
+                this.#generation.push(this.#modelService.clone(this.#ancestorModel));
         } else {
-            for (let i = 0; i < this.population; i++)
-                this.generation.push(this.modelService.create());
+            for (let i = 0; i < this.#population; i++)
+                this.#generation.push(this.#modelService.create());
         }
 
-        this.generationNumber = 1;
-        this.nextModelIndex = 0;
+        this.#generationNumber = 1;
+        this.#nextModelIndex = 0;
         this.resetGenerationStats();
-        this.needsFirstPopulation = false;
+        this.#needsFirstPopulation = false;
     }
 
     populateNextGeneration() {
         let fittest = this.getFittest();
         let toMutate = fittest.clone();
-        let mutants = toMutate.map(m => this.modelService.mutate(m));
-        this.generation = [...fittest, ...mutants];
-        this.generationNumber++;
-        this.nextModelIndex = 0;
+        let mutants = toMutate.map(m => this.#modelService.mutate(m));
+        this.#generation = [...fittest, ...mutants];
+        this.#generationNumber++;
+        this.#nextModelIndex = 0;
         this.#gameCallbacks.onNewGeneration();
         this.resetGenerationStats();
     }
 
     getFittest() {
         let me = this;
-        return this.generation.getTop(m => me.fitnessFunc(m), me.mutantPopulation).items;
+        return this.#generation.getTop(m => me.fitnessFunc(m), me.#mutantPopulation).items;
     }
 
     fitnessFunc(model) {
@@ -106,9 +115,9 @@ class Ai {
 
     onWormDied(age, len) {
         this.currentModel.wormAge = age;
-        this.totalAge += age;
+        this.#totalAge += age;
         this.currentModel.wormLength = len;
-        this.totalLen += len;
+        this.#totalLen += len;
         if (age < this.genMinAge) this.genMinAge = age;
         if (age > this.genMaxAge) this.genMaxAge = age;
         if (len < this.genMinLen) this.genMinLen = len;

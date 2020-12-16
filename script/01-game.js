@@ -9,6 +9,7 @@ class Game {
 	#overlay;
 	#isPaused = false;
 	#worm;
+	#ai;
 
 	constructor(znakeConf) {
 		let me = this;
@@ -72,7 +73,7 @@ class Game {
 				Restart: () => me.#restart()
 			});
 
-		this.ai = new Ai(
+		this.#ai = new Ai(
 			this.#config.ai,
 			this.#grid.playableCellCount,
 			{
@@ -103,7 +104,7 @@ class Game {
 	}
 
 	#start() {
-		let brain = this.ai.getNextModel();
+		let brain = this.#ai.getNextModel();
 		this.#worm = new Worm(
 			brain,
 			this.#config.ai.inputVectorSize,
@@ -118,7 +119,7 @@ class Game {
 			});
 
 		this.#button.bind("Restart");
-		this.feeder.dropFood(); //Todo: make feeder private
+		this.feeder.dropFood(1); //Todo: make feeder private
 		// this.visualiser = new Visualiser(this);
 		// this.visualiser.visualiseGrid();
 		this.#worm.run();
@@ -133,7 +134,7 @@ class Game {
 			this.#worm.stop();
 		}
 		this.#worm.disappear();
-		let brain = this.ai.getNextModel();
+		let brain = this.#ai.getNextModel();
 		this.#worm = new Worm(
 			brain,
 			this.#config.ai.inputVectorSize,
@@ -177,7 +178,7 @@ class Game {
 	}
 
 	#onNewModel() {
-		this.#generationInfoboard.set({ [InfoKey.WormNo]: `${this.ai.nextModelIndex} / ${this.#config.ai.population}` });
+		this.#generationInfoboard.set({ [InfoKey.WormNo]: `${this.#ai.nextModelIndex} / ${this.#config.ai.population}` });
 	}
 
 	#onWormBorn(replacedFoodCell = false) {
@@ -195,7 +196,7 @@ class Game {
 	}
 
 	#onNewGeneration() {
-		this.#generationInfoboard.set({ [InfoKey.Generation]: this.ai.generationNumber });
+		this.#generationInfoboard.set({ [InfoKey.Generation]: this.#ai.generationNumber });
 	}
 
 	#onStepTaken(age) {
@@ -203,23 +204,22 @@ class Game {
 	}
 
 	#onFoodEaten(len) {
-		// this.#generationInfoboard.set({ [InfoKey.Length]: age });
 		if (len >= this.#config.worm.targetLength) {
 			const shouldDownload = confirm(`Target length of ${this.#config.worm.targetLength} reached!\nWould you like to download the current AI model`);
 			if (shouldDownload)
-				game.ai.currentModel.save('downloads://znakeAi-model');
+				this.#ai.currentModel.save('downloads://znakeAi-model');
 		}
-		const foodSpread = Math.floor(this.ai.averageLen);
+		const foodSpread = Math.floor(this.#ai.averageLen);
 		this.feeder.dropFood(foodSpread);
 	}
 
 	#onWormDied(age, len) {
 		this.#worm.stop();
-		this.ai.onWormDied(age, len);
+		this.#ai.onWormDied(age, len);
 		this.#evolutionInfoboard.set({
-			[InfoKey.TotalWorms]: this.ai.totalModels,
-			[InfoKey.AverageLen]: this.ai.averageLen.toFixed(3),
-			[InfoKey.AverageAge]: this.ai.averageAge.toFixed(3),
+			[InfoKey.TotalWorms]: this.#ai.totalModels,
+			[InfoKey.AverageLen]: this.#ai.averageLen.toFixed(3),
+			[InfoKey.AverageAge]: this.#ai.averageAge.toFixed(3),
 		});
 		this.#restart();
 	}
