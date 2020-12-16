@@ -207,7 +207,7 @@ class Game {
 		if (len >= this.#config.worm.targetLength) {
 			const shouldDownload = confirm(`Target length of ${this.#config.worm.targetLength} reached!\nWould you like to download the current AI model`);
 			if (shouldDownload)
-				this.#ai.currentModel.save('downloads://znakeAi-model');
+				this.#ai.currentModel.save('downloads://znakeAi-model'); //Todo: Move to ai
 		}
 		const foodSpread = Math.floor(this.#ai.averageLen);
 		this.feeder.dropFood(foodSpread);

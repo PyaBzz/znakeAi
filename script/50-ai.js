@@ -30,6 +30,9 @@ class Ai {
     //Todo: Refactor a stat object
     get averageAge() { return this.#totalAge / this.#totalModels }
     get averageLen() { return this.#totalLen / this.#totalModels }
+    get nextModelIndex() { return this.#nextModelIndex }
+    get generationNumber() { return this.#generationNumber }
+    get totalModels() { return this.#totalModels }
 
     bindEvents() {
         this.#jsonUpload = document.getElementById('json-upload');
