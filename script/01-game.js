@@ -117,6 +117,34 @@ class Game {
 		this.bindEvents();
 	}
 
+	#doNewEvolution() {
+		//Todo: Implement
+	}
+
+	#evolutionDone() {
+		//
+	}
+
+	#doNewGeneration() {
+		//Todo: Implement
+	}
+
+	#onNewGeneration() {//Todo: Flow should be initiated by the game rather than ai
+		this.#stat.onNewGeneration();
+		this.#generationInfoboard.set({
+			[InfoKey.genNumber]: this.#stat.get(Stat.key.generationNo),
+		});
+	}
+
+	#onGenerationDone() {
+		this.#generationInfoboard.set({
+			[InfoKey.genMinAge]: this.#stat.get(Stat.key.genMinAge),
+			[InfoKey.genMaxAge]: this.#stat.get(Stat.key.genMaxAge),
+			[InfoKey.genMinLen]: this.#stat.get(Stat.key.genMinLen),
+			[InfoKey.genMaxLen]: this.#stat.get(Stat.key.genMaxLen),
+		});
+	}
+
 	#doNewWorm() {
 		if (this.isPaused) {
 			this.#overlay.popDown();
@@ -210,21 +238,5 @@ class Game {
 			[InfoKey.averageAge]: this.#stat.get(Stat.key.averageAge).toFixed(3),
 		});
 		this.#doNewWorm();
-	}
-
-	#onNewGeneration() {
-		this.#stat.onNewGeneration();
-		this.#generationInfoboard.set({
-			[InfoKey.genNumber]: this.#stat.get(Stat.key.generationNo),
-		});
-	}
-
-	#onGenerationDone() {
-		this.#generationInfoboard.set({
-			[InfoKey.genMinAge]: this.#stat.get(Stat.key.genMinAge),
-			[InfoKey.genMaxAge]: this.#stat.get(Stat.key.genMaxAge),
-			[InfoKey.genMinLen]: this.#stat.get(Stat.key.genMinLen),
-			[InfoKey.genMaxLen]: this.#stat.get(Stat.key.genMaxLen),
-		});
 	}
 }
