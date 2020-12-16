@@ -10,7 +10,6 @@ class Ai {
     #loadButton;
     #ancestorModel;
     #generation = [];
-    #generationNumber;
     #nextModelIndex;
     #currentModel;
     #downloadPath;
@@ -26,8 +25,6 @@ class Ai {
         this.bindEvents();
         this.#needsFirstPopulation = true;
     }
-
-    get generationNumber() { return this.#generationNumber }
 
     bindEvents() {
         this.#jsonUpload = document.getElementById('json-upload');
@@ -91,7 +88,6 @@ class Ai {
                 this.#generation.push(this.#modelService.create());
         }
 
-        this.#generationNumber = 1;
         this.#nextModelIndex = 0;
         this.#needsFirstPopulation = false;
     }
@@ -101,7 +97,6 @@ class Ai {
         let toMutate = fittest.clone();
         let mutants = toMutate.map(m => this.#modelService.mutate(m));
         this.#generation = [...fittest, ...mutants];
-        this.#generationNumber++;
         this.#nextModelIndex = 0;
         this.#gameCallbacks.onNewGeneration();
     }

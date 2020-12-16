@@ -188,7 +188,7 @@ class Game {
 	#onWormBorn(replacedFoodCell = false) {
 		if (replacedFoodCell)
 			this.#feeder.dropFood();
-		this.#stat.resetWorm();
+		this.#stat.onNewWorm();
 	}
 
 	#onStepTaken(age) {
@@ -202,7 +202,7 @@ class Game {
 			if (shouldDownload)
 				this.#ai.saveModel();
 		}
-		const foodSpread = Math.floor(this.#stat.get(Stat.key.averageLen));
+		const foodSpread = Math.floor(this.#stat.get(Stat.key.averageLen)); //Todo: Add to infoboard for visibility
 		this.#feeder.dropFood(foodSpread);
 	}
 
@@ -222,8 +222,10 @@ class Game {
 	}
 
 	#onNewGeneration() {
-		this.#generationInfoboard.set({ [InfoKey.Generation]: this.#ai.generationNumber });//Todo: Move to stat
-		this.#stat.resetGeneration();
+		this.#stat.onNewGeneration();
+		this.#generationInfoboard.set({
+			[InfoKey.Generation]: this.#stat.get(Stat.key.generationNo),
+		});
 	}
 
 	#onGenerationDone() {

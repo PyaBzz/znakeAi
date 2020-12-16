@@ -22,6 +22,7 @@ class Stat {
         for (const key in Stat.key) {
             this.#data[key] = 0;
         }
+        this.set({ [Stat.key.generationNo]: 1 });
     }
 
     set(items) {
@@ -59,11 +60,12 @@ class Stat {
         return this.#data[key];
     }
 
-    resetWorm() {
+    onNewWorm() {
         this.#add([Stat.key.totalWorms], 1);
     }
 
-    resetGeneration() {
+    onNewGeneration() {
+        this.#add([Stat.key.generationNo]);
         this.set({
             [Stat.key.genMinAge]: Number.MAX_VALUE,
             [Stat.key.genMaxAge]: 0,
@@ -72,7 +74,7 @@ class Stat {
         });
     }
 
-    resetEvolution() {
-        //
+    onNewEvolution() {
+        //Todo: Add stat collection on evolution convergence
     }
 }

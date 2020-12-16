@@ -27,5 +27,3 @@ znakeConfig = {
         downloadPath: 'downloads://znakeAi-model',
     }
 }
-
-//Todo: Add stat collection of convergence
