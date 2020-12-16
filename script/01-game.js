@@ -46,6 +46,7 @@ class Game {
 				[InfoKey.TotalWorms]: 1,
 				[InfoKey.AverageAge]: 0,
 				[InfoKey.AverageLen]: 0,
+				[InfoKey.FoodSpread]: 1,
 			}
 		);
 
@@ -202,7 +203,8 @@ class Game {
 			if (shouldDownload)
 				this.#ai.saveModel();
 		}
-		const foodSpread = Math.floor(this.#stat.get(Stat.key.averageLen)); //Todo: Add to infoboard for visibility
+		const foodSpread = Math.floor(this.#stat.get(Stat.key.averageLen)) || 1;
+		this.#evolutionInfoboard.set({ [InfoKey.FoodSpread]: foodSpread });
 		this.#feeder.dropFood(foodSpread);
 	}
 

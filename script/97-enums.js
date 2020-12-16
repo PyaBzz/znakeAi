@@ -40,6 +40,7 @@ InfoKey = Object.freeze({
     TotalWorms: "Total Worms",
     AverageAge: "Average Age",
     AverageLen: "Average Length",
+    FoodSpread: "Food Spread",
     genMinAge: "Last Gen. Min Age",
     genMaxAge: "Last Gen. Max Age",
     genMinLen: "Last Gen. Min Length",
