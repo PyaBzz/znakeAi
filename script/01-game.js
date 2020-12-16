@@ -11,6 +11,7 @@ class Game {
 	#worm;
 	#feeder;
 	#ai;
+	#stat;
 
 	constructor(znakeConf) {
 		let me = this;
@@ -83,6 +84,8 @@ class Game {
 				onNewModel: (...args) => this.#onNewModel(...args),
 				onNewGeneration: (...args) => this.#onNewGeneration(...args),
 			});
+
+		this.#stat = new Stat();
 	}
 
 	#importConfig(znakeConf) {
@@ -178,26 +181,14 @@ class Game {
 		};
 	}
 
-	#onNewModel() {
-		this.#generationInfoboard.set({ [InfoKey.WormNo]: `${this.#ai.nextModelIndex} / ${this.#config.ai.population}` });
+	#onNewModel(nextIndex) { //Todo: Can we combine newModel and newWorm callbacks?
+		this.#generationInfoboard.set({ [InfoKey.WormNo]: `${nextIndex} / ${this.#config.ai.population}` });
 	}
 
 	#onWormBorn(replacedFoodCell = false) {
 		if (replacedFoodCell)
 			this.#feeder.dropFood();
-	}
-
-	#onGenerationDone(genMinAge, genMaxAge, genMinLen, genMaxLen) {
-		this.#generationInfoboard.set({
-			[InfoKey.genMinAge]: genMinAge,
-			[InfoKey.genMaxAge]: genMaxAge,
-			[InfoKey.genMinLen]: genMinLen,
-			[InfoKey.genMaxLen]: genMaxLen,
-		});
-	}
-
-	#onNewGeneration() {
-		this.#generationInfoboard.set({ [InfoKey.Generation]: this.#ai.generationNumber });
+		this.#stat.resetWorm();
 	}
 
 	#onStepTaken(age) {
@@ -205,23 +196,42 @@ class Game {
 	}
 
 	#onFoodEaten(len) {
+		this.#generationInfoboard.set({ [InfoKey.Length]: len });
 		if (len >= this.#config.worm.targetLength) {
 			const shouldDownload = confirm(`Target length of ${this.#config.worm.targetLength} reached!\nWould you like to download the current AI model`);
 			if (shouldDownload)
 				this.#ai.saveModel();
 		}
-		const foodSpread = Math.floor(this.#ai.averageLen);
+		const foodSpread = Math.floor(this.#stat.get(Stat.key.averageLen));
 		this.#feeder.dropFood(foodSpread);
 	}
 
 	#onWormDied(age, len) {
-		this.#worm.stop();
+		this.#worm.stop(); //Todo: Move to worm
 		this.#ai.onWormDied(age, len);
+		this.#stat.set({
+			[Stat.key.wormAge]: age,
+			[Stat.key.wormLen]: len,
+		});
 		this.#evolutionInfoboard.set({
-			[InfoKey.TotalWorms]: this.#ai.totalModels,
-			[InfoKey.AverageLen]: this.#ai.averageLen.toFixed(3),
-			[InfoKey.AverageAge]: this.#ai.averageAge.toFixed(3),
+			[InfoKey.TotalWorms]: this.#stat.get(Stat.key.totalWorms),
+			[InfoKey.AverageLen]: this.#stat.get(Stat.key.averageLen).toFixed(3),
+			[InfoKey.AverageAge]: this.#stat.get(Stat.key.averageAge).toFixed(3),
 		});
 		this.#restart();
+	}
+
+	#onNewGeneration() {
+		this.#generationInfoboard.set({ [InfoKey.Generation]: this.#ai.generationNumber });//Todo: Move to stat
+		this.#stat.resetGeneration();
+	}
+
+	#onGenerationDone() {
+		this.#generationInfoboard.set({
+			[InfoKey.genMinAge]: this.#stat.get(Stat.key.genMinAge),
+			[InfoKey.genMaxAge]: this.#stat.get(Stat.key.genMaxAge),
+			[InfoKey.genMinLen]: this.#stat.get(Stat.key.genMinLen),
+			[InfoKey.genMaxLen]: this.#stat.get(Stat.key.genMaxLen),
+		});
 	}
 }

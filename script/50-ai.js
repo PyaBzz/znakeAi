@@ -1,9 +1,6 @@
 class Ai {
     #gameCallbacks = {};
     #playableCellCount;
-    #totalModels = 0;
-    #totalAge = 0;
-    #totalLen = 0;
     #mutantPopulation;
     #population;
     #modelService;
@@ -30,12 +27,7 @@ class Ai {
         this.#needsFirstPopulation = true;
     }
 
-    //Todo: Refactor a stat object
-    get averageAge() { return this.#totalAge / this.#totalModels }
-    get averageLen() { return this.#totalLen / this.#totalModels }
-    get nextModelIndex() { return this.#nextModelIndex }
     get generationNumber() { return this.#generationNumber }
-    get totalModels() { return this.#totalModels }
 
     bindEvents() {
         this.#jsonUpload = document.getElementById('json-upload');
@@ -80,14 +72,13 @@ class Ai {
             this.populateFirstGeneration();
 
         if (this.#nextModelIndex === this.#population) {
-            this.#gameCallbacks.onGenerationDone(this.genMinAge, this.genMaxAge, this.genMinLen, this.genMaxLen);
+            this.#gameCallbacks.onGenerationDone();
             this.populateNextGeneration();
         }
 
         this.#currentModel = this.#generation[this.#nextModelIndex];
-        this.#totalModels++;
         this.#nextModelIndex++;
-        this.#gameCallbacks.onNewModel();
+        this.#gameCallbacks.onNewModel(this.#nextModelIndex);
         return this.#currentModel;
     }
 
@@ -102,7 +93,6 @@ class Ai {
 
         this.#generationNumber = 1;
         this.#nextModelIndex = 0;
-        this.resetGenerationStats();
         this.#needsFirstPopulation = false;
     }
 
@@ -114,7 +104,6 @@ class Ai {
         this.#generationNumber++;
         this.#nextModelIndex = 0;
         this.#gameCallbacks.onNewGeneration();
-        this.resetGenerationStats();
     }
 
     getFittest() {
@@ -128,19 +117,6 @@ class Ai {
 
     onWormDied(age, len) {
         this.#currentModel.wormAge = age;
-        this.#totalAge += age;
         this.#currentModel.wormLength = len;
-        this.#totalLen += len;
-        if (age < this.genMinAge) this.genMinAge = age;
-        if (age > this.genMaxAge) this.genMaxAge = age;
-        if (len < this.genMinLen) this.genMinLen = len;
-        if (len > this.genMaxLen) this.genMaxLen = len;
     }
-
-    resetGenerationStats() {
-        this.genMinAge = Number.MAX_VALUE;
-        this.genMaxAge = 0;
-        this.genMinLen = Number.MAX_VALUE;
-        this.genMaxLen = 0;
-    }
-} 
+}
