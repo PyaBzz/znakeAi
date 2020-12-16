@@ -35,8 +35,8 @@ class Game {
 				[InfoKey.genMinAge]: 0,
 				[InfoKey.genMaxLen]: 0,
 				[InfoKey.genMinLen]: 0,
-			}
-		);
+			});
+
 		this.#evolutionInfoboard = new Infoboard(
 			document.getElementById("evolution-stats"),
 			{
@@ -47,8 +47,7 @@ class Game {
 				[InfoKey.averageAge]: 0,
 				[InfoKey.averageLen]: 0,
 				[InfoKey.foodSpread]: 1,
-			}
-		);
+			});
 
 		this.#control = new Control(() => this.#togglePause(), this.#config.keys);
 
@@ -58,8 +57,8 @@ class Game {
 				me.#overlay.unbindHandler();
 				me.#overlay.beTranslucent();
 				me.#overlay.line1 = "PAUSE";
-				me.#overlay.line2 = "";
-				me.#overlay.line3 = "";
+				me.#overlay.line2 = "press SPACE";
+				me.#overlay.line3 = "to resume";
 				me.#onSplashClicked();
 			},
 			{
@@ -72,8 +71,8 @@ class Game {
 
 		this.#button = new MultiFuncButton(document.getElementById('button'),
 			{
-				Start: () => me.#start(),
-				NewWorm: () => me.#doNewWorm()
+				Start: () => me.#init(),
+				Pause: () => me.#togglePause(), //Todo: What should this button do?
 			});
 
 		this.#ai = new Ai(
@@ -108,30 +107,17 @@ class Game {
 			this.#evolutionInfoboard.set({ [InfoKey.ancestor]: "Failed!" });
 	}
 
-	#start() {
-		let brain = this.#ai.getNextModel();
-		this.#worm = new Worm(
-			brain,
-			this.#config.ai.inputVectorSize,
-			this.#grid,
-			this.#config.startAtCentre,
-			this.#config.stepTime,
-			{
-				onWormBorn: (...args) => this.#onWormBorn(...args),
-				onStepTaken: (...args) => this.#onStepTaken(...args),
-				onFoodEaten: (...args) => this.#onFoodEaten(...args),
-				onWormDied: (...args) => this.#onWormDied(...args),
-			});
-
-		this.#button.bind("NewWorm");
-		this.#feeder.dropFood(1);
+	#init() {
+		this.#worm = this.#buildWorm();
+		this.#button.bind("Pause");
+		this.#feeder.dropFood();
 		// this.visualiser = new Visualiser(this);
 		// this.visualiser.visualiseGrid();
 		this.#worm.run();
 		this.bindEvents();
 	}
 
-	#doNewWorm() { //Todo: Does method body agree with the name?
+	#doNewWorm() {
 		if (this.isPaused) {
 			this.#overlay.popDown();
 			this.isPaused = false;
@@ -139,8 +125,14 @@ class Game {
 			this.#worm.stop();
 		}
 		this.#worm.disappear();
-		let brain = this.#ai.getNextModel();
-		this.#worm = new Worm( //Todo: Use a builder method
+		this.#worm = this.#buildWorm();
+		this.#generationInfoboard.set({ [InfoKey.length]: 1 });
+		this.#worm.run();
+	}
+
+	#buildWorm() {
+		const brain = this.#ai.getNextModel();
+		return new Worm(
 			brain,
 			this.#config.ai.inputVectorSize,
 			this.#grid,
@@ -152,8 +144,6 @@ class Game {
 				onFoodEaten: (...args) => this.#onFoodEaten(...args),
 				onWormDied: (...args) => this.#onWormDied(...args),
 			});
-		this.#generationInfoboard.set({ [InfoKey.length]: 1 });
-		this.#worm.run();
 	}
 
 	#togglePause() {
