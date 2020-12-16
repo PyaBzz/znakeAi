@@ -73,7 +73,7 @@ class Game {
 		this.#button = new MultiFuncButton(document.getElementById('button'),
 			{
 				Start: () => me.#start(),
-				Restart: () => me.#restart()
+				NewWorm: () => me.#doNewWorm()
 			});
 
 		this.#ai = new Ai(
@@ -123,7 +123,7 @@ class Game {
 				onWormDied: (...args) => this.#onWormDied(...args),
 			});
 
-		this.#button.bind("Restart");
+		this.#button.bind("NewWorm");
 		this.#feeder.dropFood(1);
 		// this.visualiser = new Visualiser(this);
 		// this.visualiser.visualiseGrid();
@@ -131,7 +131,7 @@ class Game {
 		this.bindEvents();
 	}
 
-	#restart() {
+	#doNewWorm() { //Todo: Does method body agree with the name?
 		if (this.isPaused) {
 			this.#overlay.popDown();
 			this.isPaused = false;
@@ -140,7 +140,7 @@ class Game {
 		}
 		this.#worm.disappear();
 		let brain = this.#ai.getNextModel();
-		this.#worm = new Worm(
+		this.#worm = new Worm( //Todo: Use a builder method
 			brain,
 			this.#config.ai.inputVectorSize,
 			this.#grid,
@@ -209,7 +209,6 @@ class Game {
 	}
 
 	#onWormDied(age, len) {
-		this.#worm.stop(); //Todo: Move to worm
 		this.#ai.onWormDied(age, len);
 		this.#stat.set({
 			[Stat.key.wormAge]: age,
@@ -220,7 +219,7 @@ class Game {
 			[InfoKey.averageLen]: this.#stat.get(Stat.key.averageLen).toFixed(3),
 			[InfoKey.averageAge]: this.#stat.get(Stat.key.averageAge).toFixed(3),
 		});
-		this.#restart();
+		this.#doNewWorm();
 	}
 
 	#onNewGeneration() {

@@ -120,6 +120,7 @@ class Worm {
     }
 
     die() {
+        this.stop();
         this.disappear();
         this.#gameCallbacks.onWormDied(this.#age, this.#length);
     }

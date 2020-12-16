@@ -10,6 +10,8 @@ class Feeder {
 		let centre = this.#grid.getCentreCell();
 		let blankCells = this.#grid.getBlankCellsAround(centre, spread);
 		let nextFoodCell = blankCells.pickRandom();
+		if (!nextFoodCell)
+			debugger;
 		nextFoodCell.beFood();
 		this.#grid.food = nextFoodCell;
 	}
