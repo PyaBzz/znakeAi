@@ -27,10 +27,10 @@ class Game {
 		this.#generationInfoboard = new Infoboard(
 			document.getElementById("generation-stats"),
 			{
-				[InfoKey.Age]: 0,
-				[InfoKey.Length]: 1,
-				[InfoKey.WormNo]: `1 / ${this.#config.ai.population}`,
-				[InfoKey.Generation]: 1,
+				[InfoKey.age]: 0,
+				[InfoKey.length]: 1,
+				[InfoKey.wormNo]: `1 / ${this.#config.ai.population}`,
+				[InfoKey.genNumber]: 1,
 				[InfoKey.genMaxAge]: 0,
 				[InfoKey.genMinAge]: 0,
 				[InfoKey.genMaxLen]: 0,
@@ -43,10 +43,10 @@ class Game {
 				[InfoKey.ancestor]: "No",
 				[InfoKey.targetLength]: this.#config.worm.targetLength,
 				[InfoKey.maxStepsToFood]: this.#grid.playableCellCount,
-				[InfoKey.TotalWorms]: 1,
-				[InfoKey.AverageAge]: 0,
-				[InfoKey.AverageLen]: 0,
-				[InfoKey.FoodSpread]: 1,
+				[InfoKey.totalWorms]: 1,
+				[InfoKey.averageAge]: 0,
+				[InfoKey.averageLen]: 0,
+				[InfoKey.foodSpread]: 1,
 			}
 		);
 
@@ -152,7 +152,7 @@ class Game {
 				onFoodEaten: (...args) => this.#onFoodEaten(...args),
 				onWormDied: (...args) => this.#onWormDied(...args),
 			});
-		this.#generationInfoboard.set({ [InfoKey.Length]: 1 });
+		this.#generationInfoboard.set({ [InfoKey.length]: 1 });
 		this.#worm.run();
 	}
 
@@ -183,7 +183,7 @@ class Game {
 	}
 
 	#onNewModel(nextIndex) { //Todo: Can we combine newModel and newWorm callbacks?
-		this.#generationInfoboard.set({ [InfoKey.WormNo]: `${nextIndex} / ${this.#config.ai.population}` });
+		this.#generationInfoboard.set({ [InfoKey.wormNo]: `${nextIndex} / ${this.#config.ai.population}` });
 	}
 
 	#onWormBorn(replacedFoodCell = false) {
@@ -193,18 +193,18 @@ class Game {
 	}
 
 	#onStepTaken(age) {
-		this.#generationInfoboard.set({ [InfoKey.Age]: age });
+		this.#generationInfoboard.set({ [InfoKey.age]: age });
 	}
 
 	#onFoodEaten(len) {
-		this.#generationInfoboard.set({ [InfoKey.Length]: len });
+		this.#generationInfoboard.set({ [InfoKey.length]: len });
 		if (len >= this.#config.worm.targetLength) {
 			const shouldDownload = confirm(`Target length of ${this.#config.worm.targetLength} reached!\nWould you like to download the current AI model`);
 			if (shouldDownload)
 				this.#ai.saveModel();
 		}
 		const foodSpread = Math.floor(this.#stat.get(Stat.key.averageLen)) || 1;
-		this.#evolutionInfoboard.set({ [InfoKey.FoodSpread]: foodSpread });
+		this.#evolutionInfoboard.set({ [InfoKey.foodSpread]: foodSpread });
 		this.#feeder.dropFood(foodSpread);
 	}
 
@@ -216,9 +216,9 @@ class Game {
 			[Stat.key.wormLen]: len,
 		});
 		this.#evolutionInfoboard.set({
-			[InfoKey.TotalWorms]: this.#stat.get(Stat.key.totalWorms),
-			[InfoKey.AverageLen]: this.#stat.get(Stat.key.averageLen).toFixed(3),
-			[InfoKey.AverageAge]: this.#stat.get(Stat.key.averageAge).toFixed(3),
+			[InfoKey.totalWorms]: this.#stat.get(Stat.key.totalWorms),
+			[InfoKey.averageLen]: this.#stat.get(Stat.key.averageLen).toFixed(3),
+			[InfoKey.averageAge]: this.#stat.get(Stat.key.averageAge).toFixed(3),
 		});
 		this.#restart();
 	}
@@ -226,7 +226,7 @@ class Game {
 	#onNewGeneration() {
 		this.#stat.onNewGeneration();
 		this.#generationInfoboard.set({
-			[InfoKey.Generation]: this.#stat.get(Stat.key.generationNo),
+			[InfoKey.genNumber]: this.#stat.get(Stat.key.generationNo),
 		});
 	}
 

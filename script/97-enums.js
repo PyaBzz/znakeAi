@@ -33,19 +33,19 @@ NeuronInitialiser = Object.freeze({
 });
 
 InfoKey = Object.freeze({
-    Length: "Length",
-    Age: "Age",
-    WormNo: "Worm No",
-    Generation: "Generation",
-    TotalWorms: "Total Worms",
-    AverageAge: "Average Age",
-    AverageLen: "Average Length",
-    FoodSpread: "Food Spread",
+    age: "Age",
+    length: "Length",
+    wormNo: "Worm No",
+    genNumber: "Generation No",
     genMinAge: "Last Gen. Min Age",
     genMaxAge: "Last Gen. Max Age",
     genMinLen: "Last Gen. Min Length",
     genMaxLen: "Last Gen. Max Length",
     ancestor: "Import Ancestor",
-    maxStepsToFood: "Max Steps To Food",
     targetLength: "Target Length",
+    maxStepsToFood: "Max Steps To Food",
+    totalWorms: "Total Worms",
+    averageAge: "Average Age",
+    averageLen: "Average Length",
+    foodSpread: "Food Spread",
 });
