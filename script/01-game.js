@@ -88,6 +88,8 @@ class Game {
 			});
 
 		this.#stat = new Stat();
+
+		//Todo: Put ancestor handling here
 	}
 
 	#onSplashClicked() {
