@@ -9,9 +9,9 @@ class Feeder {
 
 	dropFood(spread = 1) {
 		spread = Math.max(spread, 1);
-		let centre = this.#grid.getCentreCell();
-		let blankCells = this.#grid.getBlankCellsAround(centre, spread);
-		let nextFoodCell = blankCells.pickRandom();
+		const centre = this.#grid.centreCell();
+		const blankCells = this.#grid.getBlankCellsAround(centre, spread);
+		const nextFoodCell = blankCells.pickRandom();
 		if (!nextFoodCell)
 			debugger;
 		nextFoodCell.beFood();

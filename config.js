@@ -2,7 +2,6 @@
 
 var Config = deepFreeze({
 	devMode: false,
-	startAtCentre: true,
 	grid: {
 		height: 11,  // Greater than 4
 		width: 11,  // Greater than 4
@@ -22,7 +21,7 @@ var Config = deepFreeze({
 		population: 32,  // Only even numbers
 	},
 	worm: {
-		//
+		startAtCentre: true,
 	},
 	neuralNet: {
 		inputSize: 10,
