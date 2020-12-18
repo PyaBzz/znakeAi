@@ -1,8 +1,11 @@
 "use strict";
 
 class Game {
+	static #infoKey = Object.freeze({ useAncestor: "Use Ancestor", evolutionNo: "Evolution No", });
+
 	#evoCounter = Config.evolution.rounds;
 	#grid = new Grid(document.getElementById('grid-container'));
+
 	// #mouse = new Mouse(this);
 	// #keyboard = new Keyboard(() => this.#togglePause());
 
@@ -14,6 +17,22 @@ class Game {
 			[ButtonKey.End]: () => null,
 		});
 
+	#infoboard = new Infoboard(
+		document.getElementById("game-info"),
+		{
+			[Game.#infoKey.useAncestor]: "No",
+			[Game.#infoKey.evolutionNo]: 0,
+		},
+		"Game info",
+	);
+
+	#evoInfoboard = new Infoboard(
+		document.getElementById("evolution-info"),
+		{
+			[Evolution.infoKey.generationNo]: 0,
+		},
+		"Evolution info",
+	);
 
 	constructor() {
 		this.#validateConfig();

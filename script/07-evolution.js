@@ -1,6 +1,7 @@
 "use strict";
 
 class Evolution {
+    static infoKey = Object.freeze({ generationNo: "Generation No" });
 
     constructor() {
     }

@@ -34,7 +34,7 @@ var NeuronInitialiser = Object.freeze({
     varianceScaling: "varianceScaling",
 });
 
-var InfoKey = Object.freeze({
+var InfoKey = Object.freeze({ //Todo: Move to corresponding classes as static props
     age: "Age",
     length: "Length",
     wormNo: "Worm No",
