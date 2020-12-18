@@ -1,5 +1,4 @@
 class Game {
-	#config = {};
 	#mouse;
 	#grid;
 	#button;
@@ -13,23 +12,26 @@ class Game {
 	#ai;
 	#stat;
 
-	constructor(znakeConf) {
+	constructor() {
 		let me = this;
-		this.#importConfig(znakeConf);
+		if (Config.grid.height < 4)
+			throw "Grid height must be at least 4"
+		if (Config.grid.width < 4)
+			throw "Grid width must be at least 4"
 		this.#mouse = new Mouse(this);
 
 		this.#grid = new Grid(
 			document.getElementById('grid-container'),
-			this.#config.grid,
+			Config.grid,
 			(...args) => this.#mouse.bindByTag(...args),
-			this.#config.devMode);
+			Config.devMode);
 
 		this.#generationInfoboard = new Infoboard(
 			document.getElementById("generation-stats"),
 			{
 				[InfoKey.age]: 0,
 				[InfoKey.length]: 1,
-				[InfoKey.wormNo]: `1 / ${this.#config.ai.population}`,
+				[InfoKey.wormNo]: `1 / ${Config.ai.population}`,
 				[InfoKey.genNumber]: 1,
 				[InfoKey.genMaxAge]: 0,
 				[InfoKey.genMinAge]: 0,
@@ -41,7 +43,7 @@ class Game {
 			document.getElementById("evolution-stats"),
 			{
 				[InfoKey.ancestor]: "No",
-				[InfoKey.targetLength]: this.#config.worm.targetLength,
+				[InfoKey.targetLength]: Config.worm.targetLength,
 				[InfoKey.maxStepsToFood]: this.#grid.playableCellCount,
 				[InfoKey.totalWorms]: 1,
 				[InfoKey.averageAge]: 0,
@@ -49,7 +51,7 @@ class Game {
 				[InfoKey.foodSpread]: 1,
 			});
 
-		this.#control = new Control(() => this.#togglePause(), this.#config.keys);
+		this.#control = new Control(() => this.#togglePause(), Config.keys);
 
 		this.#overlay = new Overlay(document.getElementById('body'),
 			() => {
@@ -63,7 +65,7 @@ class Game {
 			},
 			{
 				line1: "Znake",
-				line2: this.#config.devMode ? "Developer mode" : "",
+				line2: Config.devMode ? "Developer mode" : "",
 				line3: "Click me!",
 			});
 
@@ -76,7 +78,7 @@ class Game {
 			});
 
 		this.#ai = new Ai(
-			this.#config.ai,
+			Config.ai,
 			this.#grid.playableCellCount,
 			{
 				onAncestorLoad: (...args) => this.#onAncestorLoad(...args),
@@ -86,15 +88,6 @@ class Game {
 			});
 
 		this.#stat = new Stat();
-	}
-
-	#importConfig(znakeConf) {
-		for (let key in znakeConf)
-			this.#config[key] = znakeConf[key];
-		if (this.#config.grid.height < 4)
-			throw "Grid height must be at least 4"
-		if (this.#config.grid.width < 4)
-			throw "Grid width must be at least 4"
 	}
 
 	#onSplashClicked() {
@@ -162,10 +155,10 @@ class Game {
 		const brain = this.#ai.getNextModel();
 		return new Worm(
 			brain,
-			this.#config.ai.inputVectorSize,
+			Config.ai.inputVectorSize,
 			this.#grid,
-			this.#config.startAtCentre,
-			this.#config.stepTime,
+			Config.startAtCentre,
+			Config.stepTime,
 			{
 				onWormBorn: (...args) => this.#onWormBorn(...args),
 				onStepTaken: (...args) => this.#onStepTaken(...args),
@@ -201,7 +194,7 @@ class Game {
 	}
 
 	#onNewModel(nextIndex) { //Todo: Can we combine newModel and newWorm callbacks?
-		this.#generationInfoboard.set({ [InfoKey.wormNo]: `${nextIndex} / ${this.#config.ai.population}` });
+		this.#generationInfoboard.set({ [InfoKey.wormNo]: `${nextIndex} / ${Config.ai.population}` });
 	}
 
 	#onWormBorn(replacedFoodCell = false) {
@@ -216,8 +209,8 @@ class Game {
 
 	#onFoodEaten(len) {
 		this.#generationInfoboard.set({ [InfoKey.length]: len });
-		if (len >= this.#config.worm.targetLength) {
-			const shouldDownload = confirm(`Target length of ${this.#config.worm.targetLength} reached!\nWould you like to download the current AI model`);
+		if (len >= Config.worm.targetLength) {
+			const shouldDownload = confirm(`Target length of ${Config.worm.targetLength} reached!\nWould you like to download the current AI model`);
 			if (shouldDownload)
 				this.#ai.saveModel();
 		}
