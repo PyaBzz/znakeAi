@@ -1,53 +1,60 @@
 "use strict";
 
 class Cell {
-    static #type = Object.freeze({ head: "head", worm: "worm", wall: "wall", blank: "blank", food: "food" });
+    static #types = Object.freeze({ head: "head", worm: "worm", wall: "wall", blank: "blank", food: "food" });
     // static #value = Object.freeze({ head: -2, worm: -1, wall: -1, blank: 0, food: 2 });
+    #element = document.createElement('td');
+    #row;
+    #col;
+    #type;
 
-    constructor(grid, rowNumber, colNumber) {
-        this.grid = grid;
-        this.element = document.createElement('td');
-        this.element.className = 'cell';
-        this.element.cell = this;
-        this.row = rowNumber;
-        this.col = colNumber;
-        this.type = Cell.#type.blank;
+    constructor(rowNumber, colNumber) {
+        this.#element.className = 'cell';
+        this.#element.cell = this;
+        this.#row = rowNumber;
+        this.#col = colNumber;
+        this.#type = Cell.#types.blank;
     }
 
-    get isWorm() { return this.type === Cell.#type.worm }
-    get isHead() { return this.type === Cell.#type.head }
-    get isFood() { return this.type === Cell.#type.food }
-    get isBlank() { return this.type === Cell.#type.blank }
-    get isWall() { return this.type === Cell.#type.wall }
+    get row() { return this.#row }
+    get col() { return this.#col }
+    get isWorm() { return this.#type === Cell.#types.worm }
+    get isHead() { return this.#type === Cell.#types.head }
+    get isFood() { return this.#type === Cell.#types.food }
+    get isBlank() { return this.#type === Cell.#types.blank }
+    get isWall() { return this.#type === Cell.#types.wall }
     get isDeadly() { return this.isWall || this.isWorm }
 
+    sitIn(row) {
+        row.appendChild(this.#element);
+    }
+
     beWorm() {
-        this.type = Cell.#type.worm;
-        this.element.className = 'worm';
+        this.#type = Cell.#types.worm;
+        this.#element.className = 'worm';
     }
 
     beHead() {
-        this.type = Cell.#type.head;
-        // this.grid.head = this;
-        this.element.className = 'worm';
+        this.#type = Cell.#types.head;
+        this.#element.className = 'worm';
     }
 
     beFood() {
-        this.type = Cell.#type.food;
-        this.element.className = 'food';
+        this.#type = Cell.#types.food;
+        this.#element.className = 'food';
     }
 
     beBlank() {
-        this.type = Cell.#type.blank;
-        this.element.className = 'cell';
+        this.#type = Cell.#types.blank;
+        this.#element.className = 'cell';
     }
 
     beWall() {
-        this.type = Cell.#type.wall;
-        this.element.className = 'wall';
+        this.#type = Cell.#types.wall;
+        this.#element.className = 'wall';
     }
 
-    getDiff2Death(direc1, direc2) {//Todo: Move to grid
+    getDiff2Death(direc1, direc2) {
         direc2 = direc2 || null;
         let diffDir1 = 1;
         let diffDir2 = 0;

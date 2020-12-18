@@ -6,6 +6,7 @@ class Game {
 
 	constructor() {
 		this.#validateConfig();
+
 		// this.#mouse = new Mouse(this);
 
 		// while (this.#evoCounter) {

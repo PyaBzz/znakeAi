@@ -9,11 +9,10 @@ class Grid {
     // #food = null;
 
     constructor(parent) {
-        const table = document.createElement('table');
         for (let col = 0; col <= this.#maxColIndex; col++) {
             this.#cells.push([]);
             for (let row = 0; row <= this.#maxRowIndex; row++) {
-                const newCell = new Cell(this, row, col); //Todo: Review cell implementation
+                const newCell = new Cell(this, row, col);
                 if (col == 0 || col == this.#maxColIndex || row == 0 || row == this.#maxRowIndex) newCell.beWall();
                 this.#cells[col].push(newCell);
 
@@ -35,11 +34,12 @@ class Grid {
                 }
             }
         }
+        const table = document.createElement('table');
         for (let row = 0; row <= this.#maxRowIndex; row++) {
             const newRow = document.createElement('tr');
             for (let col = 0; col <= this.#maxColIndex; col++) {
                 const cell = this.#cells[col][row];
-                newRow.appendChild(cell.element);
+                cell.sitIn(newRow);
             }
             table.appendChild(newRow);
         }
@@ -51,11 +51,11 @@ class Grid {
         return flatArrayOfCells.filter((cell, ind) => cell.isBlank);
     }
 
-    getBlankCellsAround(root, diff) {
+    getBlankCellsAround(root, diff) { //Todo: Could move to cell with neighbour recursion
         const result = [];
         if (root.isBlank)
             result.push(root);
-        const rootCol = root.col;
+        const rootCol = root.col; //Todo: The only external reference to col and row
         const rootRow = root.row;
         const minCol = Math.max(rootCol - diff, 0);
         const maxCol = Math.min(rootCol + diff, this.#maxColIndex);
