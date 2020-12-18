@@ -1,14 +1,14 @@
 "use strict";
 
-class Control {
+class Keyboard {
 	#pauseFunc;
 	#mapping;
 
-	constructor(gamePauseFunc, config) {
+	constructor(gamePauseFunc) {
 		this.#pauseFunc = gamePauseFunc;
 		this.bind();
 		this.#mapping = {
-			[config.pause.charCodeAt(0)]: 0,
+			[Config.keyboard.pause.charCodeAt(0)]: 0,
 		};
 	}
 

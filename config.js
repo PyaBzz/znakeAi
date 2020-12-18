@@ -6,7 +6,7 @@ var Config = deepFreeze({
 		height: 11,  // Greater than 4
 		width: 11,  // Greater than 4
 	},
-	keys: {
+	keyboard: {
 		pause: ' ',
 	},
 	stepTime: {
