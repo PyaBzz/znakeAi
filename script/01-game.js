@@ -3,13 +3,20 @@
 class Game {
 	#evoCounter = Config.evolution.rounds;
 	#grid = new Grid(document.getElementById('grid-container'));
-	#keyboard = new Keyboard(() => this.#togglePause());
+	// #mouse = new Mouse(this);
+	// #keyboard = new Keyboard(() => this.#togglePause());
+
+	#button = new MultiFuncButton(document.getElementById('button'),
+		{
+			[ButtonKey.Start]: () => this.#start(),
+			[ButtonKey.Pause]: () => this.#pause(),
+			[ButtonKey.Resume]: () => this.#resume(),
+		});
 
 
 	constructor() {
 		this.#validateConfig();
 
-		// this.#mouse = new Mouse(this);
 
 
 		// while (this.#evoCounter) {
@@ -24,7 +31,18 @@ class Game {
 			throw "Grid width must be at least 4"
 	}
 
-	#togglePause() {
-		// check();
+	#start() {
+		log("start");
+		this.#button.bind(ButtonKey.Pause);
+	}
+
+	#pause() {
+		this.#button.bind(ButtonKey.Resume);
+		log("pause");
+	}
+
+	#resume() {
+		this.#button.bind(ButtonKey.Pause);
+		log("resume");
 	}
 }

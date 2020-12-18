@@ -36,21 +36,17 @@
 
 <body id="body">
 
-    <header class='fullwidth-row'>
-        <p class='spread-elements' id='znake-title'>Znake Ai</p>
-    </header>
+    <header>Znake Ai</header>
 
     <div class='fullwidth-row' id='controls-row'>
-        <button class='spread-elements' id='button'></button>
         <div class='spread-elements info'>Space bar to pause/unpause.</div>
     </div>
 
     <div class='fullwidth-row'>
-        <div id='grid-container'></div>
-        <div class='spread-elements' id='generation-stats'></div>
-        <div class='spread-elements' id='evolution-stats'></div>
-        <div class='spread-elements' id='uploads'>
-            <label>Run slow</label>
+        <div class='spread-elements' id='controls'>
+            <button class='spread-elements' id='button'></button>
+            </br>
+            <label>Slow down</label>
             <input type="checkbox" id="speed-tickbox">
             </br>
             <label>Ancestor model JSON</label>
@@ -61,5 +57,8 @@
             </br>
             <button id="load-button">Import Ancestor</button>
         </div>
+        <div id='grid-container'></div>
+        <div class='spread-elements' id='generation-stats'></div>
+        <div class='spread-elements' id='evolution-stats'></div>
     </div>
 </body>

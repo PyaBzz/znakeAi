@@ -51,3 +51,9 @@ var InfoKey = Object.freeze({
     averageLen: "Average Length",
     foodSpread: "Food Spread",
 });
+
+var ButtonKey = Object.freeze({
+    Start: "Start",
+    Pause: "Pause",
+    Resume: "Resume",
+});

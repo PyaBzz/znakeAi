@@ -5,6 +5,7 @@
   --corner-percentage: 20%;
   --cell-dimension: 20px;
 }
+
 * {
   margin: 0;
   overflow: hidden;
@@ -14,24 +15,35 @@
   -o-user-select: none;
   user-select: none;
 }
+
 html {
   padding: 10px 10px 0 10px;
 }
+
 body {
   background: black;
   font-family: helvetica;
   text-align: center;
 }
+
+header {
+  color: var(--worm-colour);
+  font-size: 24px;
+  font-weight: bold;
+}
+
 .fullwidth-row {
   width: 100%;
   text-align: justify;
   font-size: 0.1px;
 }
+
 .fullwidth-row:after {
   content: "";
   width: 100%; /* Ensures there are at least 2 lines of text, so justification works */
   display: inline-block;
 }
+
 #controls-row {
   margin-top: 10px;
 }
@@ -44,22 +56,18 @@ label{
 .spread-elements {
   display: inline-block;
   vertical-align: top;
-  text-align: center;
+  /* text-align: center; */
   font-size: 24px;
-}
-
-#znake-title {
-  color: darkgrey;
 }
 
 #button {
   background-color: dimgrey;
-  font-size: 14px;
-  width: 60px;
+  font-size: 20px;
+  width: 120px;
   height: 40px;
   border-radius: 4px;
   border: none;
-  color: black;
+  color: var(--worm-colour);
 }
 
 #button:focus {
@@ -127,6 +135,7 @@ table {
   border-spacing: 1px;
   background-color: #202020;
 }
+
 td {
   box-sizing: border-box;
   border-radius: 2px;
@@ -134,12 +143,15 @@ td {
   width: var(--cell-dimension);
   height: var(--cell-dimension);
 }
+
 td.wall {
   background-color: var(--wall-colour);
 }
+
 td.worm {
   background-color: var(--worm-colour);
 }
+
 td.food {
   background-color: var(--food-colour);
 }
