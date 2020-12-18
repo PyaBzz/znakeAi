@@ -56,4 +56,5 @@ var ButtonKey = Object.freeze({
     Start: "Start",
     Pause: "Pause",
     Resume: "Resume",
+    End: "End",
 });

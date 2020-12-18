@@ -11,17 +11,12 @@ class Game {
 			[ButtonKey.Start]: () => this.#start(),
 			[ButtonKey.Pause]: () => this.#pause(),
 			[ButtonKey.Resume]: () => this.#resume(),
+			[ButtonKey.End]: () => null,
 		});
 
 
 	constructor() {
 		this.#validateConfig();
-
-
-
-		// while (this.#evoCounter) {
-		// 	this.#evoCounter--;
-		// }
 	}
 
 	#validateConfig() {
@@ -34,6 +29,21 @@ class Game {
 	#start() {
 		log("start");
 		this.#button.bind(ButtonKey.Pause);
+		this.#doNextEvolution();
+	}
+
+	#doNextEvolution() {
+		if (this.#evoCounter) {
+			this.#evoCounter--;
+			const evo = new Evolution();
+			const resPromise = evo.start();
+			resPromise.then(res => {
+				log(res);
+				this.#doNextEvolution();
+			});
+		} else {
+			this.#end();
+		}
 	}
 
 	#pause() {
@@ -44,5 +54,10 @@ class Game {
 	#resume() {
 		this.#button.bind(ButtonKey.Pause);
 		log("resume");
+	}
+
+	#end() {
+		this.#button.bind(ButtonKey.End);
+		log("fin");
 	}
 }
