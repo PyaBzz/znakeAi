@@ -1,3 +1,5 @@
+"use strict";
+
 class Cell {
     static #type = Object.freeze({ head: "head", worm: "worm", wall: "wall", blank: "blank", food: "food" });
     // static #value = Object.freeze({ head: -2, worm: -1, wall: -1, blank: 0, food: 2 });

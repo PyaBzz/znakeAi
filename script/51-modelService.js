@@ -1,3 +1,5 @@
+"use strict";
+
 class ModelService {
     constructor(config) {
         this.layerSizes = config.layerSizes;

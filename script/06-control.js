@@ -1,3 +1,5 @@
+"use strict";
+
 class Control {
 	#pauseFunc;
 	#mapping;

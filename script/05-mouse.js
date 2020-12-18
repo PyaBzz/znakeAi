@@ -1,3 +1,5 @@
+"use strict";
+
 class Mouse {
 	constructor(game) {
 		document.oncontextmenu = (clickEvent) => clickEvent.preventDefault();

@@ -1,3 +1,5 @@
+"use strict";
+
 class Grid {
     constructor(parent, config, mouseBindFunc, devMode) {
         this.container = parent;

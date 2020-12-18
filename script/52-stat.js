@@ -1,3 +1,5 @@
+"use strict";
+
 class Stat {
     static key = Object.freeze({
         wormIndex: "wormIndex",

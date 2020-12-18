@@ -1,3 +1,5 @@
+"use strict";
+
 class Visualiser {
     constructor(game) {
         this.game = game;

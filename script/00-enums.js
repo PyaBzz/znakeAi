@@ -1,6 +1,8 @@
-Direction = Object.freeze({ up: "up", right: "right", down: "down", left: "left" });
+"use strict";
 
-NeuronActivation = Object.freeze({
+var Direction = Object.freeze({ up: "up", right: "right", down: "down", left: "left" });
+
+var NeuronActivation = Object.freeze({
     linear: "linear",
     elu: "elu",
     selu: "selu",
@@ -14,7 +16,7 @@ NeuronActivation = Object.freeze({
     tanh: "tanh",
 });
 
-NeuronInitialiser = Object.freeze({
+var NeuronInitialiser = Object.freeze({
     zeros: "zeros",
     ones: "ones",
     constant: "constant",
@@ -32,7 +34,7 @@ NeuronInitialiser = Object.freeze({
     varianceScaling: "varianceScaling",
 });
 
-InfoKey = Object.freeze({
+var InfoKey = Object.freeze({
     age: "Age",
     length: "Length",
     wormNo: "Worm No",
