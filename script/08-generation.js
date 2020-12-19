@@ -40,6 +40,14 @@ class Generation {
         });
     }
 
+    #reproduce() {
+        //Todo: Implement
+    }
+
+    #naturalSelect() {
+        return this.#worms.getTop(w => w.fitness, this.#reproducingPopulation).items;
+    }
+
     #updateBoard() {
         GenInfoboard.instance.set({
             [GenInfoboard.key.maxLen]: this.#maxLen,
@@ -47,14 +55,6 @@ class Generation {
             [GenInfoboard.key.maxAge]: this.#maxAge,
             [GenInfoboard.key.minAge]: this.#minAge,
         });
-    }
-
-    #reproduce() {
-        //Todo: Implement
-    }
-
-    #naturalSelect() {
-        return this.#worms.getTop(w => w.fitness, this.#reproducingPopulation).items;
     }
 }
 
