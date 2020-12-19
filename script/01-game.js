@@ -2,7 +2,6 @@
 
 class Game {
 	static #infoKey = Object.freeze({ useAncestor: "Use Ancestor", evolutionNo: "Evolution No", });
-	#grid = new Grid(document.getElementById('grid-container'));
 	#ancestor = null;
 	#evoCounter = 0;
 
@@ -36,6 +35,7 @@ class Game {
 
 	constructor() {
 		this.#validateConfig();
+		const grid = Grid.instance; //Only to instantiate the singleton
 		Evolution.ancestor = null; //Todo: Add file loading code to Game
 	}
 

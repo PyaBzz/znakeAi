@@ -1,8 +1,9 @@
 "use strict";
 
 class Worm {
-    #neuralNetSrv;
+    #neuralNetSrv; //Todo: Make neuralNetSrv static
     #brain;
+    #grid = Grid.instance;
 
     constructor(brain) {
         this.#neuralNetSrv = new NeuralNetSrv();

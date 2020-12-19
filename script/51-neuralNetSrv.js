@@ -1,13 +1,7 @@
 "use strict";
 
 class NeuralNetSrv {
-    #inputSize = Config.neuralNet.inputSize;
-    #layerSizes = Config.neuralNet.layerSizes;
-    #activation = Config.neuralNet.activation;
-    #kernelInit = Config.neuralNet.kernelInit;
-    #useBias = Config.neuralNet.useBias;
-    #biasInit = Config.neuralNet.biasInit;
-    #mutationDiversity = Config.neuralNet.mutationDiversity;
+    #config = Config.neuralNet;
 
     constructor() {
     }
@@ -15,23 +9,23 @@ class NeuralNetSrv {
     create() {
         return tf.tidy(() => {
             let model = tf.sequential();
-            for (let layerSize of this.#layerSizes) {
+            for (let layerSize of this.#config.layerSizes) {
                 if (model.layers.length === 0)
                     model.add(tf.layers.dense({
                         units: layerSize,
-                        inputShape: [this.#inputSize],
-                        activation: this.#activation,
-                        kernelInitializer: this.#kernelInit,
-                        useBias: this.#useBias,
-                        biasInitializer: this.#biasInit,
+                        inputShape: [this.#config.inputSize],
+                        activation: this.#config.activation,
+                        kernelInitializer: this.#config.kernelInit,
+                        useBias: this.#config.useBias,
+                        biasInitializer: this.#config.biasInit,
                     }));
                 else
                     model.add(tf.layers.dense({
                         units: layerSize,
-                        activation: this.#activation,
-                        kernelInitializer: this.#kernelInit,
-                        useBias: this.#useBias,
-                        biasInitializer: this.#biasInit,
+                        activation: this.#config.activation,
+                        kernelInitializer: this.#config.kernelInit,
+                        useBias: this.#config.useBias,
+                        biasInitializer: this.#config.biasInit,
                     }));
             }
             return model;
@@ -59,7 +53,7 @@ class NeuralNetSrv {
                 const mutatedLayer = mutant.layers[i];
 
                 const originalWeights = originalLayer.getWeights();
-                if (this.#useBias) {
+                if (this.#config.useBias) {
                     const originalCoefficients = originalWeights[0];
                     const originalBiases = originalWeights[1];
                     const mutatedCoefficients = this.#addNoise(originalCoefficients);
@@ -78,7 +72,7 @@ class NeuralNetSrv {
     #addNoise(tensor) {
         return tf.tidy(() => {
             const shape = tensor.shape;
-            let noiseTensor = tf.truncatedNormal(shape, 0, this.#mutationDiversity);
+            let noiseTensor = tf.truncatedNormal(shape, 0, this.#config.mutationDiversity);
             return tf.add(tensor, noiseTensor);
         });
     }

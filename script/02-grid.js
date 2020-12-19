@@ -1,6 +1,7 @@
 "use strict";
 
 class Grid {
+    static #instance = null;
     #cells = [];
     #maxRowIndex = Config.grid.height - 1;
     #maxColIndex = Config.grid.width - 1;
@@ -8,7 +9,12 @@ class Grid {
     // #playableCellCount = (Config.grid.height - 2) * (Config.grid.width - 2);
     // #food = null;
 
-    constructor(parent) {
+    constructor() {
+        if (Grid.#instance)
+            throw new Error("Do not instantiate a singleton class twice");
+
+        const parent = document.getElementById('grid-container');
+
         for (let col = 0; col <= this.#maxColIndex; col++) {
             this.#cells.push([]);
             for (let row = 0; row <= this.#maxRowIndex; row++) {
@@ -44,6 +50,11 @@ class Grid {
             table.appendChild(newRow);
         }
         parent.appendChild(table);
+        Grid.#instance = this;
+    }
+
+    static get instance() {
+        return Grid.#instance ? Grid.#instance : new Grid();
     }
 
     get #allBlankCells() {
