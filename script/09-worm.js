@@ -174,7 +174,7 @@ class Worm {
     #die(resolver) {
         this.stop();
         this.#disappear();
-        resolver(new WormResult(this.#length, this.#age));
+        resolver(new WormResult(this, this.#length, this.#age));
     }
 
     replicate() {
@@ -187,10 +187,12 @@ class Worm {
 }
 
 class WormResult {
+    #worm;
     #len;
     #age;
 
-    constructor(len, age) {
+    constructor(worm, len, age) {
+        this.#worm = worm;
         this.#len = len;
         this.#age = age;
     }

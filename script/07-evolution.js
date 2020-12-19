@@ -32,13 +32,14 @@ class Evolution {
                     return resHandler(this.run());
                 });
             } else {
-                resHandler(new EvolutionResult(this.#maxLen, this.#minLen, this.#maxAge, this.#minAge, this.#totalLen, this.#totalAge));
+                resHandler(new EvolutionResult(this, this.#maxLen, this.#minLen, this.#maxAge, this.#minAge, this.#totalLen, this.#totalAge));
             }
         });
     }
 }
 
 class EvolutionResult {
+    #evo;
     #maxLen;
     #minLen;
     #maxAge;
@@ -46,7 +47,8 @@ class EvolutionResult {
     #totalLen;
     #totalAge;
 
-    constructor(maxLen, minLen, maxAge, minAge, totalLen, totalAge,) {
+    constructor(evo, maxLen, minLen, maxAge, minAge, totalLen, totalAge,) {
+        this.#evo = evo;
         this.#maxLen = maxLen;
         this.#minLen = minLen;
         this.#maxAge = maxAge;

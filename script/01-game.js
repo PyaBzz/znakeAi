@@ -41,6 +41,7 @@ class Game {
 	#run() {
 		this.#evoCounter++;
 		if (this.#evoCounter <= Config.evolution.rounds) {
+			GameInfoboard.instance.set({ [Game.infoKey.evolutionNo]: this.#evoCounter + " /" + Config.evolution.rounds });
 			const evo = new Evolution(this.#ancestor);
 			const evoResPromise = evo.run();
 			return evoResPromise.then(evoRes => {

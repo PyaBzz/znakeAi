@@ -34,24 +34,6 @@ var NeuronInitialiser = Object.freeze({
     varianceScaling: "varianceScaling",
 });
 
-var InfoKey = Object.freeze({ //Todo: Move to corresponding classes as static props
-    age: "Age",
-    length: "Length",
-    wormNo: "Worm No",
-    genNumber: "Generation No",
-    genMinAge: "Last Gen. Min Age",
-    genMaxAge: "Last Gen. Max Age",
-    genMinLen: "Last Gen. Min Length",
-    genMaxLen: "Last Gen. Max Length",
-    ancestor: "Import Ancestor",
-    targetLength: "Target Length",
-    maxStepsToFood: "Max Steps To Food",
-    totalWorms: "Total Worms",
-    averageAge: "Average Age",
-    averageLen: "Average Length",
-    foodSpread: "Food Spread",
-});
-
 var ButtonKey = Object.freeze({
     Start: "Start",
     Pause: "Pause",

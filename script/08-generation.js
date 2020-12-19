@@ -2,7 +2,7 @@
 
 class Generation {
     static infoKey = Object.freeze({ wormNo: "Worm No" });
-    static #reproducingPopulation = Config.generation.population / 2;
+    #reproducingPopulation = Config.generation.population / 2;
     #worms = [];
     #wormCounter = 0;
     #maxLen = 0;
@@ -34,7 +34,7 @@ class Generation {
                     return resHandler(this.run());
                 });
             } else {
-                resHandler(new GenerationResult(this.#maxLen, this.#minLen, this.#maxAge, this.#minAge, this.#totalLen, this.#totalAge));
+                resHandler(new GenerationResult(this, this.#maxLen, this.#minLen, this.#maxAge, this.#minAge, this.#totalLen, this.#totalAge));
             }
         });
     }
@@ -44,11 +44,12 @@ class Generation {
     }
 
     #naturalSelect() {
-        return this.#worms.getTop(w => w.fitness, Generation.#reproducingPopulation).items;
+        return this.#worms.getTop(w => w.fitness, this.#reproducingPopulation).items;
     }
 }
 
 class GenerationResult {
+    #gen;
     #maxLen;
     #minLen;
     #maxAge;
@@ -56,7 +57,8 @@ class GenerationResult {
     #totalLen;
     #totalAge;
 
-    constructor(maxLen, minLen, maxAge, minAge, totalLen, totalAge,) {
+    constructor(gen, maxLen, minLen, maxAge, minAge, totalLen, totalAge,) {
+        this.#gen = gen;
         this.#maxLen = maxLen;
         this.#minLen = minLen;
         this.#maxAge = maxAge;
