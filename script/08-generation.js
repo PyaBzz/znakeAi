@@ -17,6 +17,7 @@ class Generation {
         this.#wormCounter++;
         return new Promise((resHandler, rejHandler) => {
             if (this.#wormCounter <= Config.generation.population) {
+                GenInfoboard.instance.set({ [Generation.infoKey.wormNo]: this.#wormCounter });
                 const worm = new Worm();
                 const wormResPromise = worm.live();
                 return wormResPromise.then(wormRes => {
@@ -71,4 +72,26 @@ class GenerationResult {
 
     get totalLen() { return this.#totalLen }
     get totalAge() { return this.#totalAge }
+}
+
+class GenInfoboard {
+    static #instance = null;
+    #board = new Infoboard(
+        document.getElementById("generation-info"),
+        {
+            [Generation.infoKey.wormNo]: 0,
+        },
+        "Generation info",
+    );
+
+    constructor() {
+        GenInfoboard.#instance = this;
+    }
+
+    static get instance() {
+        return GenInfoboard.#instance ? GenInfoboard.#instance : new GenInfoboard();
+    }
+
+    get(key) { return this.#board.get(key) }
+    set(...args) { this.#board.set(...args) }
 }

@@ -36,6 +36,7 @@ class Game {
 	constructor() {
 		this.#validateConfig();
 		const grid = Grid.instance; //Only to instantiate the singleton
+		const genInfoboard = GenInfoboard.instance; //Only to instantiate the singleton
 		Evolution.ancestor = null; //Todo: Add file loading code to Game
 	}
 
