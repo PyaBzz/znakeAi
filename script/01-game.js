@@ -16,7 +16,7 @@ class Game {
 			[ButtonKey.End]: () => null,
 		});
 
-	#infoboard = new Infoboard(
+	#infoboard = new Infoboard( //Todo: Make this singleton as well?
 		document.getElementById("game-info"),
 		{
 			[Game.#infoKey.useAncestor]: "No",
@@ -25,7 +25,7 @@ class Game {
 		"Game info",
 	);
 
-	#evoInfoboard = new Infoboard(
+	#evoInfoboard = new Infoboard( //Todo: Make this singleton as well?
 		document.getElementById("evolution-info"),
 		{
 			[Evolution.infoKey.generationNo]: 0,

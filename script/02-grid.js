@@ -6,8 +6,8 @@ class Grid {
     #maxRowIndex = Config.grid.height - 1;
     #maxColIndex = Config.grid.width - 1;
     // #maxDistance = bazMath.amplitude([this.#maxColIndex, this.#maxRowIndex]);
-    // #playableCellCount = (Config.grid.height - 2) * (Config.grid.width - 2);
-    // #food = null;
+    #playableCellCount = (Config.grid.height - 2) * (Config.grid.width - 2);
+    #food = null;
 
     constructor() {
         if (Grid.#instance)
@@ -18,7 +18,7 @@ class Grid {
         for (let col = 0; col <= this.#maxColIndex; col++) {
             this.#cells.push([]);
             for (let row = 0; row <= this.#maxRowIndex; row++) {
-                const newCell = new Cell(this, row, col);
+                const newCell = new Cell(row, col);
                 if (col == 0 || col == this.#maxColIndex || row == 0 || row == this.#maxRowIndex) newCell.beWall();
                 this.#cells[col].push(newCell);
 

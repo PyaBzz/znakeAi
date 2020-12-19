@@ -9,10 +9,6 @@ var Config = deepFreeze({
 	keyboard: {
 		pause: ' ',
 	},
-	stepTime: {
-		fast: 1,  // milliseconds
-		slow: 100,  // milliseconds
-	},
 	evolution: {
 		rounds: 2,
 		target: {
@@ -27,6 +23,10 @@ var Config = deepFreeze({
 	},
 	worm: {
 		startAtCentre: true,
+		stepTime: {
+			fast: 1,  // milliseconds
+			slow: 100,  // milliseconds
+		},
 	},
 	neuralNet: {
 		inputSize: 10,
