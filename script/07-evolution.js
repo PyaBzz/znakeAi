@@ -2,6 +2,7 @@
 
 class Evolution {
     static infoKey = Object.freeze({ generationNo: "Generation No" });
+    static ancestor = null;
     #genCounter = 0;
 
     constructor() {

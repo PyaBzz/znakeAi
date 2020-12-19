@@ -22,6 +22,14 @@ class Generation {
             }
         });
     }
+
+    #reproduce(){
+        //Todo: Implement
+    }
+
+    #naturalSelect(){
+        //Todo: Implement
+    }
 }
 
 class GenerationResult {

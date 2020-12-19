@@ -2,9 +2,9 @@
 
 class Game {
 	static #infoKey = Object.freeze({ useAncestor: "Use Ancestor", evolutionNo: "Evolution No", });
-
-	#evoCounter = 0;
 	#grid = new Grid(document.getElementById('grid-container'));
+	#ancestor = null;
+	#evoCounter = 0;
 
 	// #mouse = new Mouse(this);
 	// #keyboard = new Keyboard(() => this.#togglePause());
@@ -36,6 +36,7 @@ class Game {
 
 	constructor() {
 		this.#validateConfig();
+		Evolution.ancestor = null; //Todo: Add file loading code to Game
 	}
 
 	#validateConfig() {
@@ -48,17 +49,17 @@ class Game {
 	#start() {
 		log("game start");
 		this.#button.bind(ButtonKey.Pause);
-		this.#doNextEvolution();
+		this.#run();
 	}
 
-	#doNextEvolution() {
+	#run() {
 		this.#evoCounter++;
 		if (this.#evoCounter <= Config.evolution.rounds) {
-			const evo = new Evolution();
+			const evo = new Evolution(this.#ancestor);
 			const evoResPromise = evo.run();
 			return evoResPromise.then(evoRes => {
 				log(evoRes.stat + this.#evoCounter);
-				return this.#doNextEvolution();
+				return this.#run();
 			});
 		} else {
 			this.#end();
