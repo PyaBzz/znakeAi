@@ -11,20 +11,23 @@ class Generation {
     #totalLen = 0;
     #totalAge = 0
 
-    constructor(number) {
+    constructor(number, previous) {
         GenInfoboard.instance.set({ [GenInfoboard.key.generationNo]: number + " /" + Config.evolution.target.generationCount });
+        if (previous)
+            this.#worms = previous.#evolve();
+        else
+            for (let i = 0; i < Config.generation.population; i++)
+                this.#worms.push(new Worm());
     }
 
-    run() {
+    live() {
         this.#wormCounter++;
         return new Promise((resHandler, rejHandler) => {
             if (this.#wormCounter <= Config.generation.population) {
                 GenInfoboard.instance.set({ [GenInfoboard.key.wormNo]: this.#wormCounter + " /" + Config.generation.population });
-                const worm = new Worm();
-                this.#worms.push(worm);
+                const worm = this.#worms[this.#wormCounter - 1];
                 const wormResPromise = worm.live();
                 return wormResPromise.then(wormRes => {
-                    log(`worm ${this.#wormCounter} >> ${wormRes.len}, ${wormRes.age}`);
                     this.#maxLen = Math.max(this.#maxLen, wormRes.len);
                     this.#minLen = Math.min(this.#minLen, wormRes.len);
                     this.#maxAge = Math.max(this.#maxAge, wormRes.age);
@@ -32,7 +35,7 @@ class Generation {
                     this.#totalLen += wormRes.len;
                     this.#totalAge += wormRes.age;
                     this.#updateBoard();
-                    return resHandler(this.run());
+                    return resHandler(this.live());
                 });
             } else {
                 resHandler(new GenerationResult(this, this.#maxLen, this.#minLen, this.#maxAge, this.#minAge, this.#totalLen, this.#totalAge));
@@ -40,8 +43,11 @@ class Generation {
         });
     }
 
-    #reproduce() {
-        //Todo: Implement
+    #evolve() {
+        const fittest = this.#naturalSelect();
+        const replicas = fittest.map(w => w.replicate());
+        const mutants = fittest.map(w => w.mutate());
+        return [...replicas, ...mutants];
     }
 
     #naturalSelect() {
@@ -77,14 +83,13 @@ class GenerationResult {
         this.#totalAge = totalAge;
     }
 
+    get gen() { return this.#gen }
     get maxLen() { return this.#maxLen }
     get averageLen() { return this.#totalLen / Config.generation.population }
     get minLen() { return this.#minLen }
-
     get maxAge() { return this.#maxAge }
     get averageAge() { return this.#totalAge / Config.generation.population }
     get minAge() { return this.#minAge }
-
     get totalLen() { return this.#totalLen }
     get totalAge() { return this.#totalAge }
 }

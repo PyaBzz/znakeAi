@@ -3,7 +3,7 @@
 class Worm {
     #config = Config.worm;
     #inputSize = Config.neuralNet.inputSize;
-    #neuralNetSrv; //Todo: Make neuralNetSrv static
+    #neuralNetSrv;
     #brain;
     #sections = [];
     #intervaller;
@@ -19,14 +19,7 @@ class Worm {
     constructor(brain) {
         this.#neuralNetSrv = new NeuralNetSrv();
         this.#brain = brain || this.#neuralNetSrv.create();
-
-        const origin = Grid.instance.getStartCell(this.#config.startAtCentre);
-        const originWasFood = origin.isFood;
-        this.#sections.push(origin);
-        this.#head.beHead();
         this.#maxStepsToFood = Grid.instance.playableCellCount;
-        if (originWasFood)
-            Feeder.instance.dropFood();
     }
 
     get #head() { return this.#sections[0] }
@@ -35,6 +28,12 @@ class Worm {
     get fitness() { return this.#age + (this.#length - 1) * Grid.instance.playableCellCount }
 
     live() {
+        const origin = Grid.instance.getStartCell(this.#config.startAtCentre);
+        const originWasFood = origin.isFood;
+        this.#sections.push(origin);
+        this.#head.beHead();
+        if (originWasFood)
+            Feeder.instance.dropFood();
         let me = this;
         return new Promise((resolver, rejecter) => {
             me.#intervaller = new Intervaller(() => me.#step(resolver), this.#config.stepTime.fast);
@@ -178,11 +177,12 @@ class Worm {
     }
 
     replicate() {
-        //Todo: Implement
+        return new Worm(this.#brain);
     }
 
     mutate() {
-        //Todo: Implement
+        const mutantBrain = this.#neuralNetSrv.mutate(this.#brain);
+        return new Worm(mutantBrain);
     }
 }
 

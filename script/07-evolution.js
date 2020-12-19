@@ -2,6 +2,7 @@
 
 class Evolution {
     static ancestor = null;
+    #previousGen = null;
     #genCounter = 0;
     #maxLen = 0;
     #minLen = Number.MAX_VALUE;
@@ -10,7 +11,7 @@ class Evolution {
     #totalLen = 0;
     #totalAge = 0
 
-    constructor(number) {
+    constructor(number, ancestorBrain) {
         EvoInfoboard.instance.set({ [EvoInfoboard.key.evolutionNo]: number + " /" + Config.evolution.rounds });
     }
 
@@ -21,10 +22,10 @@ class Evolution {
         this.#genCounter++;
         return new Promise((resHandler, rejHandler) => {
             if (this.#genCounter <= Config.evolution.target.generationCount) { //Todo: Implement other criteria to determine if target is reached
-                const gen = new Generation(this.#genCounter);
-                const genResPromise = gen.run();
+                const gen = new Generation(this.#genCounter, this.#previousGen);
+                const genResPromise = gen.live();
                 return genResPromise.then(genRes => {
-                    log(`generation ${this.#genCounter} >> ${genRes.maxLen}, ${genRes.minLen}, ${genRes.maxAge}, ${genRes.minAge}, ${genRes.totalLen}, ${genRes.totalAge}`);
+                    this.#previousGen = genRes.gen;
                     this.#maxLen = Math.max(this.#maxLen, genRes.maxLen);
                     this.#minLen = Math.min(this.#minLen, genRes.minLen);
                     this.#maxAge = Math.max(this.#maxAge, genRes.maxAge);

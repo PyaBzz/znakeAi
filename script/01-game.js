@@ -1,7 +1,7 @@
 "use strict";
 
 class Game {
-	#ancestor = null;
+	#ancestorBrain = null;
 	#evoCounter = 0;
 
 	// #mouse = new Mouse(this);
@@ -32,7 +32,6 @@ class Game {
 	}
 
 	#start() {
-		log("game start");
 		this.#button.bind(ButtonKey.Pause);
 		this.#run();
 	}
@@ -40,7 +39,7 @@ class Game {
 	#run() {
 		this.#evoCounter++;
 		if (this.#evoCounter <= Config.evolution.rounds) {
-			const evo = new Evolution(this.#evoCounter, this.#ancestor);
+			const evo = new Evolution(this.#evoCounter, this.#ancestorBrain);
 			const evoResPromise = evo.run();
 			return evoResPromise.then(evoRes => {
 				log(`evolution ${this.#evoCounter} >> ${evoRes.maxLen}, ${evoRes.minLen}, ${evoRes.maxAge}, ${evoRes.minAge}, ${evoRes.totalLen}, ${evoRes.totalAge}`);
@@ -63,7 +62,6 @@ class Game {
 
 	#end() {
 		this.#button.bind(ButtonKey.End);
-		log("fin");
 	}
 }
 

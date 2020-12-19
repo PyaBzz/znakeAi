@@ -10,11 +10,11 @@ var Config = deepFreeze({
 		pause: ' ',
 	},
 	evolution: {
-		rounds: 2,
+		rounds: 1,
 		target: {
 			length: 30,
 			averageLen: 4,
-			generationCount: 3,
+			generationCount: 130,
 			lifeSpan: 100,
 		},
 	},

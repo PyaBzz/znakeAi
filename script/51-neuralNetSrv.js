@@ -1,6 +1,6 @@
 "use strict";
 
-class NeuralNetSrv {
+class NeuralNetSrv { //Todo: Make it singleton or static
     #config = Config.neuralNet;
 
     constructor() {
