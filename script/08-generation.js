@@ -12,7 +12,7 @@ class Generation {
         return new Promise((resHandler, rejHandler) => {
             if (this.#wormCounter <= Config.generation.population) {
                 const worm = new Worm();
-                const wormResPromise = worm.run();
+                const wormResPromise = worm.live();
                 return wormResPromise.then(wormRes => {
                     log(wormRes.stat + this.#wormCounter);
                     return resHandler(this.run());

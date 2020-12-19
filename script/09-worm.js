@@ -37,7 +37,7 @@ class Worm {
     get #tail() { return this.#sections.last }
     get #length() { return this.#sections.length }
 
-    run() {
+    live() {
         return new Promise((resHandler, rejHandler) => {
             // const steps = [1, 2, 3];
             // steps.forEachInterval(elem => null, 100, () => resHandler(new WormResult()));
