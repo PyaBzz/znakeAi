@@ -3,7 +3,6 @@
 class Worm {
     #config = Config.worm;
     #inputSize = Config.neuralNet.inputSize;
-    #neuralNetSrv;
     #brain;
     #sections = [];
     #intervaller;
@@ -17,8 +16,7 @@ class Worm {
     #age = 0;
 
     constructor(brain) {
-        this.#neuralNetSrv = new NeuralNetSrv();
-        this.#brain = brain || this.#neuralNetSrv.create();
+        this.#brain = brain || NeuralNetSrv.instance.create();
         this.#maxStepsToFood = Grid.instance.playableCellCount;
     }
 
@@ -181,7 +179,7 @@ class Worm {
     }
 
     mutate() {
-        const mutantBrain = this.#neuralNetSrv.mutate(this.#brain);
+        const mutantBrain = NeuralNetSrv.instance.mutate(this.#brain);
         return new Worm(mutantBrain);
     }
 }

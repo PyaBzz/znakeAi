@@ -1,9 +1,17 @@
 "use strict";
 
-class NeuralNetSrv { //Todo: Make it singleton or static
+class NeuralNetSrv {
+    static #instance = null;
     #config = Config.neuralNet;
 
     constructor() {
+        if (NeuralNetSrv.#instance)
+            throw new Error("Do not instantiate a singleton class twice");
+        NeuralNetSrv.#instance = this;
+    }
+
+    static get instance() {
+        return NeuralNetSrv.#instance ? NeuralNetSrv.#instance : new NeuralNetSrv();
     }
 
     create() {
