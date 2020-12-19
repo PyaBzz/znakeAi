@@ -1,7 +1,7 @@
 "use strict";
 
 class Generation {
-    static infoKey = Object.freeze({ wormNo: "Worm No" });
+    static infoKey = Object.freeze({ generationNo: "Generation No", wormNo: "Worm No" });
     #reproducingPopulation = Config.generation.population / 2;
     #worms = [];
     #wormCounter = 0;
@@ -12,7 +12,8 @@ class Generation {
     #totalLen = 0;
     #totalAge = 0
 
-    constructor() {
+    constructor(number) {
+        GenInfoboard.instance.set({ [Generation.infoKey.generationNo]: number + " /" + Config.evolution.target.generationCount });
     }
 
     run() {
@@ -84,6 +85,7 @@ class GenInfoboard {
     #board = new Infoboard(
         document.getElementById("generation-info"),
         {
+            [Generation.infoKey.generationNo]: 0,
             [Generation.infoKey.wormNo]: 0,
         },
         "Generation info",

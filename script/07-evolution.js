@@ -1,7 +1,7 @@
 "use strict";
 
 class Evolution {
-    static infoKey = Object.freeze({ generationNo: "Generation No" });
+    static infoKey = Object.freeze({ evolutionNo: "Evolution No" });
     static ancestor = null;
     #genCounter = 0;
     #maxLen = 0;
@@ -11,15 +11,15 @@ class Evolution {
     #totalLen = 0;
     #totalAge = 0
 
-    constructor() {
+    constructor(number) {
+        EvoInfoboard.instance.set({ [Evolution.infoKey.evolutionNo]: number + " /" + Config.evolution.rounds });
     }
 
     run() {
         this.#genCounter++;
         return new Promise((resHandler, rejHandler) => {
             if (this.#genCounter <= Config.evolution.target.generationCount) { //Todo: Implement other criteria to determine if target is reached
-                EvoInfoboard.instance.set({ [Evolution.infoKey.generationNo]: this.#genCounter + " /" + Config.evolution.target.generationCount });
-                const gen = new Generation();
+                const gen = new Generation(this.#genCounter);
                 const genResPromise = gen.run();
                 return genResPromise.then(genRes => {
                     log(`generation ${this.#genCounter} >> ${genRes.maxLen}, ${genRes.minLen}, ${genRes.maxAge}, ${genRes.minAge}, ${genRes.totalLen}, ${genRes.totalAge}`);
@@ -74,7 +74,7 @@ class EvoInfoboard {
     #board = new Infoboard(
         document.getElementById("evolution-info"),
         {
-            [Evolution.infoKey.generationNo]: 0,
+            [Evolution.infoKey.evolutionNo]: 0,
         },
         "Evolution info",
     );

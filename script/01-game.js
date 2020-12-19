@@ -1,7 +1,7 @@
 "use strict";
 
 class Game {
-	static infoKey = Object.freeze({ useAncestor: "Use Ancestor", evolutionNo: "Evolution No", });
+	static infoKey = Object.freeze({ useAncestor: "Use Ancestor" });
 	#ancestor = null;
 	#evoCounter = 0;
 
@@ -41,8 +41,7 @@ class Game {
 	#run() {
 		this.#evoCounter++;
 		if (this.#evoCounter <= Config.evolution.rounds) {
-			GameInfoboard.instance.set({ [Game.infoKey.evolutionNo]: this.#evoCounter + " /" + Config.evolution.rounds });
-			const evo = new Evolution(this.#ancestor);
+			const evo = new Evolution(this.#evoCounter, this.#ancestor);
 			const evoResPromise = evo.run();
 			return evoResPromise.then(evoRes => {
 				log(`evolution ${this.#evoCounter} >> ${evoRes.maxLen}, ${evoRes.minLen}, ${evoRes.maxAge}, ${evoRes.minAge}, ${evoRes.totalLen}, ${evoRes.totalAge}`);
@@ -75,7 +74,6 @@ class GameInfoboard {
 		document.getElementById("game-info"),
 		{
 			[Game.infoKey.useAncestor]: "No",
-			[Game.infoKey.evolutionNo]: 0,
 		},
 		"Game info",
 	);
