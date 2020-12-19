@@ -18,6 +18,7 @@ class Evolution {
         this.#genCounter++;
         return new Promise((resHandler, rejHandler) => {
             if (this.#genCounter <= Config.evolution.target.generationCount) { //Todo: Implement other criteria to determine if target is reached
+                EvoInfoboard.instance.set({ [Evolution.infoKey.generationNo]: this.#genCounter + " /" + Config.evolution.target.generationCount });
                 const gen = new Generation();
                 const genResPromise = gen.run();
                 return genResPromise.then(genRes => {
@@ -64,4 +65,26 @@ class EvolutionResult {
 
     get totalLen() { return this.#totalLen }
     get totalAge() { return this.#totalAge }
+}
+
+class EvoInfoboard {
+    static #instance = null;
+    #board = new Infoboard(
+        document.getElementById("evolution-info"),
+        {
+            [Evolution.infoKey.generationNo]: 0,
+        },
+        "Evolution info",
+    );
+
+    constructor() {
+        EvoInfoboard.#instance = this;
+    }
+
+    static get instance() {
+        return EvoInfoboard.#instance ? EvoInfoboard.#instance : new EvoInfoboard();
+    }
+
+    get(key) { return this.#board.get(key) }
+    set(...args) { this.#board.set(...args) }
 }

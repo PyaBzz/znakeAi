@@ -17,7 +17,7 @@ class Generation {
         this.#wormCounter++;
         return new Promise((resHandler, rejHandler) => {
             if (this.#wormCounter <= Config.generation.population) {
-                GenInfoboard.instance.set({ [Generation.infoKey.wormNo]: this.#wormCounter });
+                GenInfoboard.instance.set({ [Generation.infoKey.wormNo]: this.#wormCounter + " /" + Config.generation.population });
                 const worm = new Worm();
                 const wormResPromise = worm.live();
                 return wormResPromise.then(wormRes => {

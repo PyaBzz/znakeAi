@@ -25,18 +25,11 @@ class Game {
 		"Game info",
 	);
 
-	#evoInfoboard = new Infoboard( //Todo: Make this singleton as well?
-		document.getElementById("evolution-info"),
-		{
-			[Evolution.infoKey.generationNo]: 0,
-		},
-		"Evolution info",
-	);
-
 	constructor() {
 		this.#validateConfig();
 		const grid = Grid.instance; //Only to instantiate the singleton
 		const genInfoboard = GenInfoboard.instance; //Only to instantiate the singleton
+		const evoInfoboard = EvoInfoboard.instance; //Only to instantiate the singleton
 		Evolution.ancestor = null; //Todo: Add file loading code to Game
 	}
 
