@@ -1,7 +1,7 @@
 "use strict";
 
 class Game {
-	static #infoKey = Object.freeze({ useAncestor: "Use Ancestor", evolutionNo: "Evolution No", });
+	static infoKey = Object.freeze({ useAncestor: "Use Ancestor", evolutionNo: "Evolution No", });
 	#ancestor = null;
 	#evoCounter = 0;
 
@@ -16,18 +16,10 @@ class Game {
 			[ButtonKey.End]: () => null,
 		});
 
-	#infoboard = new Infoboard( //Todo: Make this singleton as well?
-		document.getElementById("game-info"),
-		{
-			[Game.#infoKey.useAncestor]: "No",
-			[Game.#infoKey.evolutionNo]: 0,
-		},
-		"Game info",
-	);
-
 	constructor() {
 		this.#validateConfig();
 		const grid = Grid.instance; //Only to instantiate the singleton
+		const gameInfoboard = GameInfoboard.instance; //Only to instantiate the singleton
 		const genInfoboard = GenInfoboard.instance; //Only to instantiate the singleton
 		const evoInfoboard = EvoInfoboard.instance; //Only to instantiate the singleton
 		Evolution.ancestor = null; //Todo: Add file loading code to Game
@@ -74,4 +66,27 @@ class Game {
 		this.#button.bind(ButtonKey.End);
 		log("fin");
 	}
+}
+
+class GameInfoboard {
+	static #instance = null;
+	#board = new Infoboard(
+		document.getElementById("game-info"),
+		{
+			[Game.infoKey.useAncestor]: "No",
+			[Game.infoKey.evolutionNo]: 0,
+		},
+		"Game info",
+	);
+
+	constructor() {
+		GameInfoboard.#instance = this;
+	}
+
+	static get instance() {
+		return GameInfoboard.#instance ? GameInfoboard.#instance : new GameInfoboard();
+	}
+
+	get(key) { return this.#board.get(key) }
+	set(...args) { this.#board.set(...args) }
 }
