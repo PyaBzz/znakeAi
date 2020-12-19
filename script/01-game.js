@@ -3,7 +3,7 @@
 class Game {
 	static #infoKey = Object.freeze({ useAncestor: "Use Ancestor", evolutionNo: "Evolution No", });
 
-	#evoCounter = Config.evolution.rounds;
+	#evoCounter = 0;
 	#grid = new Grid(document.getElementById('grid-container'));
 
 	// #mouse = new Mouse(this);
@@ -46,19 +46,19 @@ class Game {
 	}
 
 	#start() {
-		log("start");
+		log("game start");
 		this.#button.bind(ButtonKey.Pause);
 		this.#doNextEvolution();
 	}
 
 	#doNextEvolution() {
-		if (this.#evoCounter) {
-			this.#evoCounter--;
+		this.#evoCounter++;
+		if (this.#evoCounter <= Config.evolution.rounds) {
 			const evo = new Evolution();
-			const resPromise = evo.start();
-			resPromise.then(res => {
-				log(res);
-				this.#doNextEvolution();
+			const evoResPromise = evo.run();
+			return evoResPromise.then(evoRes => {
+				log(evoRes.stat + this.#evoCounter);
+				return this.#doNextEvolution();
 			});
 		} else {
 			this.#end();

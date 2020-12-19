@@ -2,14 +2,32 @@
 
 class Evolution {
     static infoKey = Object.freeze({ generationNo: "Generation No" });
+    #genCounter = 0;
 
     constructor() {
     }
 
-    start() {
+    run() {
+        this.#genCounter++;
         return new Promise((resHandler, rejHandler) => {
-            const gens = [1, 2, 3, 4, 5, 6];
-            gens.forEachInterval(elem => log(elem), 500, () => resHandler("Done"));
+            if (this.#genCounter <= Config.evolution.target.generationCount) { //Todo: Implement other criteria to determine if target is reached
+                const gen = new Generation();
+                const genResPromise = gen.run();
+                return genResPromise.then(genRes => {
+                    log(genRes.stat + this.#genCounter);
+                    return resHandler(this.run());
+                });
+            } else {
+                resHandler(new EvolutionResult());
+            }
         });
+    }
+}
+
+class EvolutionResult {
+    stat = "evo result";
+
+    constructor() {
+        //Todo: Implement
     }
 }

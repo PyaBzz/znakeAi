@@ -14,11 +14,16 @@ var Config = deepFreeze({
 		slow: 100,  // milliseconds
 	},
 	evolution: {
-		rounds: 3,
-		targetLength: 30, //Todo: Add other target criteria like generation number, average length, etc.
+		rounds: 2,
+		target: {
+			length: 30,
+			averageLen: 4,
+			generationCount: 3,
+			lifeSpan: 100,
+		},
 	},
 	generation: {
-		population: 32,  // Only even numbers
+		population: 2,  // Only even numbers
 	},
 	worm: {
 		startAtCentre: true,
@@ -32,7 +37,7 @@ var Config = deepFreeze({
 		biasInit: NeuronInitialiser.zeros,
 		mutationDiversity: 0.1,  //Standard deviation of the normal noise
 		downloadPath: 'downloads://znakeAi-model',
-	}
+	},
 });
 
 onload = function () {
