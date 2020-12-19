@@ -2,6 +2,12 @@
 
 class Generation {
     static infoKey = Object.freeze({ wormNo: "Worm No" });
+    #maxLen = 0;
+    #minLen = Number.MAX_VALUE;
+    #maxAge = 0
+    #minAge = Number.MAX_VALUE;
+    #totalLen = 0;
+    #totalAge = 0
     #wormCounter = 0;
 
     constructor() {
@@ -14,28 +20,51 @@ class Generation {
                 const worm = new Worm();
                 const wormResPromise = worm.live();
                 return wormResPromise.then(wormRes => {
-                    log(wormRes.stat + this.#wormCounter);
+                    log(`worm ${this.#wormCounter}: ${wormRes.len}, ${wormRes.age}`);
+                    this.#maxLen = Math.max(this.#maxLen, wormRes.len);
+                    this.#minLen = Math.min(this.#minLen, wormRes.len);
+                    this.#maxAge = Math.max(this.#maxAge, wormRes.age);
+                    this.#minAge = Math.min(this.#minAge, wormRes.age);
+                    this.#totalLen += wormRes.len;
+                    this.#totalAge += wormRes.age;
                     return resHandler(this.run());
                 });
             } else {
-                resHandler(new GenerationResult());
+                resHandler(new GenerationResult(this.#maxLen, this.#minLen, this.#maxAge, this.#minAge, this.#totalLen, this.#totalAge));
             }
         });
     }
 
-    #reproduce(){
+    #reproduce() {
         //Todo: Implement
     }
 
-    #naturalSelect(){
+    #naturalSelect() {
         //Todo: Implement
     }
 }
 
 class GenerationResult {
-    stat = "gen result";
+    #maxLen;
+    #minLen;
+    #maxAge;
+    #minAge;
+    #totalLen;
+    #totalAge;
 
-    constructor() {
-        //Todo: Implement
+    constructor(maxLen, minLen, maxAge, minAge, totalLen, totalAge,) {
+        this.#maxLen = maxLen;
+        this.#minLen = minLen;
+        this.#maxAge = maxAge;
+        this.#minAge = minAge;
+        this.#totalLen = totalLen;
+        this.#totalAge = totalAge;
     }
+
+    get maxLen() { return this.#maxLen }
+    get minLen() { return this.#minLen }
+    get maxAge() { return this.#maxAge }
+    get minAge() { return this.#minAge }
+    get totalLen() { return this.#totalLen }
+    get totalAge() { return this.#totalAge }
 }

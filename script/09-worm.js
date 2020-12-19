@@ -25,6 +25,8 @@ class Worm {
         this.#sections.push(origin);
         this.#head.beHead();
         this.#maxStepsToFood = Grid.instance.playableCellCount;
+        if (originWasFood)
+            Feeder.instance.dropFood();
     }
 
     get #head() { return this.#sections[0] }
@@ -52,6 +54,7 @@ class Worm {
         else if (nextCell.isFood) {
             this.#moveHeadTo(nextCell);
             this.#stepsSinceLastMeal = 0;
+            Feeder.instance.dropFood();
         }
         else {
             this.#moveHeadTo(nextCell);
@@ -170,7 +173,7 @@ class Worm {
     #die(resolver) {
         this.stop();
         this.#disappear();
-        resolver(new WormResult());
+        resolver(new WormResult(this.#length, this.#age));
     }
 
     replicate() {
@@ -183,9 +186,13 @@ class Worm {
 }
 
 class WormResult {
-    stat = "worm result";
+    #len;
+    #age;
 
-    constructor() {
-        //Todo: Implement
+    constructor(len, age) {
+        this.#len = len;
+        this.#age = age;
     }
+    get len() { return this.#len }
+    get age() { return this.#age }
 }

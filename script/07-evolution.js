@@ -15,7 +15,7 @@ class Evolution {
                 const gen = new Generation();
                 const genResPromise = gen.run();
                 return genResPromise.then(genRes => {
-                    log(genRes.stat + this.#genCounter);
+                    log(`generation ${this.#genCounter}: ${genRes.maxLen}, ${genRes.minLen}, ${genRes.maxAge}, ${genRes.minAge}, ${genRes.totalLen}, ${genRes.totalAge}`);
                     return resHandler(this.run());
                 });
             } else {

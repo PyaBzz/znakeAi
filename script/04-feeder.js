@@ -2,6 +2,7 @@
 
 class Feeder {
 	static #instance = null;
+	//Todo: Persist spread in feeder
 
 	constructor() {
 		if (Feeder.#instance)
