@@ -24,12 +24,6 @@ class Worm {
         const originWasFood = origin.isFood;
         this.#sections.push(origin);
         this.#head.beHead();
-
-        let me = this;
-        this.#intervaller = new Intervaller(() => {
-            me.#step();
-        }, this.#config.stepTime.fast);
-
         this.#maxStepsToFood = Grid.instance.playableCellCount;
     }
 
@@ -38,14 +32,14 @@ class Worm {
     get #length() { return this.#sections.length }
 
     live() {
-        return new Promise((resHandler, rejHandler) => {
-            // const steps = [1, 2, 3];
-            // steps.forEachInterval(elem => null, 100, () => resHandler(new WormResult()));
-            this.#intervaller.run(); //Todo: Adopt this
+        let me = this;
+        return new Promise((resolver, rejecter) => {
+            me.#intervaller = new Intervaller(() => me.#step(resolver), this.#config.stepTime.fast);
+            this.#intervaller.run();
         });
     }
 
-    #step() { //Todo: Review
+    #step(resolver) { //Todo: Review
         this.#age++;
         this.#stepsSinceLastMeal++;
         const dir = this.#getNextDirection();
@@ -53,7 +47,7 @@ class Worm {
         let nextCell = this.#getNextCell();
 
         if (nextCell.isDeadly) {
-            this.#die();
+            this.#die(resolver);
         }
         else if (nextCell.isFood) {
             this.#moveHeadTo(nextCell);
@@ -64,7 +58,7 @@ class Worm {
             this.#moveTail();
         }
         if (this.#stepsSinceLastMeal === this.#maxStepsToFood)
-            this.#die();
+            this.#die(resolver);
     }
 
     speedUp() {
@@ -173,9 +167,10 @@ class Worm {
         this.#sections.forEach(s => s.beBlank());
     }
 
-    #die() {
+    #die(resolver) {
         this.stop();
         this.#disappear();
+        resolver(new WormResult());
     }
 
     replicate() {

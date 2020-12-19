@@ -58,6 +58,8 @@ class Grid {
         return Grid.#instance ? Grid.#instance : new Grid();
     }
 
+    get playableCellCount() { return this.#playableCellCount }
+
     get #allBlankCells() {
         const flatArrayOfCells = this.#cells.flat();
         return flatArrayOfCells.filter((cell, ind) => cell.isBlank);
