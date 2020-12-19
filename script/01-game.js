@@ -1,7 +1,6 @@
 "use strict";
 
 class Game {
-	static infoKey = Object.freeze({ useAncestor: "Use Ancestor" });
 	#ancestor = null;
 	#evoCounter = 0;
 
@@ -70,10 +69,11 @@ class Game {
 
 class GameInfoboard {
 	static #instance = null;
+	static key = Object.freeze({ useAncestor: "Use Ancestor" });
 	#board = new Infoboard(
 		document.getElementById("game-info"),
 		{
-			[Game.infoKey.useAncestor]: "No",
+			[GameInfoboard.key.useAncestor]: "No",
 		},
 		"Game info",
 	);

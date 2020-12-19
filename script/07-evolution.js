@@ -1,7 +1,6 @@
 "use strict";
 
 class Evolution {
-    static infoKey = Object.freeze({ evolutionNo: "Evolution No" });
     static ancestor = null;
     #genCounter = 0;
     #maxLen = 0;
@@ -12,7 +11,7 @@ class Evolution {
     #totalAge = 0
 
     constructor(number) {
-        EvoInfoboard.instance.set({ [Evolution.infoKey.evolutionNo]: number + " /" + Config.evolution.rounds });
+        EvoInfoboard.instance.set({ [EvoInfoboard.key.evolutionNo]: number + " /" + Config.evolution.rounds });
     }
 
     run() {
@@ -71,10 +70,11 @@ class EvolutionResult {
 
 class EvoInfoboard {
     static #instance = null;
+    static key = Object.freeze({ evolutionNo: "Evolution No" });
     #board = new Infoboard(
         document.getElementById("evolution-info"),
         {
-            [Evolution.infoKey.evolutionNo]: 0,
+            [EvoInfoboard.key.evolutionNo]: 0,
         },
         "Evolution info",
     );

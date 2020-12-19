@@ -1,7 +1,6 @@
 "use strict";
 
 class Generation {
-    static infoKey = Object.freeze({ generationNo: "Generation No", wormNo: "Worm No" });
     #reproducingPopulation = Config.generation.population / 2;
     #worms = [];
     #wormCounter = 0;
@@ -13,14 +12,14 @@ class Generation {
     #totalAge = 0
 
     constructor(number) {
-        GenInfoboard.instance.set({ [Generation.infoKey.generationNo]: number + " /" + Config.evolution.target.generationCount });
+        GenInfoboard.instance.set({ [GenInfoboard.key.generationNo]: number + " /" + Config.evolution.target.generationCount });
     }
 
     run() {
         this.#wormCounter++;
         return new Promise((resHandler, rejHandler) => {
             if (this.#wormCounter <= Config.generation.population) {
-                GenInfoboard.instance.set({ [Generation.infoKey.wormNo]: this.#wormCounter + " /" + Config.generation.population });
+                GenInfoboard.instance.set({ [GenInfoboard.key.wormNo]: this.#wormCounter + " /" + Config.generation.population });
                 const worm = new Worm();
                 this.#worms.push(worm);
                 const wormResPromise = worm.live();
@@ -32,11 +31,21 @@ class Generation {
                     this.#minAge = Math.min(this.#minAge, wormRes.age);
                     this.#totalLen += wormRes.len;
                     this.#totalAge += wormRes.age;
+                    this.#updateBoard();
                     return resHandler(this.run());
                 });
             } else {
                 resHandler(new GenerationResult(this, this.#maxLen, this.#minLen, this.#maxAge, this.#minAge, this.#totalLen, this.#totalAge));
             }
+        });
+    }
+
+    #updateBoard() {
+        GenInfoboard.instance.set({
+            [GenInfoboard.key.maxLen]: this.#maxLen,
+            [GenInfoboard.key.minLen]: this.#minLen,
+            [GenInfoboard.key.maxAge]: this.#maxAge,
+            [GenInfoboard.key.minAge]: this.#minAge,
         });
     }
 
@@ -82,11 +91,23 @@ class GenerationResult {
 
 class GenInfoboard {
     static #instance = null;
+    static key = Object.freeze({
+        generationNo: "Generation No",
+        wormNo: "Worm No",
+        maxLen: "Max Length",
+        minLen: "Min Length",
+        maxAge: "Max Age",
+        minAge: "Min Age",
+    });
     #board = new Infoboard(
         document.getElementById("generation-info"),
         {
-            [Generation.infoKey.generationNo]: 0,
-            [Generation.infoKey.wormNo]: 0,
+            [GenInfoboard.key.generationNo]: 0,
+            [GenInfoboard.key.wormNo]: 0,
+            [GenInfoboard.key.maxLen]: 0,
+            [GenInfoboard.key.minLen]: 0,
+            [GenInfoboard.key.maxAge]: 0,
+            [GenInfoboard.key.minAge]: 0,
         },
         "Generation info",
     );
