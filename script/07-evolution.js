@@ -4,6 +4,12 @@ class Evolution {
     static infoKey = Object.freeze({ generationNo: "Generation No" });
     static ancestor = null;
     #genCounter = 0;
+    #maxLen = 0;
+    #minLen = Number.MAX_VALUE;
+    #maxAge = 0
+    #minAge = Number.MAX_VALUE;
+    #totalLen = 0;
+    #totalAge = 0
 
     constructor() {
     }
@@ -15,20 +21,47 @@ class Evolution {
                 const gen = new Generation();
                 const genResPromise = gen.run();
                 return genResPromise.then(genRes => {
-                    log(`generation ${this.#genCounter}: ${genRes.maxLen}, ${genRes.minLen}, ${genRes.maxAge}, ${genRes.minAge}, ${genRes.totalLen}, ${genRes.totalAge}`);
+                    log(`generation ${this.#genCounter} >> ${genRes.maxLen}, ${genRes.minLen}, ${genRes.maxAge}, ${genRes.minAge}, ${genRes.totalLen}, ${genRes.totalAge}`);
+                    this.#maxLen = Math.max(this.#maxLen, genRes.maxLen);
+                    this.#minLen = Math.min(this.#minLen, genRes.minLen);
+                    this.#maxAge = Math.max(this.#maxAge, genRes.maxAge);
+                    this.#minAge = Math.min(this.#minAge, genRes.minAge);
+                    this.#totalLen += genRes.totalLen;
+                    this.#totalAge += genRes.totalAge;
                     return resHandler(this.run());
                 });
             } else {
-                resHandler(new EvolutionResult());
+                resHandler(new EvolutionResult(this.#maxLen, this.#minLen, this.#maxAge, this.#minAge, this.#totalLen, this.#totalAge));
             }
         });
     }
 }
 
 class EvolutionResult {
-    stat = "evo result";
+    #maxLen;
+    #minLen;
+    #maxAge;
+    #minAge;
+    #totalLen;
+    #totalAge;
 
-    constructor() {
-        //Todo: Implement
+    constructor(maxLen, minLen, maxAge, minAge, totalLen, totalAge,) {
+        this.#maxLen = maxLen;
+        this.#minLen = minLen;
+        this.#maxAge = maxAge;
+        this.#minAge = minAge;
+        this.#totalLen = totalLen;
+        this.#totalAge = totalAge;
     }
+
+    get maxLen() { return this.#maxLen }
+    get averageLen() { return this.#totalLen / Config.generation.population }
+    get minLen() { return this.#minLen }
+
+    get maxAge() { return this.#maxAge }
+    get averageAge() { return this.#totalAge / Config.generation.population }
+    get minAge() { return this.#minAge }
+
+    get totalLen() { return this.#totalLen }
+    get totalAge() { return this.#totalAge }
 }

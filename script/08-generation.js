@@ -2,13 +2,13 @@
 
 class Generation {
     static infoKey = Object.freeze({ wormNo: "Worm No" });
+    #wormCounter = 0;
     #maxLen = 0;
     #minLen = Number.MAX_VALUE;
     #maxAge = 0
     #minAge = Number.MAX_VALUE;
     #totalLen = 0;
     #totalAge = 0
-    #wormCounter = 0;
 
     constructor() {
     }
@@ -20,7 +20,7 @@ class Generation {
                 const worm = new Worm();
                 const wormResPromise = worm.live();
                 return wormResPromise.then(wormRes => {
-                    log(`worm ${this.#wormCounter}: ${wormRes.len}, ${wormRes.age}`);
+                    log(`worm ${this.#wormCounter} >> ${wormRes.len}, ${wormRes.age}`);
                     this.#maxLen = Math.max(this.#maxLen, wormRes.len);
                     this.#minLen = Math.min(this.#minLen, wormRes.len);
                     this.#maxAge = Math.max(this.#maxAge, wormRes.age);
@@ -62,9 +62,13 @@ class GenerationResult {
     }
 
     get maxLen() { return this.#maxLen }
+    get averageLen() { return this.#totalLen / Config.generation.population }
     get minLen() { return this.#minLen }
+
     get maxAge() { return this.#maxAge }
+    get averageAge() { return this.#totalAge / Config.generation.population }
     get minAge() { return this.#minAge }
+
     get totalLen() { return this.#totalLen }
     get totalAge() { return this.#totalAge }
 }

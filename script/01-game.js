@@ -58,7 +58,7 @@ class Game {
 			const evo = new Evolution(this.#ancestor);
 			const evoResPromise = evo.run();
 			return evoResPromise.then(evoRes => {
-				log(evoRes.stat + this.#evoCounter);
+				log(`evolution ${this.#evoCounter} >> ${evoRes.maxLen}, ${evoRes.minLen}, ${evoRes.maxAge}, ${evoRes.minAge}, ${evoRes.totalLen}, ${evoRes.totalAge}`);
 				return this.#run();
 			});
 		} else {
