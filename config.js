@@ -19,7 +19,7 @@ var Config = deepFreeze({
 		},
 	},
 	generation: {
-		population: 2,  // Only even numbers
+		population: 32,  // Only even numbers
 	},
 	worm: {
 		startAtCentre: true,

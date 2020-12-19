@@ -2,6 +2,8 @@
 
 class Generation {
     static infoKey = Object.freeze({ wormNo: "Worm No" });
+    static #reproducingPopulation = Config.generation.population / 2;
+    #worms = [];
     #wormCounter = 0;
     #maxLen = 0;
     #minLen = Number.MAX_VALUE;
@@ -19,6 +21,7 @@ class Generation {
             if (this.#wormCounter <= Config.generation.population) {
                 GenInfoboard.instance.set({ [Generation.infoKey.wormNo]: this.#wormCounter + " /" + Config.generation.population });
                 const worm = new Worm();
+                this.#worms.push(worm);
                 const wormResPromise = worm.live();
                 return wormResPromise.then(wormRes => {
                     log(`worm ${this.#wormCounter} >> ${wormRes.len}, ${wormRes.age}`);
@@ -41,7 +44,7 @@ class Generation {
     }
 
     #naturalSelect() {
-        //Todo: Implement
+        return this.#worms.getTop(w => w.fitness, Generation.#reproducingPopulation).items;
     }
 }
 

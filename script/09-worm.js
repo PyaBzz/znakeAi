@@ -32,6 +32,7 @@ class Worm {
     get #head() { return this.#sections[0] }
     get #tail() { return this.#sections.last }
     get #length() { return this.#sections.length }
+    get fitness() { return this.#age + (this.#length - 1) * Grid.instance.playableCellCount }
 
     live() {
         let me = this;
