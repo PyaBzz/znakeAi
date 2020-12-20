@@ -87,19 +87,18 @@ class Game {
 		if (this.#evoCounter <= Config.evolution.rounds) {
 			const evo = new Evolution(this.#evoCounter, this.#ancestorBrain);
 			evo.run();
-			// log(`evolution ${this.#evoCounter} >> ${evoRes.maxLen}, ${evoRes.minLen}, ${evoRes.maxAge}, ${evoRes.minAge}, ${evoRes.totalLen}, ${evoRes.totalAge}`);
 		} else {
 			this.#end();
 		}
 	}
 
 	#pause() {
-		this.#button.bind(ButtonKey.Resume);
+		this.#button.bind(ButtonKey.Resume);//Todo: Could go to a button object as subscription
 		EventBus.instance.notify(EventBus.key.pause);
 	}
 
 	#resume() {
-		this.#button.bind(ButtonKey.Pause);
+		this.#button.bind(ButtonKey.Pause);//Todo: Could go to a button object as subscription
 		EventBus.instance.notify(EventBus.key.resume);
 	}
 

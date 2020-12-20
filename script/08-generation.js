@@ -54,6 +54,7 @@ class Generation {
         this.#totalLen += len;
         this.#totalAge += age;
         this.#updateBoard();
+        this.live();
     }
 
     #evolve() {

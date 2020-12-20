@@ -10,6 +10,7 @@ class Feeder {
 			throw new Error("Do not instantiate a singleton class twice");
 
 		Feeder.#instance = this;
+		this.#subscribeEvents();
 		this.#dropFood();
 	}
 
@@ -19,6 +20,7 @@ class Feeder {
 	#subscribeEvents() {
 		const me = this;
 		this.#subscriptionRefs[EventBus.key.foodEaten] = EventBus.instance.subscribe(EventBus.key.foodEaten, (...args) => me.#dropFood(...args));
+		this.#subscriptionRefs[EventBus.key.averageLenChanged] = EventBus.instance.subscribe(EventBus.key.averageLenChanged, (...args) => me.#setSpread(...args));
 	}
 
 	#unsubscribeEvents() {
@@ -33,7 +35,7 @@ class Feeder {
 		this.#spread = 1;
 	}
 
-	setSpread(val) {
+	#setSpread(val) {
 		val = Math.floor(val);
 		if (val > this.#spread)
 			this.#spread = val;

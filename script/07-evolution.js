@@ -14,6 +14,7 @@ class Evolution {
     constructor(number, ancestorBrain) {
         EvoInfoboard.instance.set({ [EvoInfoboard.key.evolutionNo]: number + " /" + Config.evolution.rounds });
         Feeder.instance.resetSpread();
+        this.#subscribeEvents();
     }
 
     get #averageLen() { return this.totalLen / (Config.generation.population * this.#genCounter) }
@@ -55,6 +56,7 @@ class Evolution {
         this.#minLen = Math.min(this.#minLen, len);
         this.#totalLen += len;
         this.#totalAge += age;
+        EventBus.instance.notify(EventBus.key.averageLenChanged, this.#averageLen)
         this.#updateBoard();
     }
 
