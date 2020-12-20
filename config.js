@@ -18,7 +18,7 @@ var Config = deepFreeze({
 	worm: {
 		startAtCentre: true,
 		stepTime: {
-			fast: 1,  // milliseconds
+			fast: 60,  // milliseconds
 			slow: 100,  // milliseconds
 		},
 	},

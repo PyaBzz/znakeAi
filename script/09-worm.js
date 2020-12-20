@@ -7,6 +7,7 @@ class Worm {
     #sections = [];
     #intervaller;
     #maxStepsToFood = 0;
+    #subscriptionRefs = {};
     #direction = {
         queue: [Direction.right],
         current: Direction.right,
@@ -42,18 +43,18 @@ class Worm {
 
     #subscribeEvents() {
         const me = this;
-        EventBus.instance.subscribe(EventBus.key.pause, () => me.#stop());
-        EventBus.instance.subscribe(EventBus.key.resume, () => me.#resume());
-        EventBus.instance.subscribe(EventBus.key.speedUp, () => me.#speedUp());
-        EventBus.instance.subscribe(EventBus.key.slowDown, () => me.#slowDown());
+        this.#subscriptionRefs[EventBus.key.pause] = EventBus.instance.subscribe(EventBus.key.pause, () => me.#stop());
+        this.#subscriptionRefs[EventBus.key.resume] = EventBus.instance.subscribe(EventBus.key.resume, () => me.#resume());
+        this.#subscriptionRefs[EventBus.key.speedUp] = EventBus.instance.subscribe(EventBus.key.speedUp, () => me.#speedUp());
+        this.#subscriptionRefs[EventBus.key.slowDown] = EventBus.instance.subscribe(EventBus.key.slowDown, () => me.#slowDown());
     }
 
     #unsubscribeEvents() {
         const me = this;
-        EventBus.instance.subscribe(EventBus.key.pause, () => null);
-        EventBus.instance.subscribe(EventBus.key.resume, () => null);
-        EventBus.instance.subscribe(EventBus.key.speedUp, () => null);
-        EventBus.instance.subscribe(EventBus.key.slowDown, () => null);
+        for (let key in this.#subscriptionRefs) {
+            const ref = this.#subscriptionRefs[key];
+            EventBus.instance.unsubscribe(key, ref);
+        }
     }
 
     #step(resolver) { //Todo: Review
