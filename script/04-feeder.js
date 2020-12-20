@@ -19,15 +19,15 @@ class Feeder {
 
 	#subscribeEvents() {
 		const me = this;
-		this.#subscriptionRefs[EventBus.key.foodEaten] = EventBus.instance.subscribe(EventBus.key.foodEaten, (...args) => me.#dropFood(...args));
-		this.#subscriptionRefs[EventBus.key.averageLenChanged] = EventBus.instance.subscribe(EventBus.key.averageLenChanged, (...args) => me.#setSpread(...args));
+		this.#subscriptionRefs[EventBus.key.foodEaten] = The.eventBus.subscribe(EventBus.key.foodEaten, (...args) => me.#dropFood(...args));
+		this.#subscriptionRefs[EventBus.key.averageLenChanged] = The.eventBus.subscribe(EventBus.key.averageLenChanged, (...args) => me.#setSpread(...args));
 	}
 
 	#unsubscribeEvents() {
 		const me = this;
 		for (let key in this.#subscriptionRefs) {
 			const ref = this.#subscriptionRefs[key];
-			EventBus.instance.unsubscribe(key, ref);
+			The.eventBus.unsubscribe(key, ref);
 		}
 	}
 
@@ -42,12 +42,12 @@ class Feeder {
 	}
 
 	#dropFood() {
-		const centre = Grid.instance.centreCell;
-		const blankCells = Grid.instance.getBlankCellsAround(centre, this.#spread);
+		const centre = The.grid.centreCell;
+		const blankCells = The.grid.getBlankCellsAround(centre, this.#spread);
 		const nextFoodCell = blankCells.pickRandom();
 		if (!nextFoodCell)
 			debugger;
 		nextFoodCell.beFood();
-		Grid.instance.food = nextFoodCell;
+		The.grid.food = nextFoodCell;
 	}
 }

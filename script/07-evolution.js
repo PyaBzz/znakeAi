@@ -13,8 +13,8 @@ class Evolution {
     #totalWorms = 0;
 
     constructor(number, ancestorBrain) {
-        EvoInfoboard.instance.set({ [EvoInfoboard.key.evolutionNo]: number + " /" + Config.evolution.rounds });
-        Feeder.instance.resetSpread();
+        The.evoBoard.set({ [EvoBoard.key.evolutionNo]: number + " /" + Config.evolution.rounds });
+        The.feeder.resetSpread();
         this.#subscribeEvents();
     }
 
@@ -23,21 +23,21 @@ class Evolution {
 
     #subscribeEvents() {
         const me = this;
-        this.#subscriptionRefs[EventBus.key.wormDied] = EventBus.instance.subscribe(EventBus.key.wormDied, (...args) => this.#onWormDied(...args));
-        this.#subscriptionRefs[EventBus.key.generationEnd] = EventBus.instance.subscribe(EventBus.key.generationEnd, (...args) => this.#onGenerationEnd(...args));
+        this.#subscriptionRefs[EventBus.key.wormDied] = The.eventBus.subscribe(EventBus.key.wormDied, (...args) => this.#onWormDied(...args));
+        this.#subscriptionRefs[EventBus.key.generationEnd] = The.eventBus.subscribe(EventBus.key.generationEnd, (...args) => this.#onGenerationEnd(...args));
     }
 
     #unsubscribeEvents() {
         const me = this;
         for (let key in this.#subscriptionRefs) {
             const ref = this.#subscriptionRefs[key];
-            EventBus.instance.unsubscribe(key, ref);
+            The.eventBus.unsubscribe(key, ref);
         }
     }
 
     run() {
         if (this.#reachedTarget()) {
-            EventBus.instance.notify(EventBus.key.targetReached);
+            The.eventBus.notify(EventBus.key.targetReached);
         } else {
             this.#genCounter++;
             const gen = new Generation(this.#genCounter, this.#lastGen);
@@ -58,7 +58,7 @@ class Evolution {
         this.#minLen = Math.min(this.#minLen, len);
         this.#totalLen += len;
         this.#totalAge += age;
-        EventBus.instance.notify(EventBus.key.averageLenChanged, this.#averageLen)
+        The.eventBus.notify(EventBus.key.averageLenChanged, this.#averageLen)
         this.#updateBoard();
     }
 
@@ -68,19 +68,19 @@ class Evolution {
     }
 
     #updateBoard() {
-        EvoInfoboard.instance.set({
-            [EvoInfoboard.key.maxLen]: this.#maxLen,
-            [EvoInfoboard.key.minLen]: this.#minLen,
-            [EvoInfoboard.key.maxAge]: this.#maxAge,
-            [EvoInfoboard.key.minAge]: this.#minAge,
-            [EvoInfoboard.key.averageLen]: this.#averageLen.toFixed(3),
-            [EvoInfoboard.key.averageAge]: this.#averageAge.toFixed(3),
-            [EvoInfoboard.key.foodSpread]: Feeder.instance.spread,
+        The.evoBoard.set({
+            [EvoBoard.key.maxLen]: this.#maxLen,
+            [EvoBoard.key.minLen]: this.#minLen,
+            [EvoBoard.key.maxAge]: this.#maxAge,
+            [EvoBoard.key.minAge]: this.#minAge,
+            [EvoBoard.key.averageLen]: this.#averageLen.toFixed(3),
+            [EvoBoard.key.averageAge]: this.#averageAge.toFixed(3),
+            [EvoBoard.key.foodSpread]: The.feeder.spread,
         });
     }
 }
 
-class EvoInfoboard {
+class EvoBoard {
     static #instance = null;
     static key = Object.freeze({
         evolutionNo: "Evolution No",
@@ -95,25 +95,25 @@ class EvoInfoboard {
     #board = new Infoboard(
         document.getElementById("evolution-board"),
         {
-            [EvoInfoboard.key.evolutionNo]: 0,
-            [EvoInfoboard.key.maxLen]: 0,
-            [EvoInfoboard.key.minLen]: 0,
-            [EvoInfoboard.key.maxAge]: 0,
-            [EvoInfoboard.key.minAge]: 0,
-            [EvoInfoboard.key.averageLen]: 0,
-            [EvoInfoboard.key.averageAge]: 0,
-            [EvoInfoboard.key.foodSpread]: 1,
+            [EvoBoard.key.evolutionNo]: 0,
+            [EvoBoard.key.maxLen]: 0,
+            [EvoBoard.key.minLen]: 0,
+            [EvoBoard.key.maxAge]: 0,
+            [EvoBoard.key.minAge]: 0,
+            [EvoBoard.key.averageLen]: 0,
+            [EvoBoard.key.averageAge]: 0,
+            [EvoBoard.key.foodSpread]: 1,
 
         },
         "Evolution info",
     );
 
     constructor() {
-        EvoInfoboard.#instance = this;
+        EvoBoard.#instance = this;
     }
 
     static get instance() {
-        return EvoInfoboard.#instance ? EvoInfoboard.#instance : new EvoInfoboard();
+        return EvoBoard.#instance ? EvoBoard.#instance : new EvoBoard();
     }
 
     get(key) { return this.#board.get(key) }

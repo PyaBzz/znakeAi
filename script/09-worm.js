@@ -18,38 +18,38 @@ class Worm {
 
     constructor(brain) {
         this.#brain = brain || NeuralNetSrv.instance.create();
-        this.#maxStepsToFood = Grid.instance.playableCellCount;
+        this.#maxStepsToFood = The.grid.playableCellCount;
     }
 
     get #head() { return this.#sections[0] }
     get #tail() { return this.#sections.last }
     get #length() { return this.#sections.length }
-    get fitness() { return this.#age + (this.#length - 1) * Grid.instance.playableCellCount }
+    get fitness() { return this.#age + (this.#length - 1) * The.grid.playableCellCount }
 
     #subscribeEvents() {
         const me = this;
-        this.#subscriptionRefs[EventBus.key.pause] = EventBus.instance.subscribe(EventBus.key.pause, (...args) => me.#stop(...args));
-        this.#subscriptionRefs[EventBus.key.resume] = EventBus.instance.subscribe(EventBus.key.resume, (...args) => me.#resume(...args));
-        this.#subscriptionRefs[EventBus.key.speedUp] = EventBus.instance.subscribe(EventBus.key.speedUp, (...args) => me.#speedUp(...args));
-        this.#subscriptionRefs[EventBus.key.slowDown] = EventBus.instance.subscribe(EventBus.key.slowDown, (...args) => me.#slowDown(...args));
+        this.#subscriptionRefs[EventBus.key.pause] = The.eventBus.subscribe(EventBus.key.pause, (...args) => me.#stop(...args));
+        this.#subscriptionRefs[EventBus.key.resume] = The.eventBus.subscribe(EventBus.key.resume, (...args) => me.#resume(...args));
+        this.#subscriptionRefs[EventBus.key.speedUp] = The.eventBus.subscribe(EventBus.key.speedUp, (...args) => me.#speedUp(...args));
+        this.#subscriptionRefs[EventBus.key.slowDown] = The.eventBus.subscribe(EventBus.key.slowDown, (...args) => me.#slowDown(...args));
     }
 
     #unsubscribeEvents() {
         const me = this;
         for (let key in this.#subscriptionRefs) {
             const ref = this.#subscriptionRefs[key];
-            EventBus.instance.unsubscribe(key, ref);
+            The.eventBus.unsubscribe(key, ref);
         }
     }
 
     live(wormNumber) {
-        WormInfoboard.instance.set({ [WormInfoboard.key.wormNo]: wormNumber + " /" + Config.generation.population });
-        const origin = Grid.instance.getStartCell(this.#config.startAtCentre);
+        The.wormBoard.set({ [WormBoard.key.wormNo]: wormNumber + " /" + Config.generation.population });
+        const origin = The.grid.getStartCell(this.#config.startAtCentre);
         const originWasFood = origin.isFood;
         this.#sections.push(origin);
         this.#head.beHead();
         if (originWasFood)
-            EventBus.instance.notify(EventBus.key.foodEaten);
+            The.eventBus.notify(EventBus.key.foodEaten);
         this.#subscribeEvents();
         const me = this;
         this.#intervaller = new Intervaller(() => me.#step(), this.#config.stepTime.fast);
@@ -69,7 +69,7 @@ class Worm {
         else if (nextCell.isFood) {
             this.#moveHeadTo(nextCell);
             this.#stepsSinceLastMeal = 0;
-            EventBus.instance.notify(EventBus.key.foodEaten);
+            The.eventBus.notify(EventBus.key.foodEaten);
             if (this.#reachedTarget()) { //Todo: Move to target object
                 const shouldDownload = confirm(`Target length of ${Config.target.length} reached!\nWould you like to download the current AI model`);
                 if (shouldDownload)
@@ -133,8 +133,8 @@ class Worm {
 
     #getInput() {
         let result = [];
-        const foodDiffHor = Grid.instance.food.col - this.#head.col;
-        const foodDiffVer = Grid.instance.food.row - this.#head.row;
+        const foodDiffHor = The.grid.food.col - this.#head.col;
+        const foodDiffVer = The.grid.food.row - this.#head.row;
         const foodSignalHor = foodDiffHor === 0 ? 0 : 1 / foodDiffHor;
         result.push(foodSignalHor);
         const foodSignalVer = foodDiffVer === 0 ? 0 : 1 / foodDiffVer;
@@ -204,7 +204,7 @@ class Worm {
     #die() {
         this.#stop();
         this.#disappear();
-        EventBus.instance.notify(EventBus.key.wormDied, this.#age, this.#length);
+        The.eventBus.notify(EventBus.key.wormDied, this.#age, this.#length);
         this.#unsubscribeEvents();
     }
 
@@ -218,14 +218,14 @@ class Worm {
     }
 
     #updateBoard() {
-        WormInfoboard.instance.set({
-            [WormInfoboard.key.len]: this.#length,
-            [WormInfoboard.key.age]: this.#age,
+        The.wormBoard.set({
+            [WormBoard.key.len]: this.#length,
+            [WormBoard.key.age]: this.#age,
         });
     }
 }
 
-class WormInfoboard {
+class WormBoard {
     static #instance = null;
     static key = Object.freeze({
         wormNo: "Worm No",
@@ -235,19 +235,19 @@ class WormInfoboard {
     #board = new Infoboard(
         document.getElementById("worm-board"),
         {
-            [WormInfoboard.key.wormNo]: 0,
-            [WormInfoboard.key.age]: 0,
-            [WormInfoboard.key.len]: 0,
+            [WormBoard.key.wormNo]: 0,
+            [WormBoard.key.age]: 0,
+            [WormBoard.key.len]: 0,
         },
         "Worm info",
     );
 
     constructor() {
-        WormInfoboard.#instance = this;
+        WormBoard.#instance = this;
     }
 
     static get instance() {
-        return WormInfoboard.#instance ? WormInfoboard.#instance : new WormInfoboard();
+        return WormBoard.#instance ? WormBoard.#instance : new WormBoard();
     }
 
     get(key) { return this.#board.get(key) }

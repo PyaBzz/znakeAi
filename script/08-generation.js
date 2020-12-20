@@ -13,7 +13,7 @@ class Generation {
     #totalAge = 0;
 
     constructor(genNumber, previous) {
-        GenInfoboard.instance.set({ [GenInfoboard.key.generationNo]: genNumber + " /" + Config.target.generations });
+        The.genBoard.set({ [GenBoard.key.generationNo]: genNumber + " /" + Config.target.generations });
         if (previous)
             this.#worms = previous.#evolve();
         else
@@ -24,14 +24,14 @@ class Generation {
 
     #subscribeEvents() { //Todo: Add all game flow like this
         const me = this;
-        this.#subscriptionRefs[EventBus.key.wormDied] = EventBus.instance.subscribe(EventBus.key.wormDied, (...args) => this.#onWormDied(...args));
+        this.#subscriptionRefs[EventBus.key.wormDied] = The.eventBus.subscribe(EventBus.key.wormDied, (...args) => this.#onWormDied(...args));
     }
 
     #unsubscribeEvents() {
         const me = this;
         for (let key in this.#subscriptionRefs) {
             const ref = this.#subscriptionRefs[key];
-            EventBus.instance.unsubscribe(key, ref);
+            The.eventBus.unsubscribe(key, ref);
         }
     }
 
@@ -42,7 +42,7 @@ class Generation {
             worm.live(this.#wormCounter);
         } else {
             this.#unsubscribeEvents();
-            EventBus.instance.notify(EventBus.key.generationEnd, this)
+            The.eventBus.notify(EventBus.key.generationEnd, this)
         }
     }
 
@@ -69,16 +69,16 @@ class Generation {
     }
 
     #updateBoard() {
-        GenInfoboard.instance.set({
-            [GenInfoboard.key.maxLen]: this.#maxLen,
-            [GenInfoboard.key.minLen]: this.#minLen,
-            [GenInfoboard.key.maxAge]: this.#maxAge,
-            [GenInfoboard.key.minAge]: this.#minAge,
+        The.genBoard.set({
+            [GenBoard.key.maxLen]: this.#maxLen,
+            [GenBoard.key.minLen]: this.#minLen,
+            [GenBoard.key.maxAge]: this.#maxAge,
+            [GenBoard.key.minAge]: this.#minAge,
         });
     }
 }
 
-class GenInfoboard {
+class GenBoard {
     static #instance = null;
     static key = Object.freeze({
         generationNo: "Generation No",
@@ -90,21 +90,21 @@ class GenInfoboard {
     #board = new Infoboard(
         document.getElementById("generation-board"),
         {
-            [GenInfoboard.key.generationNo]: 0,
-            [GenInfoboard.key.maxLen]: 0,
-            [GenInfoboard.key.minLen]: 0,
-            [GenInfoboard.key.maxAge]: 0,
-            [GenInfoboard.key.minAge]: 0,
+            [GenBoard.key.generationNo]: 0,
+            [GenBoard.key.maxLen]: 0,
+            [GenBoard.key.minLen]: 0,
+            [GenBoard.key.maxAge]: 0,
+            [GenBoard.key.minAge]: 0,
         },
         "Generation info",
     );
 
     constructor() {
-        GenInfoboard.#instance = this;
+        GenBoard.#instance = this;
     }
 
     static get instance() {
-        return GenInfoboard.#instance ? GenInfoboard.#instance : new GenInfoboard();
+        return GenBoard.#instance ? GenBoard.#instance : new GenBoard();
     }
 
     get(key) { return this.#board.get(key) }

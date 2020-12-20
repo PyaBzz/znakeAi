@@ -1,6 +1,6 @@
 "use strict";
 
-class Game {
+class Game { //Todo: Make singleton
 	#subscriptionRefs = {};
 	#ancestorBrain = null;
 	#evoCounter = 0;
@@ -22,14 +22,14 @@ class Game {
 		this.#validateConfig();
 		this.#bindEvents();
 		//Only to instantiate the singleton classes
-		let dummyObj = Grid.instance;
-		dummyObj = EventBus.instance;
-		dummyObj = Feeder.instance;
-		dummyObj = GameInfoboard.instance;
-		dummyObj = GenInfoboard.instance;
-		dummyObj = EvoInfoboard.instance;
-		dummyObj = WormInfoboard.instance;
-		dummyObj = Target.instance;
+		let dummyObj = The.grid;
+		dummyObj = The.eventBus;
+		dummyObj = The.feeder;
+		dummyObj = The.gameBoard;
+		dummyObj = The.genBoard;
+		dummyObj = The.evoBoard;
+		dummyObj = The.wormBoard;
+		dummyObj = The.target;
 		Evolution.ancestor = null; //Todo: Add file loading code to Game
 	}
 
@@ -45,10 +45,10 @@ class Game {
 		const me = this;
 		this.speedTickbox.onchange = function () {
 			if (me.speedTickbox.checked) {
-				EventBus.instance.notify(EventBus.key.slowDown);
+				The.eventBus.notify(EventBus.key.slowDown);
 			}
 			else {
-				EventBus.instance.notify(EventBus.key.speedUp);
+				The.eventBus.notify(EventBus.key.speedUp);
 			}
 		};
 		const jsonUpload = document.getElementById('json-upload');
@@ -72,9 +72,9 @@ class Game {
 				])
 			).then(result => {
 				me.#ancestorBrain = result;
-				GameInfoboard.instance.set({ [GameInfoboard.key.useAncestor]: "Yes", })
+				The.gameBoard.set({ [GameBoard.key.useAncestor]: "Yes", })
 			}).catch(err => {
-				GameInfoboard.instance.set({ [GameInfoboard.key.useAncestor]: "Failed", })
+				The.gameBoard.set({ [GameBoard.key.useAncestor]: "Failed", })
 			});
 		};
 	}
@@ -96,12 +96,12 @@ class Game {
 
 	#pause() {
 		this.#button.bind(ButtonKey.Resume);//Todo: Could go to a button object as subscription
-		EventBus.instance.notify(EventBus.key.pause);
+		The.eventBus.notify(EventBus.key.pause);
 	}
 
 	#resume() {
 		this.#button.bind(ButtonKey.Pause);//Todo: Could go to a button object as subscription
-		EventBus.instance.notify(EventBus.key.resume);
+		The.eventBus.notify(EventBus.key.resume);
 	}
 
 	#end() {
@@ -109,23 +109,23 @@ class Game {
 	}
 }
 
-class GameInfoboard {
+class GameBoard {
 	static #instance = null;
 	static key = Object.freeze({ useAncestor: "Use Ancestor" });
 	#board = new Infoboard(
 		document.getElementById("game-board"),
 		{
-			[GameInfoboard.key.useAncestor]: "No",
+			[GameBoard.key.useAncestor]: "No",
 		},
 		"Game info",
 	);
 
 	constructor() {
-		GameInfoboard.#instance = this;
+		GameBoard.#instance = this;
 	}
 
 	static get instance() {
-		return GameInfoboard.#instance ? GameInfoboard.#instance : new GameInfoboard();
+		return GameBoard.#instance ? GameBoard.#instance : new GameBoard();
 	}
 
 	get(key) { return this.#board.get(key) }

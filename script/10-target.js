@@ -1,6 +1,7 @@
 "use strict";
 
 class Target {
+    #subscriptionRefs = {};
     static #instance = null;
 
     constructor() {
@@ -14,15 +15,15 @@ class Target {
 
     #subscribeEvents() {
         const me = this;
-        this.#subscriptionRefs[EventBus.key.wormDied] = EventBus.instance.subscribe(EventBus.key.wormDied, (...args) => this.#onWormDied(...args));
-        this.#subscriptionRefs[EventBus.key.generationEnd] = EventBus.instance.subscribe(EventBus.key.generationEnd, (...args) => this.#onGenerationEnd(...args));
+        this.#subscriptionRefs[EventBus.key.wormDied] = The.eventBus.subscribe(EventBus.key.wormDied, (...args) => this.#onWormDied(...args));
+        this.#subscriptionRefs[EventBus.key.generationEnd] = The.eventBus.subscribe(EventBus.key.generationEnd, (...args) => this.#onGenerationEnd(...args));
     }
 
     #unsubscribeEvents() {
         const me = this;
         for (let key in this.#subscriptionRefs) {
             const ref = this.#subscriptionRefs[key];
-            EventBus.instance.unsubscribe(key, ref);
+            The.eventBus.unsubscribe(key, ref);
         }
     }
 
