@@ -11,25 +11,15 @@ var Config = deepFreeze({
 	},
 	evolution: {
 		rounds: 1,
-		target: {
-			averageLen: 1.1,
-		},
 	},
 	generation: {
 		population: 32,  // Only even numbers
-		target: {
-			rounds: 130,
-		},
 	},
 	worm: {
 		startAtCentre: true,
 		stepTime: {
 			fast: 1,  // milliseconds
 			slow: 100,  // milliseconds
-		},
-		target: {
-			length: 30,
-			lifeSpan: 100,
 		},
 	},
 	neuralNet: {
@@ -41,6 +31,12 @@ var Config = deepFreeze({
 		biasInit: NeuronInitialiser.zeros,
 		mutationDiversity: 0.1,  //Standard deviation of the normal noise
 		downloadPath: 'downloads://znakeAi-model',
+	},
+	target: {
+		generations: 130,
+		averageLen: 10,
+		length: 24,
+		age: 400,
 	},
 });
 

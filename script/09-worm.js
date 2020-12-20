@@ -69,6 +69,12 @@ class Worm {
         else if (nextCell.isFood) {
             this.#moveHeadTo(nextCell);
             this.#stepsSinceLastMeal = 0;
+            if (this.#reachedTarget()) {
+                const shouldDownload = confirm(`Target length of ${Config.target.length} reached!\nWould you like to download the current AI model`);
+                if (shouldDownload)
+                    this.#brain.save(Config.neuralNet.downloadPath); //Todo: Include model details in file name
+            }
+
             Feeder.instance.dropFood();
         }
         else {
@@ -77,6 +83,11 @@ class Worm {
         }
         if (this.#stepsSinceLastMeal === this.#maxStepsToFood)
             this.#die(resolver);
+    }
+
+    #reachedTarget() {
+        return this.#length >= Config.target.length
+            || this.#age >= Config.target.age;
     }
 
     #speedUp() {

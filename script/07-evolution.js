@@ -43,8 +43,8 @@ class Evolution {
     }
 
     #reachedTarget() { //Todo: Implement other criteria to determine if target is reached
-        return this.#genCounter >= Config.generation.target.rounds
-            || this.#averageLen >= Config.evolution.target.averageLen;
+        return this.#genCounter >= Config.target.generations
+            || this.#averageLen >= Config.target.averageLen;
     }
 
     #updateBoard() {
