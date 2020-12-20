@@ -1,6 +1,7 @@
 "use strict";
 
 class Game {
+    #subscriptionRefs = {};
 	#ancestorBrain = null;
 	#evoCounter = 0;
 	#slowDownFunc;

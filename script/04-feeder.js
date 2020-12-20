@@ -1,6 +1,7 @@
 "use strict";
 
 class Feeder {
+    #subscriptionRefs = {}; //Todo: listen to foodEaten and react
 	static #instance = null;
 	#spread = 1;
 

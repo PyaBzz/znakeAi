@@ -2,13 +2,14 @@
 
 class Generation {
     #reproducingPopulation = Config.generation.population / 2;
+    #subscriptionRefs = {};
     #worms = [];
     #wormCounter = 0;
     #maxLen = 0;
     #minLen = Number.MAX_VALUE;
     #maxAge = 0
     #minAge = Number.MAX_VALUE;
-    #totalLen = 0;
+    #totalLen = 0; //Todo: Group these in a private object within the class
     #totalAge = 0
 
     constructor(number, previous) {
@@ -18,6 +19,12 @@ class Generation {
         else
             for (let i = 0; i < Config.generation.population; i++)
                 this.#worms.push(new Worm());
+        this.#subscribeEvents();
+    }
+
+    #subscribeEvents() { //Todo: Add all game flow like this
+        const me = this;
+        this.#subscriptionRefs[EventBus.key.foodEaten] = EventBus.instance.subscribe(EventBus.key.foodEaten, (...args) => log(...args));
     }
 
     live() {

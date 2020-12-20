@@ -2,12 +2,12 @@
 
 class Worm {
     #config = Config.worm;
+    #subscriptionRefs = {};
     #inputSize = Config.neuralNet.inputSize;
     #brain;
     #sections = [];
     #intervaller;
     #maxStepsToFood = 0;
-    #subscriptionRefs = {};
     #direction = {
         queue: [Direction.right],
         current: Direction.right,
@@ -26,6 +26,22 @@ class Worm {
     get #length() { return this.#sections.length }
     get fitness() { return this.#age + (this.#length - 1) * Grid.instance.playableCellCount }
 
+    #subscribeEvents() {
+        const me = this;
+        this.#subscriptionRefs[EventBus.key.pause] = EventBus.instance.subscribe(EventBus.key.pause, (...args) => me.#stop(...args));
+        this.#subscriptionRefs[EventBus.key.resume] = EventBus.instance.subscribe(EventBus.key.resume, (...args) => me.#resume(...args));
+        this.#subscriptionRefs[EventBus.key.speedUp] = EventBus.instance.subscribe(EventBus.key.speedUp, (...args) => me.#speedUp(...args));
+        this.#subscriptionRefs[EventBus.key.slowDown] = EventBus.instance.subscribe(EventBus.key.slowDown, (...args) => me.#slowDown(...args));
+    }
+
+    #unsubscribeEvents() {
+        const me = this;
+        for (let key in this.#subscriptionRefs) {
+            const ref = this.#subscriptionRefs[key];
+            EventBus.instance.unsubscribe(key, ref);
+        }
+    }
+
     live() {
         const origin = Grid.instance.getStartCell(this.#config.startAtCentre);
         const originWasFood = origin.isFood;
@@ -41,22 +57,6 @@ class Worm {
         });
     }
 
-    #subscribeEvents() {
-        const me = this;
-        this.#subscriptionRefs[EventBus.key.pause] = EventBus.instance.subscribe(EventBus.key.pause, () => me.#stop());
-        this.#subscriptionRefs[EventBus.key.resume] = EventBus.instance.subscribe(EventBus.key.resume, () => me.#resume());
-        this.#subscriptionRefs[EventBus.key.speedUp] = EventBus.instance.subscribe(EventBus.key.speedUp, () => me.#speedUp());
-        this.#subscriptionRefs[EventBus.key.slowDown] = EventBus.instance.subscribe(EventBus.key.slowDown, () => me.#slowDown());
-    }
-
-    #unsubscribeEvents() {
-        const me = this;
-        for (let key in this.#subscriptionRefs) {
-            const ref = this.#subscriptionRefs[key];
-            EventBus.instance.unsubscribe(key, ref);
-        }
-    }
-
     #step(resolver) { //Todo: Review
         this.#age++;
         this.#stepsSinceLastMeal++;
@@ -70,6 +70,7 @@ class Worm {
         else if (nextCell.isFood) {
             this.#moveHeadTo(nextCell);
             this.#stepsSinceLastMeal = 0;
+            EventBus.instance.notify(EventBus.key.foodEaten, this.#length);
             if (this.#reachedTarget()) {
                 const shouldDownload = confirm(`Target length of ${Config.target.length} reached!\nWould you like to download the current AI model`);
                 if (shouldDownload)

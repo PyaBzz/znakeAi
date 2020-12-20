@@ -1,6 +1,7 @@
 "use strict";
 
 class Evolution {
+    #subscriptionRefs = {};
     #previousGen = null;
     #genCounter = 0;
     #maxLen = 0;
