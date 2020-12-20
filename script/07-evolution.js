@@ -12,8 +12,7 @@ class Evolution {
     #totalAge = 0;
     #totalWorms = 0;
 
-    constructor(number, ancestorBrain) {
-        The.evoBoard.set({ [EvoBoard.key.evolutionNo]: number + " /" + Config.evolution.rounds });
+    constructor(ancestorBrain) {
         The.feeder.resetSpread();
         this.#subscribeEvents();
     }
@@ -40,7 +39,8 @@ class Evolution {
             The.eventBus.notify(EventKey.targetReached);
         } else {
             this.#genCounter++;
-            const gen = new Generation(this.#genCounter, this.#lastGen);
+            The.genBoard.set({ [GenBoard.key.generationNo]: this.#genCounter + " /" + Config.target.generations });
+            const gen = new Generation(this.#lastGen);
             gen.live();
         }
     }

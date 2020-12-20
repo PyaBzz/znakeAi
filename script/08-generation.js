@@ -12,8 +12,7 @@ class Generation {
     #totalLen = 0;
     #totalAge = 0;
 
-    constructor(genNumber, previous) {
-        The.genBoard.set({ [GenBoard.key.generationNo]: genNumber + " /" + Config.target.generations });
+    constructor(previous) {
         if (previous)
             this.#worms = previous.#evolve();
         else
@@ -39,7 +38,8 @@ class Generation {
         this.#wormCounter++;
         if (this.#wormCounter <= Config.generation.population) {
             const worm = this.#worms[this.#wormCounter - 1];
-            worm.live(this.#wormCounter);
+            The.wormBoard.set({ [WormBoard.key.wormNo]: this.#wormCounter + " /" + Config.generation.population });
+            worm.live();
         } else {
             this.#unsubscribeEvents();
             The.eventBus.notify(EventKey.generationEnd, this)

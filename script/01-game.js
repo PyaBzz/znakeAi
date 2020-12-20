@@ -87,7 +87,8 @@ class Game { //Todo: Make singleton
 	#run() {
 		this.#evoCounter++;
 		if (this.#evoCounter <= Config.evolution.rounds) {
-			const evo = new Evolution(this.#evoCounter, this.#ancestorBrain);
+			The.evoBoard.set({ [EvoBoard.key.evolutionNo]: this.#evoCounter + " /" + Config.evolution.rounds });
+			const evo = new Evolution(this.#ancestorBrain);
 			evo.run();
 		} else {
 			this.#end();
