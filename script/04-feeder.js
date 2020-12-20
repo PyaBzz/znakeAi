@@ -1,7 +1,7 @@
 "use strict";
 
 class Feeder {
-    #subscriptionRefs = {}; //Todo: listen to foodEaten and react
+	#subscriptionRefs = {};
 	static #instance = null;
 	#spread = 1;
 
@@ -10,10 +10,24 @@ class Feeder {
 			throw new Error("Do not instantiate a singleton class twice");
 
 		Feeder.#instance = this;
+		this.#dropFood();
 	}
 
 	static get instance() { return Feeder.#instance ? Feeder.#instance : new Feeder() }
 	get spread() { return this.#spread };
+
+	#subscribeEvents() {
+		const me = this;
+		this.#subscriptionRefs[EventBus.key.foodEaten] = EventBus.instance.subscribe(EventBus.key.foodEaten, (...args) => me.#dropFood(...args));
+	}
+
+	#unsubscribeEvents() {
+		const me = this;
+		for (let key in this.#subscriptionRefs) {
+			const ref = this.#subscriptionRefs[key];
+			EventBus.instance.unsubscribe(key, ref);
+		}
+	}
 
 	resetSpread() {
 		this.#spread = 1;
@@ -25,7 +39,7 @@ class Feeder {
 			this.#spread = val;
 	}
 
-	dropFood() {
+	#dropFood() {
 		const centre = Grid.instance.centreCell;
 		const blankCells = Grid.instance.getBlankCellsAround(centre, this.#spread);
 		const nextFoodCell = blankCells.pickRandom();

@@ -2,50 +2,65 @@
 
 class Evolution {
     #subscriptionRefs = {};
-    #previousGen = null;
+    #lastGen = null;
     #genCounter = 0;
     #maxLen = 0;
     #minLen = Number.MAX_VALUE;
-    #maxAge = 0
+    #maxAge = 0;
     #minAge = Number.MAX_VALUE;
     #totalLen = 0;
-    #totalAge = 0
+    #totalAge = 0;
 
     constructor(number, ancestorBrain) {
         EvoInfoboard.instance.set({ [EvoInfoboard.key.evolutionNo]: number + " /" + Config.evolution.rounds });
         Feeder.instance.resetSpread();
     }
 
-    get #averageLen() { return this.#totalLen / (Config.generation.population * this.#genCounter) }
-    get #averageAge() { return this.#totalAge / (Config.generation.population * this.#genCounter) }
+    get #averageLen() { return this.totalLen / (Config.generation.population * this.#genCounter) }
+    get #averageAge() { return this.totalAge / (Config.generation.population * this.#genCounter) }
+
+    #subscribeEvents() {
+        const me = this;
+        this.#subscriptionRefs[EventBus.key.wormDied] = EventBus.instance.subscribe(EventBus.key.wormDied, (...args) => this.#onWormDied(...args));
+        this.#subscriptionRefs[EventBus.key.generationEnd] = EventBus.instance.subscribe(EventBus.key.generationEnd, (...args) => this.#onGenerationEnd(...args));
+    }
+
+    #unsubscribeEvents() {
+        const me = this;
+        for (let key in this.#subscriptionRefs) {
+            const ref = this.#subscriptionRefs[key];
+            EventBus.instance.unsubscribe(key, ref);
+        }
+    }
 
     run() {
-        return new Promise((resolver, rejecter) => {
-            if (this.#reachedTarget()) {
-                resolver(new EvolutionResult(this, this.#maxLen, this.#minLen, this.#maxAge, this.#minAge, this.#totalLen, this.#totalAge));
-            } else {
-                this.#genCounter++;
-                const gen = new Generation(this.#genCounter, this.#previousGen);
-                const genResPromise = gen.live();
-                return genResPromise.then(genRes => {
-                    this.#previousGen = genRes.gen;
-                    this.#maxLen = Math.max(this.#maxLen, genRes.maxLen);
-                    this.#minLen = Math.min(this.#minLen, genRes.minLen);
-                    this.#maxAge = Math.max(this.#maxAge, genRes.maxAge);
-                    this.#minAge = Math.min(this.#minAge, genRes.minAge);
-                    this.#totalLen += genRes.totalLen;
-                    this.#totalAge += genRes.totalAge;
-                    Feeder.instance.setSpread(this.#averageLen);
-                    this.#updateBoard();
-                    return resolver(this.run());
-                });
-            }
-        });
+        if (this.#reachedTarget()) {
+            EventBus.instance.notify(EventBus.key.targetReached);
+        } else {
+            this.#genCounter++;
+            const gen = new Generation(this.#genCounter, this.#lastGen);
+            gen.live();
+        }
     }
 
     #reachedTarget() { //Todo: Implement other criteria to determine if target is reached
         return this.#genCounter >= Config.target.generations
             || this.#averageLen >= Config.target.averageLen;
+    }
+
+    #onWormDied(age, len) {
+        this.#maxAge = Math.max(this.#maxAge, age);
+        this.#minAge = Math.min(this.#minAge, age);
+        this.#maxLen = Math.max(this.#maxLen, len);
+        this.#minLen = Math.min(this.#minLen, len);
+        this.#totalLen += len;
+        this.#totalAge += age;
+        this.#updateBoard();
+    }
+
+    #onGenerationEnd(lastGen) {
+        this.#lastGen = lastGen;
+        this.run();
     }
 
     #updateBoard() {
@@ -59,35 +74,6 @@ class Evolution {
             [EvoInfoboard.key.foodSpread]: Feeder.instance.spread,
         });
     }
-}
-
-class EvolutionResult {
-    #evo;
-    #maxLen;
-    #minLen;
-    #maxAge;
-    #minAge;
-    #totalLen;
-    #totalAge;
-
-    constructor(evo, maxLen, minLen, maxAge, minAge, totalLen, totalAge,) {
-        this.#evo = evo;
-        this.#maxLen = maxLen;
-        this.#minLen = minLen;
-        this.#maxAge = maxAge;
-        this.#minAge = minAge;
-        this.#totalLen = totalLen;
-        this.#totalAge = totalAge;
-    }
-
-    get maxLen() { return this.#maxLen }
-    get minLen() { return this.#minLen }
-
-    get maxAge() { return this.#maxAge }
-    get minAge() { return this.#minAge }
-
-    get totalLen() { return this.#totalLen }
-    get totalAge() { return this.#totalAge }
 }
 
 class EvoInfoboard {

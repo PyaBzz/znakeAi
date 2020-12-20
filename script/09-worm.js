@@ -48,16 +48,14 @@ class Worm {
         this.#sections.push(origin);
         this.#head.beHead();
         if (originWasFood)
-            Feeder.instance.dropFood();
+            EventBus.instance.notify(EventBus.key.foodEaten);
         this.#subscribeEvents();
         const me = this;
-        return new Promise((resolver, rejecter) => {
-            me.#intervaller = new Intervaller(() => me.#step(resolver), this.#config.stepTime.fast);
-            this.#intervaller.run();
-        });
+        this.#intervaller = new Intervaller(() => me.#step(), this.#config.stepTime.fast);
+        this.#intervaller.run();
     }
 
-    #step(resolver) { //Todo: Review
+    #step() { //Todo: Review
         this.#age++;
         this.#stepsSinceLastMeal++;
         const dir = this.#getNextDirection();
@@ -65,26 +63,24 @@ class Worm {
         let nextCell = this.#getNextCell();
 
         if (nextCell.isDeadly) {
-            this.#die(resolver);
+            this.#die();
         }
         else if (nextCell.isFood) {
             this.#moveHeadTo(nextCell);
             this.#stepsSinceLastMeal = 0;
-            EventBus.instance.notify(EventBus.key.foodEaten, this.#length);
+            EventBus.instance.notify(EventBus.key.foodEaten);
             if (this.#reachedTarget()) {
                 const shouldDownload = confirm(`Target length of ${Config.target.length} reached!\nWould you like to download the current AI model`);
                 if (shouldDownload)
                     this.#brain.save(Config.neuralNet.downloadPath); //Todo: Include model details in file name
             }
-
-            Feeder.instance.dropFood();
         }
         else {
             this.#moveHeadTo(nextCell);
             this.#moveTail();
         }
         if (this.#stepsSinceLastMeal === this.#maxStepsToFood)
-            this.#die(resolver);
+            this.#die();
     }
 
     #reachedTarget() {
@@ -202,11 +198,11 @@ class Worm {
         this.#sections.forEach(s => s.beBlank());
     }
 
-    #die(resolver) {
+    #die() {
         this.#stop();
-        this.#unsubscribeEvents();
         this.#disappear();
-        resolver(new WormResult(this, this.#length, this.#age));
+        EventBus.instance.notify(EventBus.key.wormDied, this.#age, this.#length);
+        this.#unsubscribeEvents();
     }
 
     replicate() {
@@ -217,18 +213,4 @@ class Worm {
         const mutantBrain = NeuralNetSrv.instance.mutate(this.#brain);
         return new Worm(mutantBrain);
     }
-}
-
-class WormResult {
-    #worm;
-    #len;
-    #age;
-
-    constructor(worm, len, age) {
-        this.#worm = worm;
-        this.#len = len;
-        this.#age = age;
-    }
-    get len() { return this.#len }
-    get age() { return this.#age }
 }

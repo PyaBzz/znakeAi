@@ -4,13 +4,13 @@ class Generation {
     #reproducingPopulation = Config.generation.population / 2;
     #subscriptionRefs = {};
     #worms = [];
-    #wormCounter = 0;
+    #wormCounter = 0; //Todo: Change to wormIndex
     #maxLen = 0;
     #minLen = Number.MAX_VALUE;
-    #maxAge = 0
+    #maxAge = 0;
     #minAge = Number.MAX_VALUE;
-    #totalLen = 0; //Todo: Group these in a private object within the class
-    #totalAge = 0
+    #totalLen = 0;
+    #totalAge = 0;
 
     constructor(number, previous) {
         GenInfoboard.instance.set({ [GenInfoboard.key.generationNo]: number + " /" + Config.target.generations });
@@ -24,30 +24,36 @@ class Generation {
 
     #subscribeEvents() { //Todo: Add all game flow like this
         const me = this;
-        this.#subscriptionRefs[EventBus.key.foodEaten] = EventBus.instance.subscribe(EventBus.key.foodEaten, (...args) => log(...args));
+        this.#subscriptionRefs[EventBus.key.wormDied] = EventBus.instance.subscribe(EventBus.key.wormDied, (...args) => this.#onWormDied(...args));
+    }
+
+    #unsubscribeEvents() {
+        const me = this;
+        for (let key in this.#subscriptionRefs) {
+            const ref = this.#subscriptionRefs[key];
+            EventBus.instance.unsubscribe(key, ref);
+        }
     }
 
     live() {
         this.#wormCounter++;
-        return new Promise((resHandler, rejHandler) => {
-            if (this.#wormCounter <= Config.generation.population) {
-                GenInfoboard.instance.set({ [GenInfoboard.key.wormNo]: this.#wormCounter + " /" + Config.generation.population });
-                const worm = this.#worms[this.#wormCounter - 1];
-                const wormResPromise = worm.live();
-                return wormResPromise.then(wormRes => {
-                    this.#maxLen = Math.max(this.#maxLen, wormRes.len);
-                    this.#minLen = Math.min(this.#minLen, wormRes.len);
-                    this.#maxAge = Math.max(this.#maxAge, wormRes.age);
-                    this.#minAge = Math.min(this.#minAge, wormRes.age);
-                    this.#totalLen += wormRes.len;
-                    this.#totalAge += wormRes.age;
-                    this.#updateBoard();
-                    return resHandler(this.live());
-                });
-            } else {
-                resHandler(new GenerationResult(this, this.#maxLen, this.#minLen, this.#maxAge, this.#minAge, this.#totalLen, this.#totalAge));
-            }
-        });
+        if (this.#wormCounter <= Config.generation.population) {
+            const worm = this.#worms[this.#wormCounter - 1];
+            worm.live();
+        } else {
+            this.#unsubscribeEvents();
+            EventBus.instance.notify(EventBus.key.generationEnd, this)
+        }
+    }
+
+    #onWormDied(age, len) {
+        this.#maxAge = Math.max(this.#maxAge, age);
+        this.#minAge = Math.min(this.#minAge, age);
+        this.#maxLen = Math.max(this.#maxLen, len);
+        this.#minLen = Math.min(this.#minLen, len);
+        this.#totalLen += len;
+        this.#totalAge += age;
+        this.#updateBoard();
     }
 
     #evolve() {
@@ -63,42 +69,13 @@ class Generation {
 
     #updateBoard() {
         GenInfoboard.instance.set({
+            [GenInfoboard.key.wormNo]: this.#wormCounter + " /" + Config.generation.population,
             [GenInfoboard.key.maxLen]: this.#maxLen,
             [GenInfoboard.key.minLen]: this.#minLen,
             [GenInfoboard.key.maxAge]: this.#maxAge,
             [GenInfoboard.key.minAge]: this.#minAge,
         });
     }
-}
-
-class GenerationResult {
-    #gen;
-    #maxLen;
-    #minLen;
-    #maxAge;
-    #minAge;
-    #totalLen;
-    #totalAge;
-
-    constructor(gen, maxLen, minLen, maxAge, minAge, totalLen, totalAge,) {
-        this.#gen = gen;
-        this.#maxLen = maxLen;
-        this.#minLen = minLen;
-        this.#maxAge = maxAge;
-        this.#minAge = minAge;
-        this.#totalLen = totalLen;
-        this.#totalAge = totalAge;
-    }
-
-    get gen() { return this.#gen }
-    get maxLen() { return this.#maxLen }
-    get averageLen() { return this.#totalLen / Config.generation.population }
-    get minLen() { return this.#minLen }
-    get maxAge() { return this.#maxAge }
-    get averageAge() { return this.#totalAge / Config.generation.population }
-    get minAge() { return this.#minAge }
-    get totalLen() { return this.#totalLen }
-    get totalAge() { return this.#totalAge }
 }
 
 class GenInfoboard {

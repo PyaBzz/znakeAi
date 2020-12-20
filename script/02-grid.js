@@ -51,7 +51,6 @@ class Grid {
         }
         parent.appendChild(table);
         Grid.#instance = this;
-        Feeder.instance.dropFood();
     }
 
     static get instance() {

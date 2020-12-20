@@ -1,7 +1,7 @@
 "use strict";
 
 class Game {
-    #subscriptionRefs = {};
+	#subscriptionRefs = {};
 	#ancestorBrain = null;
 	#evoCounter = 0;
 	#slowDownFunc;
@@ -23,6 +23,7 @@ class Game {
 		this.#bindEvents();
 		//Only to instantiate the singleton classes
 		let dummyObj = Grid.instance;
+		dummyObj = Feeder.instance;
 		dummyObj = GameInfoboard.instance;
 		dummyObj = GenInfoboard.instance;
 		dummyObj = EvoInfoboard.instance;
@@ -85,11 +86,8 @@ class Game {
 		this.#evoCounter++;
 		if (this.#evoCounter <= Config.evolution.rounds) {
 			const evo = new Evolution(this.#evoCounter, this.#ancestorBrain);
-			const evoResPromise = evo.run();
-			return evoResPromise.then(evoRes => {
-				log(`evolution ${this.#evoCounter} >> ${evoRes.maxLen}, ${evoRes.minLen}, ${evoRes.maxAge}, ${evoRes.minAge}, ${evoRes.totalLen}, ${evoRes.totalAge}`);
-				return this.#run();
-			});
+			evo.run();
+			// log(`evolution ${this.#evoCounter} >> ${evoRes.maxLen}, ${evoRes.minLen}, ${evoRes.maxAge}, ${evoRes.minAge}, ${evoRes.totalLen}, ${evoRes.totalAge}`);
 		} else {
 			this.#end();
 		}
