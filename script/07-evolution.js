@@ -19,9 +19,11 @@ class Evolution {
     get #averageAge() { return this.#totalAge / (Config.generation.population * this.#genCounter) }
 
     run() {
-        this.#genCounter++;
-        return new Promise((resHandler, rejHandler) => {
-            if (this.#genCounter <= Config.evolution.target.generationCount) { //Todo: Implement other criteria to determine if target is reached
+        return new Promise((resolver, rejecter) => {
+            if (this.#reachedTarget()) {
+                resolver(new EvolutionResult(this, this.#maxLen, this.#minLen, this.#maxAge, this.#minAge, this.#totalLen, this.#totalAge));
+            } else {
+                this.#genCounter++;
                 const gen = new Generation(this.#genCounter, this.#previousGen);
                 const genResPromise = gen.live();
                 return genResPromise.then(genRes => {
@@ -34,12 +36,15 @@ class Evolution {
                     this.#totalAge += genRes.totalAge;
                     Feeder.instance.setSpread(this.#averageLen);
                     this.#updateBoard();
-                    return resHandler(this.run());
+                    return resolver(this.run());
                 });
-            } else {
-                resHandler(new EvolutionResult(this, this.#maxLen, this.#minLen, this.#maxAge, this.#minAge, this.#totalLen, this.#totalAge));
             }
         });
+    }
+
+    #reachedTarget() { //Todo: Implement other criteria to determine if target is reached
+        return this.#genCounter >= Config.generation.target.rounds
+            || this.#averageLen >= Config.evolution.target.averageLen;
     }
 
     #updateBoard() {

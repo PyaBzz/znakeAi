@@ -12,7 +12,7 @@ class Generation {
     #totalAge = 0
 
     constructor(number, previous) {
-        GenInfoboard.instance.set({ [GenInfoboard.key.generationNo]: number + " /" + Config.evolution.target.generationCount });
+        GenInfoboard.instance.set({ [GenInfoboard.key.generationNo]: number + " /" + Config.generation.target.rounds });
         if (previous)
             this.#worms = previous.#evolve();
         else
