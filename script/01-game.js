@@ -45,10 +45,10 @@ class Game { //Todo: Make singleton
 		const me = this;
 		this.speedTickbox.onchange = function () {
 			if (me.speedTickbox.checked) {
-				The.eventBus.notify(EventBus.key.slowDown);
+				The.eventBus.notify(EventKey.slowDown);
 			}
 			else {
-				The.eventBus.notify(EventBus.key.speedUp);
+				The.eventBus.notify(EventKey.speedUp);
 			}
 		};
 		const jsonUpload = document.getElementById('json-upload');
@@ -96,12 +96,12 @@ class Game { //Todo: Make singleton
 
 	#pause() {
 		this.#button.bind(ButtonKey.Resume);//Todo: Could go to a button object as subscription
-		The.eventBus.notify(EventBus.key.pause);
+		The.eventBus.notify(EventKey.pause);
 	}
 
 	#resume() {
 		this.#button.bind(ButtonKey.Pause);//Todo: Could go to a button object as subscription
-		The.eventBus.notify(EventBus.key.resume);
+		The.eventBus.notify(EventKey.resume);
 	}
 
 	#end() {

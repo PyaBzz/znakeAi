@@ -23,8 +23,8 @@ class Evolution {
 
     #subscribeEvents() {
         const me = this;
-        this.#subscriptionRefs[EventBus.key.wormDied] = The.eventBus.subscribe(EventBus.key.wormDied, (...args) => this.#onWormDied(...args));
-        this.#subscriptionRefs[EventBus.key.generationEnd] = The.eventBus.subscribe(EventBus.key.generationEnd, (...args) => this.#onGenerationEnd(...args));
+        this.#subscriptionRefs[EventKey.wormDied] = The.eventBus.subscribe(EventKey.wormDied, (...args) => this.#onWormDied(...args));
+        this.#subscriptionRefs[EventKey.generationEnd] = The.eventBus.subscribe(EventKey.generationEnd, (...args) => this.#onGenerationEnd(...args));
     }
 
     #unsubscribeEvents() {
@@ -37,7 +37,7 @@ class Evolution {
 
     run() {
         if (this.#reachedTarget()) {
-            The.eventBus.notify(EventBus.key.targetReached);
+            The.eventBus.notify(EventKey.targetReached);
         } else {
             this.#genCounter++;
             const gen = new Generation(this.#genCounter, this.#lastGen);
@@ -58,7 +58,7 @@ class Evolution {
         this.#minLen = Math.min(this.#minLen, len);
         this.#totalLen += len;
         this.#totalAge += age;
-        The.eventBus.notify(EventBus.key.averageLenChanged, this.#averageLen)
+        The.eventBus.notify(EventKey.averageLenChanged, this.#averageLen)
         this.#updateBoard();
     }
 

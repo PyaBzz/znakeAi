@@ -15,8 +15,8 @@ class Target {
 
     #subscribeEvents() {
         const me = this;
-        this.#subscriptionRefs[EventBus.key.wormDied] = The.eventBus.subscribe(EventBus.key.wormDied, (...args) => this.#onWormDied(...args));
-        this.#subscriptionRefs[EventBus.key.generationEnd] = The.eventBus.subscribe(EventBus.key.generationEnd, (...args) => this.#onGenerationEnd(...args));
+        this.#subscriptionRefs[EventKey.wormDied] = The.eventBus.subscribe(EventKey.wormDied, (...args) => this.#onWormDied(...args));
+        this.#subscriptionRefs[EventKey.generationEnd] = The.eventBus.subscribe(EventKey.generationEnd, (...args) => this.#onGenerationEnd(...args));
     }
 
     #unsubscribeEvents() {

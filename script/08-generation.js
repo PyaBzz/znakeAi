@@ -24,7 +24,7 @@ class Generation {
 
     #subscribeEvents() { //Todo: Add all game flow like this
         const me = this;
-        this.#subscriptionRefs[EventBus.key.wormDied] = The.eventBus.subscribe(EventBus.key.wormDied, (...args) => this.#onWormDied(...args));
+        this.#subscriptionRefs[EventKey.wormDied] = The.eventBus.subscribe(EventKey.wormDied, (...args) => this.#onWormDied(...args));
     }
 
     #unsubscribeEvents() {
@@ -42,7 +42,7 @@ class Generation {
             worm.live(this.#wormCounter);
         } else {
             this.#unsubscribeEvents();
-            The.eventBus.notify(EventBus.key.generationEnd, this)
+            The.eventBus.notify(EventKey.generationEnd, this)
         }
     }
 

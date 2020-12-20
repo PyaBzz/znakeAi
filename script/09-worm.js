@@ -28,10 +28,10 @@ class Worm {
 
     #subscribeEvents() {
         const me = this;
-        this.#subscriptionRefs[EventBus.key.pause] = The.eventBus.subscribe(EventBus.key.pause, (...args) => me.#stop(...args));
-        this.#subscriptionRefs[EventBus.key.resume] = The.eventBus.subscribe(EventBus.key.resume, (...args) => me.#resume(...args));
-        this.#subscriptionRefs[EventBus.key.speedUp] = The.eventBus.subscribe(EventBus.key.speedUp, (...args) => me.#speedUp(...args));
-        this.#subscriptionRefs[EventBus.key.slowDown] = The.eventBus.subscribe(EventBus.key.slowDown, (...args) => me.#slowDown(...args));
+        this.#subscriptionRefs[EventKey.pause] = The.eventBus.subscribe(EventKey.pause, (...args) => me.#stop(...args));
+        this.#subscriptionRefs[EventKey.resume] = The.eventBus.subscribe(EventKey.resume, (...args) => me.#resume(...args));
+        this.#subscriptionRefs[EventKey.speedUp] = The.eventBus.subscribe(EventKey.speedUp, (...args) => me.#speedUp(...args));
+        this.#subscriptionRefs[EventKey.slowDown] = The.eventBus.subscribe(EventKey.slowDown, (...args) => me.#slowDown(...args));
     }
 
     #unsubscribeEvents() {
@@ -49,7 +49,7 @@ class Worm {
         this.#sections.push(origin);
         this.#head.beHead();
         if (originWasFood)
-            The.eventBus.notify(EventBus.key.foodEaten);
+            The.eventBus.notify(EventKey.foodEaten);
         this.#subscribeEvents();
         const me = this;
         this.#intervaller = new Intervaller(() => me.#step(), this.#config.stepTime.fast);
@@ -69,7 +69,7 @@ class Worm {
         else if (nextCell.isFood) {
             this.#moveHeadTo(nextCell);
             this.#stepsSinceLastMeal = 0;
-            The.eventBus.notify(EventBus.key.foodEaten);
+            The.eventBus.notify(EventKey.foodEaten);
             if (this.#reachedTarget()) { //Todo: Move to target object
                 const shouldDownload = confirm(`Target length of ${Config.target.length} reached!\nWould you like to download the current AI model`);
                 if (shouldDownload)
@@ -204,7 +204,7 @@ class Worm {
     #die() {
         this.#stop();
         this.#disappear();
-        The.eventBus.notify(EventBus.key.wormDied, this.#age, this.#length);
+        The.eventBus.notify(EventKey.wormDied, this.#age, this.#length);
         this.#unsubscribeEvents();
     }
 

@@ -19,8 +19,8 @@ class Feeder {
 
 	#subscribeEvents() {
 		const me = this;
-		this.#subscriptionRefs[EventBus.key.foodEaten] = The.eventBus.subscribe(EventBus.key.foodEaten, (...args) => me.#dropFood(...args));
-		this.#subscriptionRefs[EventBus.key.averageLenChanged] = The.eventBus.subscribe(EventBus.key.averageLenChanged, (...args) => me.#setSpread(...args));
+		this.#subscriptionRefs[EventKey.foodEaten] = The.eventBus.subscribe(EventKey.foodEaten, (...args) => me.#dropFood(...args));
+		this.#subscriptionRefs[EventKey.averageLenChanged] = The.eventBus.subscribe(EventKey.averageLenChanged, (...args) => me.#setSpread(...args));
 	}
 
 	#unsubscribeEvents() {
