@@ -1,5 +1,5 @@
 "use strict";
-
+//Todo: Add events for everything, connect stats to this and determine target completion in the stat object
 class EventBus {
     static key = Object.freeze({
         pause: "pause",
