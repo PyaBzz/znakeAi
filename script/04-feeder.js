@@ -2,7 +2,7 @@
 
 class Feeder {
 	static #instance = null;
-	//Todo: Persist spread in feeder
+	#spread = 1;
 
 	constructor() {
 		if (Feeder.#instance)
@@ -11,14 +11,22 @@ class Feeder {
 		Feeder.#instance = this;
 	}
 
-	static get instance() {
-		return Feeder.#instance ? Feeder.#instance : new Feeder();
+	static get instance() { return Feeder.#instance ? Feeder.#instance : new Feeder() }
+	get spread() { return this.#spread };
+
+	resetSpread() {
+		this.#spread = 1;
 	}
 
-	dropFood(spread = 1) {
-		spread = Math.max(spread, 1);
+	setSpread(val) {
+		val = Math.floor(val);
+		if (val > this.#spread)
+			this.#spread = val;
+	}
+
+	dropFood() {
 		const centre = Grid.instance.centreCell;
-		const blankCells = Grid.instance.getBlankCellsAround(centre, spread);
+		const blankCells = Grid.instance.getBlankCellsAround(centre, this.#spread);
 		const nextFoodCell = blankCells.pickRandom();
 		if (!nextFoodCell)
 			debugger;

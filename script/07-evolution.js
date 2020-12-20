@@ -13,6 +13,7 @@ class Evolution {
 
     constructor(number, ancestorBrain) {
         EvoInfoboard.instance.set({ [EvoInfoboard.key.evolutionNo]: number + " /" + Config.evolution.rounds });
+        Feeder.instance.resetSpread();
     }
 
     get #averageLen() { return this.#totalLen / (Config.generation.population * this.#genCounter) }
@@ -32,6 +33,7 @@ class Evolution {
                     this.#minAge = Math.min(this.#minAge, genRes.minAge);
                     this.#totalLen += genRes.totalLen;
                     this.#totalAge += genRes.totalAge;
+                    Feeder.instance.setSpread(this.#averageLen);
                     this.#updateBoard();
                     return resHandler(this.run());
                 });
@@ -49,6 +51,7 @@ class Evolution {
             [EvoInfoboard.key.minAge]: this.#minAge,
             [EvoInfoboard.key.averageLen]: this.#averageLen.toFixed(3),
             [EvoInfoboard.key.averageAge]: this.#averageAge.toFixed(3),
+            [EvoInfoboard.key.foodSpread]: Feeder.instance.spread,
         });
     }
 }
@@ -92,6 +95,7 @@ class EvoInfoboard {
         minAge: "Min Age",
         averageLen: "Average Length",
         averageAge: "Average Age",
+        foodSpread: "Food Spread",
     });
     #board = new Infoboard(
         document.getElementById("evolution-info"),
@@ -103,6 +107,7 @@ class EvoInfoboard {
             [EvoInfoboard.key.minAge]: 0,
             [EvoInfoboard.key.averageLen]: 0,
             [EvoInfoboard.key.averageAge]: 0,
+            [EvoInfoboard.key.foodSpread]: 1,
 
         },
         "Evolution info",
