@@ -96,7 +96,7 @@ class GenBoard {
             [GenBoard.key.maxAge]: 0,
             [GenBoard.key.minAge]: 0,
         },
-        "Generation info",
+        "Generation",
     );
 
     constructor() {

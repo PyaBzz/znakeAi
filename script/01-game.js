@@ -117,7 +117,7 @@ class GameBoard {
 		{
 			[GameBoard.key.useAncestor]: "No",
 		},
-		"Game info",
+		"Game",
 	);
 
 	constructor() {

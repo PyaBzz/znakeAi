@@ -105,7 +105,7 @@ class EvoBoard {
             [EvoBoard.key.foodSpread]: 1,
 
         },
-        "Evolution info",
+        "Evolution",
     );
 
     constructor() {

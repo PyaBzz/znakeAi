@@ -43,7 +43,7 @@ class Worm {
     }
 
     live(wormNumber) {
-        The.wormBoard.set({ [WormBoard.key.wormNo]: wormNumber + " /" + Config.generation.population });
+        The.wormBoard.set({ [WormBoard.key.wormNo]: wormNumber + " /" + Config.generation.population }); //Todo: Update board in the origin instead
         const origin = The.grid.getStartCell(this.#config.startAtCentre);
         const originWasFood = origin.isFood;
         this.#sections.push(origin);
@@ -239,7 +239,7 @@ class WormBoard {
             [WormBoard.key.age]: 0,
             [WormBoard.key.len]: 0,
         },
-        "Worm info",
+        "Worm",
     );
 
     constructor() {
