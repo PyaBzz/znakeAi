@@ -10,6 +10,7 @@ class Evolution {
     #minAge = Number.MAX_VALUE;
     #totalLen = 0;
     #totalAge = 0;
+    #totalWorms = 0;
 
     constructor(number, ancestorBrain) {
         EvoInfoboard.instance.set({ [EvoInfoboard.key.evolutionNo]: number + " /" + Config.evolution.rounds });
@@ -17,8 +18,8 @@ class Evolution {
         this.#subscribeEvents();
     }
 
-    get #averageLen() { return this.totalLen / (Config.generation.population * this.#genCounter) }
-    get #averageAge() { return this.totalAge / (Config.generation.population * this.#genCounter) }
+    get #averageLen() { return this.#totalLen / this.#totalWorms }
+    get #averageAge() { return this.#totalAge / this.#totalWorms }
 
     #subscribeEvents() {
         const me = this;
@@ -50,6 +51,7 @@ class Evolution {
     }
 
     #onWormDied(age, len) {
+        this.#totalWorms++;
         this.#maxAge = Math.max(this.#maxAge, age);
         this.#minAge = Math.min(this.#minAge, age);
         this.#maxLen = Math.max(this.#maxLen, len);
