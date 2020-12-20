@@ -38,7 +38,7 @@ class Game {
 
 	#bindEvents() {
 		this.speedTickbox = document.getElementById('speed-tickbox');
-		let me = this;
+		const me = this;
 		this.speedTickbox.onchange = function () {
 			if (me.speedTickbox.checked) {
 				EventBus.instance.notify(EventBus.key.slowDown);
@@ -46,6 +46,32 @@ class Game {
 			else {
 				EventBus.instance.notify(EventBus.key.speedUp);
 			}
+		};
+		const jsonUpload = document.getElementById('json-upload');
+		const binUpload = document.getElementById('bin-upload');
+		jsonUpload.onchange = function () { };
+		binUpload.onchange = function () { };
+		const loadButton = document.getElementById('load-button');
+		loadButton.onclick = function () {
+			if (jsonUpload.files.length === 0) {
+				alert("Please select a JSON file to describe the model");
+				return;
+			}
+			if (binUpload.files.length === 0) {
+				alert("Please select a binary file for model weights");
+				return;
+			}
+			tf.loadLayersModel(
+				tf.io.browserFiles([
+					jsonUpload.files[0],
+					binUpload.files[0]
+				])
+			).then(result => {
+				me.#ancestorBrain = result;
+				GameInfoboard.instance.set({ [GameInfoboard.key.useAncestor]: "Yes", })
+			}).catch(err => {
+				GameInfoboard.instance.set({ [GameInfoboard.key.useAncestor]: "Failed", })
+			});
 		};
 	}
 

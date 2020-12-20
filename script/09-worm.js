@@ -33,7 +33,7 @@ class Worm {
         if (originWasFood)
             Feeder.instance.dropFood();
         this.#subscribeEvents();
-        let me = this;
+        const me = this;
         return new Promise((resolver, rejecter) => {
             me.#intervaller = new Intervaller(() => me.#step(resolver), this.#config.stepTime.fast);
             this.#intervaller.run();
@@ -41,7 +41,7 @@ class Worm {
     }
 
     #subscribeEvents() {
-        let me = this;
+        const me = this;
         EventBus.instance.subscribe(EventBus.key.pause, () => me.#stop());
         EventBus.instance.subscribe(EventBus.key.resume, () => me.#resume());
         EventBus.instance.subscribe(EventBus.key.speedUp, () => me.#speedUp());
@@ -49,7 +49,7 @@ class Worm {
     }
 
     #unsubscribeEvents() {
-        let me = this;
+        const me = this;
         EventBus.instance.subscribe(EventBus.key.pause, () => null);
         EventBus.instance.subscribe(EventBus.key.resume, () => null);
         EventBus.instance.subscribe(EventBus.key.speedUp, () => null);

@@ -9,7 +9,7 @@
 // 	}
 
 // 	attach() {
-// 		let me = this;
+// 		const me = this;
 
 // 		document.onmousedown = function (clickEvent) {
 // 			let target = clickEvent.target;

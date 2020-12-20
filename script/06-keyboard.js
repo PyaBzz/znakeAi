@@ -13,7 +13,7 @@
 // 	}
 
 // 	bind() {
-// 		let me = this;
+// 		const me = this;
 // 		document.onkeydown = function (keyDownEvent) {
 // 			const action = me.#mapping[keyDownEvent.keyCode];
 // 			if (action === 0)
