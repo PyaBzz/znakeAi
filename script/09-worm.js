@@ -32,11 +32,28 @@ class Worm {
         this.#head.beHead();
         if (originWasFood)
             Feeder.instance.dropFood();
+        this.#subscribeEvents();
         let me = this;
         return new Promise((resolver, rejecter) => {
             me.#intervaller = new Intervaller(() => me.#step(resolver), this.#config.stepTime.fast);
             this.#intervaller.run();
         });
+    }
+
+    #subscribeEvents() {
+        let me = this;
+        EventBus.instance.subscribe(EventBus.key.pause, () => me.#stop());
+        EventBus.instance.subscribe(EventBus.key.resume, () => me.#resume());
+        EventBus.instance.subscribe(EventBus.key.speedUp, () => me.#speedUp());
+        EventBus.instance.subscribe(EventBus.key.slowDown, () => me.#slowDown());
+    }
+
+    #unsubscribeEvents() {
+        let me = this;
+        EventBus.instance.subscribe(EventBus.key.pause, () => null);
+        EventBus.instance.subscribe(EventBus.key.resume, () => null);
+        EventBus.instance.subscribe(EventBus.key.speedUp, () => null);
+        EventBus.instance.subscribe(EventBus.key.slowDown, () => null);
     }
 
     #step(resolver) { //Todo: Review
@@ -62,16 +79,20 @@ class Worm {
             this.#die(resolver);
     }
 
-    speedUp() {
+    #speedUp() {
         this.#intervaller.setPeriod(this.#config.stepTime.fast);
     }
 
-    slowDown() {
+    #slowDown() {
         this.#intervaller.setPeriod(this.#config.stepTime.slow);
     }
 
-    stop() {
+    #stop() {
         this.#intervaller.stop();
+    }
+
+    #resume() {
+        this.#intervaller.run();
     }
 
     #getNextDirection() {
@@ -169,7 +190,8 @@ class Worm {
     }
 
     #die(resolver) {
-        this.stop();
+        this.#stop();
+        this.#unsubscribeEvents();
         this.#disappear();
         resolver(new WormResult(this, this.#length, this.#age));
     }

@@ -1,7 +1,6 @@
 "use strict";
 
 class Evolution {
-    static ancestor = null;
     #previousGen = null;
     #genCounter = 0;
     #maxLen = 0;

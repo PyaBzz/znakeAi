@@ -3,6 +3,8 @@
 class Game {
 	#ancestorBrain = null;
 	#evoCounter = 0;
+	#slowDownFunc;
+	#speedUpFunc;
 
 	// #mouse = new Mouse(this);
 	// #keyboard = new Keyboard(() => this.#togglePause());
@@ -17,10 +19,13 @@ class Game {
 
 	constructor() {
 		this.#validateConfig();
-		const grid = Grid.instance; //Only to instantiate the singleton
-		const gameInfoboard = GameInfoboard.instance; //Only to instantiate the singleton
-		const genInfoboard = GenInfoboard.instance; //Only to instantiate the singleton
-		const evoInfoboard = EvoInfoboard.instance; //Only to instantiate the singleton
+		this.#bindEvents();
+		//Only to instantiate the singleton classes
+		let dummyObj = Grid.instance;
+		dummyObj = GameInfoboard.instance;
+		dummyObj = GenInfoboard.instance;
+		dummyObj = EvoInfoboard.instance;
+		dummyObj = EventBus.instance;
 		Evolution.ancestor = null; //Todo: Add file loading code to Game
 	}
 
@@ -29,6 +34,19 @@ class Game {
 			throw "Grid height must be at least 4"
 		if (Config.grid.width < 4)
 			throw "Grid width must be at least 4"
+	}
+
+	#bindEvents() {
+		this.speedTickbox = document.getElementById('speed-tickbox');
+		let me = this;
+		this.speedTickbox.onchange = function () {
+			if (me.speedTickbox.checked) {
+				EventBus.instance.notify(EventBus.key.slowDown);
+			}
+			else {
+				EventBus.instance.notify(EventBus.key.speedUp);
+			}
+		};
 	}
 
 	#start() {
@@ -52,12 +70,12 @@ class Game {
 
 	#pause() {
 		this.#button.bind(ButtonKey.Resume);
-		log("pause");
+		EventBus.instance.notify(EventBus.key.pause);
 	}
 
 	#resume() {
 		this.#button.bind(ButtonKey.Pause);
-		log("resume");
+		EventBus.instance.notify(EventBus.key.resume);
 	}
 
 	#end() {
