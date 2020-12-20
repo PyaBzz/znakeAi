@@ -27,6 +27,7 @@ class Game {
 		dummyObj = GameInfoboard.instance;
 		dummyObj = GenInfoboard.instance;
 		dummyObj = EvoInfoboard.instance;
+		dummyObj = WormInfoboard.instance;
 		dummyObj = EventBus.instance;
 		Evolution.ancestor = null; //Todo: Add file loading code to Game
 	}
@@ -111,7 +112,7 @@ class GameInfoboard {
 	static #instance = null;
 	static key = Object.freeze({ useAncestor: "Use Ancestor" });
 	#board = new Infoboard(
-		document.getElementById("game-info"),
+		document.getElementById("game-board"),
 		{
 			[GameInfoboard.key.useAncestor]: "No",
 		},

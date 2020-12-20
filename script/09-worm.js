@@ -42,7 +42,8 @@ class Worm {
         }
     }
 
-    live() {
+    live(wormNumber) {
+        WormInfoboard.instance.set({ [WormInfoboard.key.wormNo]: wormNumber + " /" + Config.generation.population });
         const origin = Grid.instance.getStartCell(this.#config.startAtCentre);
         const originWasFood = origin.isFood;
         this.#sections.push(origin);
@@ -81,6 +82,8 @@ class Worm {
         }
         if (this.#stepsSinceLastMeal === this.#maxStepsToFood)
             this.#die();
+
+        this.#updateBoard();
     }
 
     #reachedTarget() {
@@ -213,4 +216,40 @@ class Worm {
         const mutantBrain = NeuralNetSrv.instance.mutate(this.#brain);
         return new Worm(mutantBrain);
     }
+
+    #updateBoard() {
+        WormInfoboard.instance.set({
+            [WormInfoboard.key.len]: this.#length,
+            [WormInfoboard.key.age]: this.#age,
+        });
+    }
+}
+
+class WormInfoboard {
+    static #instance = null;
+    static key = Object.freeze({
+        wormNo: "Worm No",
+        len: "Length",
+        age: "Age",
+    });
+    #board = new Infoboard(
+        document.getElementById("worm-board"),
+        {
+            [WormInfoboard.key.wormNo]: 0,
+            [WormInfoboard.key.len]: 0,
+            [WormInfoboard.key.age]: 0,
+        },
+        "Worm info",
+    );
+
+    constructor() {
+        WormInfoboard.#instance = this;
+    }
+
+    static get instance() {
+        return WormInfoboard.#instance ? WormInfoboard.#instance : new WormInfoboard();
+    }
+
+    get(key) { return this.#board.get(key) }
+    set(...args) { this.#board.set(...args) }
 }

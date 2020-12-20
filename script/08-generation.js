@@ -12,8 +12,8 @@ class Generation {
     #totalLen = 0;
     #totalAge = 0;
 
-    constructor(number, previous) {
-        GenInfoboard.instance.set({ [GenInfoboard.key.generationNo]: number + " /" + Config.target.generations });
+    constructor(genNumber, previous) {
+        GenInfoboard.instance.set({ [GenInfoboard.key.generationNo]: genNumber + " /" + Config.target.generations });
         if (previous)
             this.#worms = previous.#evolve();
         else
@@ -39,7 +39,7 @@ class Generation {
         this.#wormCounter++;
         if (this.#wormCounter <= Config.generation.population) {
             const worm = this.#worms[this.#wormCounter - 1];
-            worm.live();
+            worm.live(this.#wormCounter);
         } else {
             this.#unsubscribeEvents();
             EventBus.instance.notify(EventBus.key.generationEnd, this)
@@ -90,7 +90,7 @@ class GenInfoboard {
         minAge: "Min Age",
     });
     #board = new Infoboard(
-        document.getElementById("generation-info"),
+        document.getElementById("generation-board"),
         {
             [GenInfoboard.key.generationNo]: 0,
             [GenInfoboard.key.wormNo]: 0,

@@ -91,7 +91,7 @@ class EvoInfoboard {
         foodSpread: "Food Spread",
     });
     #board = new Infoboard(
-        document.getElementById("evolution-info"),
+        document.getElementById("evolution-board"),
         {
             [EvoInfoboard.key.evolutionNo]: 0,
             [EvoInfoboard.key.maxLen]: 0,
