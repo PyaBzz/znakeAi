@@ -70,7 +70,7 @@ class Worm {
             this.#moveHeadTo(nextCell);
             this.#stepsSinceLastMeal = 0;
             EventBus.instance.notify(EventBus.key.foodEaten);
-            if (this.#reachedTarget()) {
+            if (this.#reachedTarget()) { //Todo: Move to target object
                 const shouldDownload = confirm(`Target length of ${Config.target.length} reached!\nWould you like to download the current AI model`);
                 if (shouldDownload)
                     this.#brain.save(Config.neuralNet.downloadPath); //Todo: Include model details in file name
@@ -236,8 +236,8 @@ class WormInfoboard {
         document.getElementById("worm-board"),
         {
             [WormInfoboard.key.wormNo]: 0,
-            [WormInfoboard.key.len]: 0,
             [WormInfoboard.key.age]: 0,
+            [WormInfoboard.key.len]: 0,
         },
         "Worm info",
     );

@@ -70,7 +70,6 @@ class Generation {
 
     #updateBoard() {
         GenInfoboard.instance.set({
-            [GenInfoboard.key.wormNo]: this.#wormCounter + " /" + Config.generation.population,
             [GenInfoboard.key.maxLen]: this.#maxLen,
             [GenInfoboard.key.minLen]: this.#minLen,
             [GenInfoboard.key.maxAge]: this.#maxAge,
@@ -83,7 +82,6 @@ class GenInfoboard {
     static #instance = null;
     static key = Object.freeze({
         generationNo: "Generation No",
-        wormNo: "Worm No",
         maxLen: "Max Length",
         minLen: "Min Length",
         maxAge: "Max Age",
@@ -93,7 +91,6 @@ class GenInfoboard {
         document.getElementById("generation-board"),
         {
             [GenInfoboard.key.generationNo]: 0,
-            [GenInfoboard.key.wormNo]: 0,
             [GenInfoboard.key.maxLen]: 0,
             [GenInfoboard.key.minLen]: 0,
             [GenInfoboard.key.maxAge]: 0,

@@ -23,12 +23,13 @@ class Game {
 		this.#bindEvents();
 		//Only to instantiate the singleton classes
 		let dummyObj = Grid.instance;
+		dummyObj = EventBus.instance;
 		dummyObj = Feeder.instance;
 		dummyObj = GameInfoboard.instance;
 		dummyObj = GenInfoboard.instance;
 		dummyObj = EvoInfoboard.instance;
 		dummyObj = WormInfoboard.instance;
-		dummyObj = EventBus.instance;
+		dummyObj = Target.instance;
 		Evolution.ancestor = null; //Todo: Add file loading code to Game
 	}
 
