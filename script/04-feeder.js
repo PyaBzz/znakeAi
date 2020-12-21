@@ -3,6 +3,7 @@
 class Feeder {
 	#subscriptions = {};
 	static #instance = null;
+	#lastFood = null;
 	#spread = 1;
 
 	constructor() {
@@ -37,8 +38,12 @@ class Feeder {
 
 	#setSpread(val) {
 		val = Math.floor(val);
-		if (val > this.#spread)
+		if (val >= this.#spread)
 			this.#spread = val;
+		else {
+			this.#lastFood.beBlank();
+			this.#dropFood();
+		}
 	}
 
 	#dropFood() {
@@ -50,6 +55,7 @@ class Feeder {
 		if (!nextFoodCell)
 			debugger;
 		nextFoodCell.beFood();
+		this.#lastFood = nextFoodCell;
 		The.grid.food = nextFoodCell;
 	}
 }
