@@ -196,8 +196,8 @@ class Worm {
     #die() {
         this.#stop();
         this.#disappear();
-        The.eventBus.notify(EventKey.wormDied, this.#age, this.#length, this);
         this.#unsubscribeEvents();
+        The.eventBus.notify(EventKey.wormDied, this.#age, this.#length);
     }
 
     downloadBrain() {

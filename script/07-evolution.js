@@ -5,6 +5,7 @@ class Evolution {
     #ancestorBrain = null;
     #lastGen = null;
     #genCounter = 0;
+    #currentGen = null;
     #maxLen = 0;
     #minLen = Number.MAX_VALUE;
     #maxAge = 0;
@@ -19,13 +20,15 @@ class Evolution {
         this.#subscribeEvents();
     }
 
-    get #averageLen() { return this.#totalLen / this.#totalWorms }
-    get #averageAge() { return this.#totalAge / this.#totalWorms }
+    get currentGen() { return this.#currentGen }
+    get averageLen() { return this.#totalLen / this.#totalWorms }
+    get averageAge() { return this.#totalAge / this.#totalWorms }
 
     #subscribeEvents() {
         const me = this;
         this.#subscriptions[EventKey.wormDied] = The.eventBus.subscribe(EventKey.wormDied, (...args) => this.#onWormDied(...args));
         this.#subscriptions[EventKey.generationEnd] = The.eventBus.subscribe(EventKey.generationEnd, (...args) => this.#onGenerationEnd(...args));
+        this.#subscriptions[EventKey.targetReached] = The.eventBus.subscribe(EventKey.targetReached, (...args) => this.#onTargetReached(...args));
     }
 
     #unsubscribeEvents() {
@@ -37,11 +40,18 @@ class Evolution {
     }
 
     run() {
+        if (The.target.reached)
+            return;
+        this.#genCounter++;
+        The.genBoard.set({ [GenBoard.key.generationNo]: this.#genCounter + " /" + Config.generation.rounds });
+        this.#currentGen = new Generation(this.#ancestorBrain, this.#lastGen);
+        this.#currentGen.run();
+    }
+
+    #onGenerationEnd(lastGen) {
+        this.#lastGen = lastGen;
         if (this.#genCounter < Config.generation.rounds) {
-            this.#genCounter++;
-            The.genBoard.set({ [GenBoard.key.generationNo]: this.#genCounter + " /" + Config.generation.rounds });
-            const gen = new Generation(this.#ancestorBrain, this.#lastGen);
-            gen.run();
+            this.run();
         } else {
             this.#unsubscribeEvents();
             The.eventBus.notify(EventKey.evolutionEnd);
@@ -57,13 +67,12 @@ class Evolution {
         this.#minLen = Math.min(this.#minLen, len);
         this.#totalLen += len;
         this.#totalAge += age;
-        The.eventBus.notify(EventKey.averageLenChanged, this.#averageLen)
+        The.eventBus.notify(EventKey.averageLenChanged, this.averageLen)
         this.#updateBoard();
     }
 
-    #onGenerationEnd(lastGen) {
-        this.#lastGen = lastGen;
-        this.run();
+    #onTargetReached() {
+        this.#unsubscribeEvents();
     }
 
     #updateBoard() {
@@ -72,8 +81,8 @@ class Evolution {
             [EvoBoard.key.minLen]: this.#minLen,
             [EvoBoard.key.maxAge]: this.#maxAge,
             [EvoBoard.key.minAge]: this.#minAge,
-            [EvoBoard.key.averageLen]: this.#averageLen.toFixed(3),
-            [EvoBoard.key.averageAge]: this.#averageAge.toFixed(3),
+            [EvoBoard.key.averageLen]: this.averageLen.toFixed(3),
+            [EvoBoard.key.averageAge]: this.averageAge.toFixed(3),
             [EvoBoard.key.foodSpread]: The.feeder.spread,
         });
     }

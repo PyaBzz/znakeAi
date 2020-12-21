@@ -5,6 +5,7 @@ class Game {
 	#subscriptions = {};
 	#ancestorBrain = null;
 	#evoCounter = 0;
+	#currentEvo = null;
 	#slowDownFunc;
 	#speedUpFunc;
 	#button = new MultiFuncButton(document.getElementById('button'),
@@ -35,14 +36,13 @@ class Game {
 		dummyObj = The.genBoard;
 		dummyObj = The.evoBoard;
 		dummyObj = The.wormBoard;
-		dummyObj = The.objective;
+		dummyObj = The.target;
 		Evolution.ancestor = null;
 		Game.#instance = this;
 	}
 
-	static get instance() {
-		return Game.#instance ? Game.#instance : new Game();
-	}
+	static get instance() { return Game.#instance ? Game.#instance : new Game(); }
+	get currentEvo() { return this.#currentEvo }
 
 	#validateConfig() {
 		if (Config.grid.height < 4)
@@ -93,6 +93,7 @@ class Game {
 	#subscribeEvents() {
 		const me = this;
 		this.#subscriptions[EventKey.evolutionEnd] = The.eventBus.subscribe(EventKey.evolutionEnd, (...args) => this.#onEvolutionEnd(...args));
+		this.#subscriptions[EventKey.targetReached] = The.eventBus.subscribe(EventKey.targetReached, (...args) => this.#onTargetReached(...args));
 	}
 
 	#unsubscribeEvents() {
@@ -109,11 +110,19 @@ class Game {
 	}
 
 	#run() {
+		this.#evoCounter++;
+		The.evoBoard.set({ [EvoBoard.key.evolutionNo]: this.#evoCounter + " /" + Config.evolution.rounds });
+		this.#currentEvo = new Evolution(this.#ancestorBrain);
+		this.#currentEvo.run();
+	}
+
+	#onTargetReached() {
+		this.#unsubscribeEvents();
+	}
+
+	#onEvolutionEnd() {
 		if (this.#evoCounter < Config.evolution.rounds) {
-			this.#evoCounter++;
-			The.evoBoard.set({ [EvoBoard.key.evolutionNo]: this.#evoCounter + " /" + Config.evolution.rounds });
-			const evo = new Evolution(this.#ancestorBrain);
-			evo.run();
+			this.#run();
 		} else {
 			this.#unsubscribeEvents();
 			this.#end();
@@ -121,12 +130,8 @@ class Game {
 		}
 	}
 
-	#onEvolutionEnd() {
-		this.#run();
-	}
-
 	#end() {
-		alert(`Completed ${this.#evoCounter} rounds of evolution`);
+		alert(`Ran ${this.#evoCounter} rounds of evolution\nreaching no target`);
 		this.#button.bind(ButtonKey.End);
 	}
 }
@@ -143,11 +148,11 @@ class GameBoard {
 		document.getElementById("game-board"),
 		{
 			[GameBoard.key.useAncestor]: "No",
-			[GameBoard.key.age]: Config.objective.age,
-			[GameBoard.key.length]: Config.objective.length,
-			[GameBoard.key.averageLen]: Config.objective.averageLen,
+			[GameBoard.key.age]: Config.target.age,
+			[GameBoard.key.length]: Config.target.length,
+			[GameBoard.key.averageLen]: Config.target.averageLen,
 		},
-		"Game Objectives",
+		"Game Targets",
 	);
 
 	constructor() {

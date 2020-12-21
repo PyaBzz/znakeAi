@@ -5,6 +5,7 @@ class Generation {
     #subscriptions = {};
     #worms = [];
     #wormCounter = 0;
+    #currentWorm = null;
     #maxLen = 0;
     #minLen = Number.MAX_VALUE;
     #maxAge = 0;
@@ -24,9 +25,12 @@ class Generation {
         this.#subscribeEvents();
     }
 
+    get currentWorm() { return this.#currentWorm }
+
     #subscribeEvents() {
         const me = this;
         this.#subscriptions[EventKey.wormDied] = The.eventBus.subscribe(EventKey.wormDied, (...args) => this.#onWormDied(...args));
+        this.#subscriptions[EventKey.targetReached] = The.eventBus.subscribe(EventKey.targetReached, (...args) => this.#onTargetReached(...args));
     }
 
     #unsubscribeEvents() {
@@ -38,16 +42,12 @@ class Generation {
     }
 
     run() {
-        if (this.#wormCounter < Config.generation.population) {
-            this.#wormCounter++;
-            const worm = this.#worms[this.#wormCounter - 1];
-            The.wormBoard.set({ [WormBoard.key.wormNo]: this.#wormCounter + " /" + Config.generation.population });
-            worm.run();
-        } else {
-            this.#unsubscribeEvents();
-            The.eventBus.notify(EventKey.generationEnd, this);
+        if (The.target.reached)
             return;
-        }
+        this.#wormCounter++;
+        this.#currentWorm = this.#worms[this.#wormCounter - 1];
+        The.wormBoard.set({ [WormBoard.key.wormNo]: this.#wormCounter + " /" + Config.generation.population });
+        this.#currentWorm.run();
     }
 
     #onWormDied(age, len) {
@@ -58,7 +58,13 @@ class Generation {
         this.#totalLen += len;
         this.#totalAge += age;
         this.#updateBoard();
-        this.run();
+        if (this.#wormCounter < Config.generation.population) {
+            this.run();
+        } else {
+            this.#unsubscribeEvents();
+            The.eventBus.notify(EventKey.generationEnd, this);
+            return;
+        }
     }
 
     #evolve() {
@@ -70,6 +76,11 @@ class Generation {
 
     #naturalSelect() {
         return this.#worms.getTop(w => w.fitness, this.#reproducingPopulation).items;
+    }
+
+    #onTargetReached() {
+        this.#unsubscribeEvents();
+        // The.eventBus.notify(EventKey.generationEnd, this);
     }
 
     #updateBoard() {

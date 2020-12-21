@@ -33,7 +33,7 @@ var Config = deepFreeze({
 		mutationDiversity: 0.1,  //Standard deviation of the normal noise
 		downloadPath: 'downloads://znakeBrain',
 	},
-	objective: {
+	target: {
 		averageLen: 10,
 		length: 24,
 		age: 400,
