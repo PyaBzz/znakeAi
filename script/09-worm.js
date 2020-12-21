@@ -2,6 +2,7 @@
 
 class Worm {
     #config = Config.worm;
+    static #defaultPeriod = null;
     #subscriptions = {};
     #inputSize = Config.neuralNet.inputSize;
     #brain;
@@ -51,7 +52,7 @@ class Worm {
             The.eventBus.notify(EventKey.foodEaten);
         this.#subscribeEvents();
         const me = this;
-        this.#intervaller = new Intervaller(() => me.#step(), this.#config.stepTime.fast);
+        this.#intervaller = new Intervaller(() => me.#step(), Worm.#defaultPeriod || Config.worm.stepTime.fast);
         this.#intervaller.run();
     }
 
@@ -81,10 +82,12 @@ class Worm {
     }
 
     #speedUp() {
+        Worm.#defaultPeriod = this.#config.stepTime.fast;
         this.#intervaller.setPeriod(this.#config.stepTime.fast);
     }
 
     #slowDown() {
+        Worm.#defaultPeriod = this.#config.stepTime.slow;
         this.#intervaller.setPeriod(this.#config.stepTime.slow);
     }
 
