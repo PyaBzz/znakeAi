@@ -1,6 +1,6 @@
 "use strict";
 
-class Game { //Todo: Make singleton
+class Game {
 	static #instance = null;
 	#subscriptions = {};
 	#ancestorBrain = null;

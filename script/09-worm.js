@@ -129,35 +129,35 @@ class Worm {
         const foodSignalVer = foodDiffVer === 0 ? 0 : 1 / foodDiffVer;
         result.push(foodSignalVer);
 
-        let deathVector = this.#head.getDiff2Death(Direction.up);
+        let deathVector = this.#head.getDiff(target => target.isDeadly, Direction.up);
         const deathSignalUp = - 1 / bazMath.amplitude(deathVector);
         result.push(deathSignalUp);
 
-        deathVector = this.#head.getDiff2Death(Direction.up, Direction.right);
+        deathVector = this.#head.getDiff(target => target.isDeadly, Direction.up, Direction.right);
         const deathSignalUpRight = - 1 / bazMath.amplitude(deathVector);
         result.push(deathSignalUpRight);
 
-        deathVector = this.#head.getDiff2Death(Direction.right);
+        deathVector = this.#head.getDiff(target => target.isDeadly, Direction.right);
         const deathSignalRight = - 1 / bazMath.amplitude(deathVector);
         result.push(deathSignalRight);
 
-        deathVector = this.#head.getDiff2Death(Direction.right, Direction.down);
+        deathVector = this.#head.getDiff(target => target.isDeadly, Direction.right, Direction.down);
         const deathSignalDownRight = - 1 / bazMath.amplitude(deathVector);
         result.push(deathSignalDownRight);
 
-        deathVector = this.#head.getDiff2Death(Direction.down);
+        deathVector = this.#head.getDiff(target => target.isDeadly, Direction.down);
         const deathSignalDown = - 1 / bazMath.amplitude(deathVector);
         result.push(deathSignalDown);
 
-        deathVector = this.#head.getDiff2Death(Direction.down, Direction.left);
+        deathVector = this.#head.getDiff(target => target.isDeadly, Direction.down, Direction.left);
         const deathSignalDownLeft = - 1 / bazMath.amplitude(deathVector);
         result.push(deathSignalDownLeft);
 
-        deathVector = this.#head.getDiff2Death(Direction.left);
+        deathVector = this.#head.getDiff(target => target.isDeadly, Direction.left);
         const deathSignalLeft = - 1 / bazMath.amplitude(deathVector);
         result.push(deathSignalLeft);
 
-        deathVector = this.#head.getDiff2Death(Direction.left, Direction.up);
+        deathVector = this.#head.getDiff(target => target.isDeadly, Direction.left, Direction.up);
         const deathSignalUpLeft = - 1 / bazMath.amplitude(deathVector);
         result.push(deathSignalUpLeft);
 

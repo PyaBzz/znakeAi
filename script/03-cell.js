@@ -54,7 +54,7 @@ class Cell {
         this.#element.className = 'wall';
     }
 
-    getDiff2Death(direc1, direc2) {
+    getDiff(predicate, direc1, direc2, visitFunc) {
         direc2 = direc2 || null;
         let diffDir1 = 1;
         let diffDir2 = 0;
@@ -63,7 +63,9 @@ class Cell {
             diffDir2 = 1;
             runner = runner[direc2];
         }
-        while (runner.isDeadly === false) {
+        while (predicate(runner) === false) {
+            if (visitFunc)
+                visitFunc(runner);
             diffDir1++;
             runner = runner[direc1];
             if (direc2 !== null) {

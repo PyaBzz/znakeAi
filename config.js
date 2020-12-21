@@ -10,11 +10,11 @@ var Config = deepFreeze({
 		pause: ' ',
 	},
 	evolution: {
-		rounds: 3,
+		rounds: 1,
 	},
 	generation: {
-		rounds: 3,
-		population: 10,  // Only even numbers
+		rounds: 130,
+		population: 32,  // Only even numbers
 	},
 	worm: {
 		startAtCentre: true,
@@ -41,5 +41,5 @@ var Config = deepFreeze({
 });
 
 onload = function () {
-	var game = new Game(Config);
+	var game = The.game;
 }
