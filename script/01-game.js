@@ -35,7 +35,7 @@ class Game {
 		dummyObj = The.genBoard;
 		dummyObj = The.evoBoard;
 		dummyObj = The.wormBoard;
-		dummyObj = The.target;
+		dummyObj = The.objective;
 		Evolution.ancestor = null;
 		Game.#instance = this;
 	}
