@@ -28,8 +28,8 @@ class Objective {
     }
 
     #onWormDied(age, len, worm) {
-        if (age >= Config.target.age || len >= Config.target.length) {
-            const shouldDownload = confirm(`Target length of ${Config.target.length} reached!\nWould you like to download this TensorFlow neural net?`);
+        if (age >= Config.objective.age || len >= Config.objective.length) {
+            const shouldDownload = confirm(`Target length of ${Config.objective.length} reached!\nWould you like to download this TensorFlow neural net?`);
             if (shouldDownload)
                 worm.downloadBrain();
         }
@@ -37,7 +37,7 @@ class Objective {
 
     #evoReachedTarget() {
         // return this.#genCounter >= Config.generation.rounds
-        //     || this.#averageLen >= Config.target.averageLen;
+        //     || this.#averageLen >= Config.objective.averageLen;
     }
 
     #onGenerationEnd() {

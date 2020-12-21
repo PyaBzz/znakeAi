@@ -2,6 +2,7 @@
 
 class Evolution {
     #subscriptions = {};
+    #ancestorBrain = null;
     #lastGen = null;
     #genCounter = 0;
     #maxLen = 0;
@@ -12,7 +13,8 @@ class Evolution {
     #totalAge = 0;
     #totalWorms = 0;
 
-    constructor(ancestorBrain) { //Todo: Implement use of ancestorBrain
+    constructor(ancestorBrain) {
+        this.#ancestorBrain = ancestorBrain;
         The.feeder.resetSpread();
         this.#subscribeEvents();
     }
@@ -38,7 +40,7 @@ class Evolution {
         if (this.#genCounter < Config.generation.rounds) {
             this.#genCounter++;
             The.genBoard.set({ [GenBoard.key.generationNo]: this.#genCounter + " /" + Config.generation.rounds });
-            const gen = new Generation(this.#lastGen);
+            const gen = new Generation(this.#ancestorBrain, this.#lastGen);
             gen.run();
         } else {
             this.#unsubscribeEvents();

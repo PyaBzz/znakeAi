@@ -12,9 +12,12 @@ class Generation {
     #totalLen = 0;
     #totalAge = 0;
 
-    constructor(previous) {
-        if (previous)
-            this.#worms = previous.#evolve();
+    constructor(ancestorBrain, lastGen) {
+        if (ancestorBrain)
+            for (let i = 0; i < Config.generation.population; i++)
+                this.#worms.push(new Worm(ancestorBrain));
+        else if (lastGen)
+            this.#worms = lastGen.#evolve();
         else
             for (let i = 0; i < Config.generation.population; i++)
                 this.#worms.push(new Worm());

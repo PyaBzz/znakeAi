@@ -133,13 +133,21 @@ class Game {
 
 class GameBoard {
 	static #instance = null;
-	static key = Object.freeze({ useAncestor: "Use Ancestor" });
+	static key = Object.freeze({
+		useAncestor: "Use Ancestor",
+		age: "Age",
+		length: "Length",
+		averageLen: "Average Len",
+	});
 	#board = new Infoboard(
 		document.getElementById("game-board"),
 		{
 			[GameBoard.key.useAncestor]: "No",
+			[GameBoard.key.age]: Config.objective.age,
+			[GameBoard.key.length]: Config.objective.length,
+			[GameBoard.key.averageLen]: Config.objective.averageLen,
 		},
-		"Game",
+		"Game Objectives",
 	);
 
 	constructor() {
