@@ -43,7 +43,9 @@ class Feeder {
 
 	#dropFood() {
 		const centre = The.grid.centreCell;
-		const blankCells = The.grid.getBlankCellsAround(centre, this.#spread);
+		let blankCells = The.grid.getBlankCellsAround(centre, this.#spread);
+		if (blankCells.hasNone)
+			blankCells = The.grid.getBlankCellsAround(centre, this.#spread + 1);
 		const nextFoodCell = blankCells.pickRandom();
 		if (!nextFoodCell)
 			debugger;

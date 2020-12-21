@@ -35,19 +35,14 @@ class Evolution {
     }
 
     run() {
-        if (this.#reachedTarget()) {
-            The.eventBus.notify(EventKey.targetReached);
+        if (this.#genCounter >= Config.target.generations) {
+            The.eventBus.notify(EventKey.evolutionEnd);
         } else {
             this.#genCounter++;
             The.genBoard.set({ [GenBoard.key.generationNo]: this.#genCounter + " /" + Config.target.generations });
             const gen = new Generation(this.#lastGen);
             gen.live();
         }
-    }
-
-    #reachedTarget() { //Todo: Implement other criteria to determine if target is reached
-        return this.#genCounter >= Config.target.generations
-            || this.#averageLen >= Config.target.averageLen;
     }
 
     #onWormDied(age, len) {
