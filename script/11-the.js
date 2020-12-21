@@ -6,6 +6,7 @@ class The {
         throw new Error("Do not instantiate a static class");
     }
 
+    static get game() { return Game.instance }
     static get grid() { return Grid.instance }
     static get feeder() { return Feeder.instance }
     static get gameBoard() { return GameBoard.instance }

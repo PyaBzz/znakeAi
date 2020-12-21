@@ -1,6 +1,7 @@
 "use strict";
 
 class Game { //Todo: Make singleton
+	static #instance = null;
 	#subscriptions = {};
 	#ancestorBrain = null;
 	#evoCounter = 0;
@@ -9,12 +10,20 @@ class Game { //Todo: Make singleton
 	#button = new MultiFuncButton(document.getElementById('button'),
 		{
 			[ButtonKey.Start]: () => this.#start(),
-			[ButtonKey.Pause]: () => this.#pause(),
-			[ButtonKey.Resume]: () => this.#resume(),
+			[ButtonKey.Pause]: () => {
+				this.#button.bind(ButtonKey.Resume);
+				The.eventBus.notify(EventKey.pause);
+			},
+			[ButtonKey.Resume]: () => {
+				this.#button.bind(ButtonKey.Pause);
+				The.eventBus.notify(EventKey.resume);
+			},
 			[ButtonKey.End]: () => null,
 		});
 
 	constructor() {
+		if (Game.#instance)
+			throw new Error("Do not instantiate a singleton class twice");
 		this.#validateConfig();
 		this.#bindEvents();
 		this.#subscribeEvents();
@@ -27,7 +36,12 @@ class Game { //Todo: Make singleton
 		dummyObj = The.evoBoard;
 		dummyObj = The.wormBoard;
 		dummyObj = The.target;
-		Evolution.ancestor = null; //Todo: Add file loading code to Game
+		Evolution.ancestor = null;
+		Game.#instance = this;
+	}
+
+	static get instance() {
+		return Game.#instance ? Game.#instance : new Game();
 	}
 
 	#validateConfig() {
@@ -109,16 +123,6 @@ class Game { //Todo: Make singleton
 
 	#onEvolutionEnd() {
 		this.#run();
-	}
-
-	#pause() {
-		this.#button.bind(ButtonKey.Resume);//Todo: Could go to a button object as subscription
-		The.eventBus.notify(EventKey.pause);
-	}
-
-	#resume() {
-		this.#button.bind(ButtonKey.Pause);//Todo: Could go to a button object as subscription
-		The.eventBus.notify(EventKey.resume);
 	}
 
 	#end() {

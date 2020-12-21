@@ -4,7 +4,7 @@ class Generation {
     #reproducingPopulation = Config.generation.population / 2;
     #subscriptions = {};
     #worms = [];
-    #wormCounter = 0; //Todo: Change to wormIndex
+    #wormCounter = 0;
     #maxLen = 0;
     #minLen = Number.MAX_VALUE;
     #maxAge = 0;
@@ -21,7 +21,7 @@ class Generation {
         this.#subscribeEvents();
     }
 
-    #subscribeEvents() { //Todo: Add all game flow like this
+    #subscribeEvents() {
         const me = this;
         this.#subscriptions[EventKey.wormDied] = The.eventBus.subscribe(EventKey.wormDied, (...args) => this.#onWormDied(...args));
     }

@@ -12,7 +12,7 @@ class Evolution {
     #totalAge = 0;
     #totalWorms = 0;
 
-    constructor(ancestorBrain) {
+    constructor(ancestorBrain) { //Todo: Implement use of ancestorBrain
         The.feeder.resetSpread();
         this.#subscribeEvents();
     }

@@ -43,7 +43,6 @@ var ButtonKey = Object.freeze({
 
 var EventKey = Object.freeze({
     wormBorn: "wormBorn",
-    // stepTaken: "stepTaken",
     foodEaten: "foodEaten",
     pause: "pause",
     resume: "resume",
@@ -51,7 +50,7 @@ var EventKey = Object.freeze({
     speedUp: "speedUp",
     wormDied: "wormDied",
     generationEnd: "generationEnd",
-    averageLenChanged: "averageLenChanged", //Todo: Update feeder with this
+    averageLenChanged: "averageLenChanged",
     targetReached: "targetReached",
     evolutionEnd: "evolutionEnd",
 });

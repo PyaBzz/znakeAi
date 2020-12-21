@@ -55,7 +55,7 @@ class Worm {
         this.#intervaller.run();
     }
 
-    #step() { //Todo: Review
+    #step() {
         this.#age++;
         this.#stepsSinceLastMeal++;
         const dir = this.#getNextDirection();
