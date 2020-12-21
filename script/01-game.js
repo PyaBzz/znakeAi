@@ -1,15 +1,11 @@
 "use strict";
 
 class Game { //Todo: Make singleton
-	#subscriptionRefs = {};
+	#subscriptions = {};
 	#ancestorBrain = null;
 	#evoCounter = 0;
 	#slowDownFunc;
 	#speedUpFunc;
-
-	// #mouse = new Mouse(this);
-	// #keyboard = new Keyboard(() => this.#togglePause());
-
 	#button = new MultiFuncButton(document.getElementById('button'),
 		{
 			[ButtonKey.Start]: () => this.#start(),
@@ -21,6 +17,7 @@ class Game { //Todo: Make singleton
 	constructor() {
 		this.#validateConfig();
 		this.#bindEvents();
+		this.#subscribeEvents();
 		//Only to instantiate the singleton classes
 		let dummyObj = The.grid;
 		dummyObj = The.eventBus;
@@ -79,20 +76,39 @@ class Game { //Todo: Make singleton
 		};
 	}
 
+	#subscribeEvents() {
+		const me = this;
+		this.#subscriptions[EventKey.evolutionEnd] = The.eventBus.subscribe(EventKey.evolutionEnd, (...args) => this.#onEvolutionEnd(...args));
+	}
+
+	#unsubscribeEvents() {
+		const me = this;
+		for (let key in this.#subscriptions) {
+			const ref = this.#subscriptions[key];
+			The.eventBus.unsubscribe(key, ref);
+		}
+	}
+
 	#start() {
 		this.#button.bind(ButtonKey.Pause);
 		this.#run();
 	}
 
 	#run() {
-		this.#evoCounter++;
-		if (this.#evoCounter <= Config.evolution.rounds) {
+		if (this.#evoCounter < Config.evolution.rounds) {
+			this.#evoCounter++;
 			The.evoBoard.set({ [EvoBoard.key.evolutionNo]: this.#evoCounter + " /" + Config.evolution.rounds });
 			const evo = new Evolution(this.#ancestorBrain);
 			evo.run();
 		} else {
+			this.#unsubscribeEvents();
 			this.#end();
+			return;
 		}
+	}
+
+	#onEvolutionEnd() {
+		this.#run();
 	}
 
 	#pause() {
@@ -106,6 +122,7 @@ class Game { //Todo: Make singleton
 	}
 
 	#end() {
+		alert(`Completed ${this.#evoCounter} rounds of evolution`);
 		this.#button.bind(ButtonKey.End);
 	}
 }

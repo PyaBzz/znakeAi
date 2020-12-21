@@ -2,7 +2,7 @@
 
 class Worm {
     #config = Config.worm;
-    #subscriptionRefs = {};
+    #subscriptions = {};
     #inputSize = Config.neuralNet.inputSize;
     #brain;
     #sections = [];
@@ -28,21 +28,21 @@ class Worm {
 
     #subscribeEvents() {
         const me = this;
-        this.#subscriptionRefs[EventKey.pause] = The.eventBus.subscribe(EventKey.pause, (...args) => me.#stop(...args));
-        this.#subscriptionRefs[EventKey.resume] = The.eventBus.subscribe(EventKey.resume, (...args) => me.#resume(...args));
-        this.#subscriptionRefs[EventKey.speedUp] = The.eventBus.subscribe(EventKey.speedUp, (...args) => me.#speedUp(...args));
-        this.#subscriptionRefs[EventKey.slowDown] = The.eventBus.subscribe(EventKey.slowDown, (...args) => me.#slowDown(...args));
+        this.#subscriptions[EventKey.pause] = The.eventBus.subscribe(EventKey.pause, (...args) => me.#stop(...args));
+        this.#subscriptions[EventKey.resume] = The.eventBus.subscribe(EventKey.resume, (...args) => me.#resume(...args));
+        this.#subscriptions[EventKey.speedUp] = The.eventBus.subscribe(EventKey.speedUp, (...args) => me.#speedUp(...args));
+        this.#subscriptions[EventKey.slowDown] = The.eventBus.subscribe(EventKey.slowDown, (...args) => me.#slowDown(...args));
     }
 
     #unsubscribeEvents() {
         const me = this;
-        for (let key in this.#subscriptionRefs) {
-            const ref = this.#subscriptionRefs[key];
+        for (let key in this.#subscriptions) {
+            const ref = this.#subscriptions[key];
             The.eventBus.unsubscribe(key, ref);
         }
     }
 
-    live() {
+    run() {
         const origin = The.grid.getStartCell(this.#config.startAtCentre);
         const originWasFood = origin.isFood;
         this.#sections.push(origin);

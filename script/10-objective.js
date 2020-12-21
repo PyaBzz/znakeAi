@@ -1,7 +1,7 @@
 "use strict";
 
 class Objective {
-    #subscriptionRefs = {};
+    #subscriptions = {};
     static #instance = null;
 
     constructor() {
@@ -15,14 +15,14 @@ class Objective {
 
     #subscribeEvents() {
         const me = this;
-        this.#subscriptionRefs[EventKey.wormDied] = The.eventBus.subscribe(EventKey.wormDied, (...args) => this.#onWormDied(...args));
-        this.#subscriptionRefs[EventKey.generationEnd] = The.eventBus.subscribe(EventKey.generationEnd, (...args) => this.#onGenerationEnd(...args));
+        this.#subscriptions[EventKey.wormDied] = The.eventBus.subscribe(EventKey.wormDied, (...args) => this.#onWormDied(...args));
+        this.#subscriptions[EventKey.generationEnd] = The.eventBus.subscribe(EventKey.generationEnd, (...args) => this.#onGenerationEnd(...args));
     }
 
     #unsubscribeEvents() {
         const me = this;
-        for (let key in this.#subscriptionRefs) {
-            const ref = this.#subscriptionRefs[key];
+        for (let key in this.#subscriptions) {
+            const ref = this.#subscriptions[key];
             The.eventBus.unsubscribe(key, ref);
         }
     }
@@ -41,7 +41,7 @@ class Objective {
     }
 
     #evoReachedTarget() {
-        // return this.#genCounter >= Config.target.generations
+        // return this.#genCounter >= Config.generation.rounds
         //     || this.#averageLen >= Config.target.averageLen;
     }
 

@@ -2,7 +2,7 @@
 
 class Generation {
     #reproducingPopulation = Config.generation.population / 2;
-    #subscriptionRefs = {};
+    #subscriptions = {};
     #worms = [];
     #wormCounter = 0; //Todo: Change to wormIndex
     #maxLen = 0;
@@ -23,26 +23,27 @@ class Generation {
 
     #subscribeEvents() { //Todo: Add all game flow like this
         const me = this;
-        this.#subscriptionRefs[EventKey.wormDied] = The.eventBus.subscribe(EventKey.wormDied, (...args) => this.#onWormDied(...args));
+        this.#subscriptions[EventKey.wormDied] = The.eventBus.subscribe(EventKey.wormDied, (...args) => this.#onWormDied(...args));
     }
 
     #unsubscribeEvents() {
         const me = this;
-        for (let key in this.#subscriptionRefs) {
-            const ref = this.#subscriptionRefs[key];
+        for (let key in this.#subscriptions) {
+            const ref = this.#subscriptions[key];
             The.eventBus.unsubscribe(key, ref);
         }
     }
 
-    live() {
-        this.#wormCounter++;
-        if (this.#wormCounter <= Config.generation.population) {
+    run() {
+        if (this.#wormCounter < Config.generation.population) {
+            this.#wormCounter++;
             const worm = this.#worms[this.#wormCounter - 1];
             The.wormBoard.set({ [WormBoard.key.wormNo]: this.#wormCounter + " /" + Config.generation.population });
-            worm.live();
+            worm.run();
         } else {
             this.#unsubscribeEvents();
-            The.eventBus.notify(EventKey.generationEnd, this)
+            The.eventBus.notify(EventKey.generationEnd, this);
+            return;
         }
     }
 
@@ -54,7 +55,7 @@ class Generation {
         this.#totalLen += len;
         this.#totalAge += age;
         this.#updateBoard();
-        this.live();
+        this.run();
     }
 
     #evolve() {

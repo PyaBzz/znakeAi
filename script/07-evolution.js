@@ -1,7 +1,7 @@
 "use strict";
 
 class Evolution {
-    #subscriptionRefs = {};
+    #subscriptions = {};
     #lastGen = null;
     #genCounter = 0;
     #maxLen = 0;
@@ -22,26 +22,28 @@ class Evolution {
 
     #subscribeEvents() {
         const me = this;
-        this.#subscriptionRefs[EventKey.wormDied] = The.eventBus.subscribe(EventKey.wormDied, (...args) => this.#onWormDied(...args));
-        this.#subscriptionRefs[EventKey.generationEnd] = The.eventBus.subscribe(EventKey.generationEnd, (...args) => this.#onGenerationEnd(...args));
+        this.#subscriptions[EventKey.wormDied] = The.eventBus.subscribe(EventKey.wormDied, (...args) => this.#onWormDied(...args));
+        this.#subscriptions[EventKey.generationEnd] = The.eventBus.subscribe(EventKey.generationEnd, (...args) => this.#onGenerationEnd(...args));
     }
 
     #unsubscribeEvents() {
         const me = this;
-        for (let key in this.#subscriptionRefs) {
-            const ref = this.#subscriptionRefs[key];
+        for (let key in this.#subscriptions) {
+            const ref = this.#subscriptions[key];
             The.eventBus.unsubscribe(key, ref);
         }
     }
 
     run() {
-        if (this.#genCounter >= Config.target.generations) {
-            The.eventBus.notify(EventKey.evolutionEnd);
-        } else {
+        if (this.#genCounter < Config.generation.rounds) {
             this.#genCounter++;
-            The.genBoard.set({ [GenBoard.key.generationNo]: this.#genCounter + " /" + Config.target.generations });
+            The.genBoard.set({ [GenBoard.key.generationNo]: this.#genCounter + " /" + Config.generation.rounds });
             const gen = new Generation(this.#lastGen);
-            gen.live();
+            gen.run();
+        } else {
+            this.#unsubscribeEvents();
+            The.eventBus.notify(EventKey.evolutionEnd);
+            return;
         }
     }
 

@@ -10,10 +10,11 @@ var Config = deepFreeze({
 		pause: ' ',
 	},
 	evolution: {
-		rounds: 1,
+		rounds: 3,
 	},
 	generation: {
-		population: 32,  // Only even numbers
+		rounds: 3,
+		population: 10,  // Only even numbers
 	},
 	worm: {
 		startAtCentre: true,
@@ -33,7 +34,6 @@ var Config = deepFreeze({
 		downloadPath: 'downloads://znakeAi-model',
 	},
 	target: {
-		generations: 130,
 		averageLen: 10,
 		length: 24,
 		age: 400,

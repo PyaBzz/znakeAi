@@ -1,7 +1,7 @@
 "use strict";
 
 class Feeder {
-	#subscriptionRefs = {};
+	#subscriptions = {};
 	static #instance = null;
 	#spread = 1;
 
@@ -19,14 +19,14 @@ class Feeder {
 
 	#subscribeEvents() {
 		const me = this;
-		this.#subscriptionRefs[EventKey.foodEaten] = The.eventBus.subscribe(EventKey.foodEaten, (...args) => me.#dropFood(...args));
-		this.#subscriptionRefs[EventKey.averageLenChanged] = The.eventBus.subscribe(EventKey.averageLenChanged, (...args) => me.#setSpread(...args));
+		this.#subscriptions[EventKey.foodEaten] = The.eventBus.subscribe(EventKey.foodEaten, (...args) => me.#dropFood(...args));
+		this.#subscriptions[EventKey.averageLenChanged] = The.eventBus.subscribe(EventKey.averageLenChanged, (...args) => me.#setSpread(...args));
 	}
 
 	#unsubscribeEvents() {
 		const me = this;
-		for (let key in this.#subscriptionRefs) {
-			const ref = this.#subscriptionRefs[key];
+		for (let key in this.#subscriptions) {
+			const ref = this.#subscriptions[key];
 			The.eventBus.unsubscribe(key, ref);
 		}
 	}
