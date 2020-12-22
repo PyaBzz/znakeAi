@@ -4,7 +4,7 @@ class Generation {
     #reproducingPopulation = Config.generation.population / 2;
     #subscriptions = {};
     #worms = [];
-    #wormCounter = 0;
+    #currentIndex = 0;
     #currentWorm = null;
     #maxLen = 0;
     #minLen = Number.MAX_VALUE;
@@ -41,9 +41,8 @@ class Generation {
     }
 
     run() {
-        this.#wormCounter++;
-        this.#currentWorm = this.#worms[this.#wormCounter - 1];
-        The.wormBoard.set({ [WormBoard.key.wormNo]: this.#wormCounter + " /" + Config.generation.population });
+        this.#currentWorm = this.#worms[this.#currentIndex];
+        The.wormBoard.set({ [WormBoard.key.wormNo]: (this.#currentIndex + 1) + " /" + Config.generation.population });
         this.#currentWorm.run();
     }
 
@@ -56,7 +55,8 @@ class Generation {
         this.#totalAge += worm.age;
         this.#updateBoard();
         const targetMet = wormTargetMet || this.#isTargetMet();
-        if (targetMet || this.#wormCounter >= Config.generation.population) {
+        this.#currentIndex++;
+        if (targetMet || this.#currentIndex >= Config.generation.population) {
             this.#unsubscribeEvents();
             The.eventBus.notify(EventKey.generationEnd, targetMet, this);
         } else {

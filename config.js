@@ -2,7 +2,6 @@
 
 var Config = deepFreeze({
 	devMode: false,
-	statFileName: 'znakeResult',
 	grid: {
 		height: 11,  // Greater than 4
 		width: 11,  // Greater than 4
@@ -44,6 +43,10 @@ var Config = deepFreeze({
 		biasInit: NeuronInitialiser.zeros,
 		mutationDiversity: 0.1,  //Standard deviation of the normal noise
 	},
+	statCsv: {
+		fileName: 'znakeResult',
+		columnWidth: 14,
+	}
 });
 
 onload = function () {

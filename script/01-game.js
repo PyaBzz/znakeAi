@@ -19,7 +19,7 @@ class Game {
 				this.#button.bind(ButtonKey.Pause);
 				The.eventBus.notify(EventKey.resume);
 			},
-			[ButtonKey.Download]: () => CsvFiler.download(this.#evoData, Config.statFileName),
+			[ButtonKey.Download]: () => CsvFiler.download(this.#evoData, Config.statCsv.fileName, Config.statCsv.columnWidth),
 		});
 
 	constructor() {
@@ -44,10 +44,22 @@ class Game {
 	get currentEvo() { return this.#currentEvo }
 
 	#validateConfig() {
-		if (Config.grid.height < 4)
-			throw "Grid height must be at least 4"
-		if (Config.grid.width < 4)
-			throw "Grid width must be at least 4"
+		let shouldThrow = false;
+		let message;
+		if (Config.grid.height < 4) {
+			shouldThrow = true;
+			message = "Grid height must be at least 4";
+		} else if (Config.grid.width < 4) {
+			shouldThrow = true;
+			message = "Grid width must be at least 4";
+		} else if (Config.generation.population % 2) {
+			shouldThrow = true;
+			message = "Worm population must be an even number";
+		}
+		if (shouldThrow) {
+			alert(message + "\nPlease correct the config");
+			throw new Error(message);
+		}
 	}
 
 	#bindEvents() {
