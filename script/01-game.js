@@ -138,7 +138,7 @@ class Game {
 	}
 
 	#end() {
-		alert(`Ran ${this.#evoCounter} rounds of evolution\nDownloaded CSV file for result`);
+		alert(`Ran ${this.#evoCounter} rounds of evolution\nDownload CSV file for stats`);
 		this.#button.bind(ButtonKey.Download);
 	}
 }
