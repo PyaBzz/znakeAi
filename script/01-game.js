@@ -52,7 +52,7 @@ class Game {
 		} else if (Config.grid.width < 4) {
 			shouldThrow = true;
 			message = "Grid width must be at least 4";
-		} else if (Config.generation.population % 2) {
+		} else if (Config.worm.population % 2) {
 			shouldThrow = true;
 			message = "Worm population must be an even number";
 		}

@@ -1,7 +1,7 @@
 "use strict";
 
 class Generation {
-    #reproducingPopulation = Config.generation.population / 2;
+    #reproducingPopulation = Config.worm.population / 2;
     #subscriptions = {};
     #worms = [];
     #currentIndex = 0;
@@ -15,12 +15,12 @@ class Generation {
 
     constructor(ancestorBrain, lastGen) {
         if (ancestorBrain)
-            for (let i = 0; i < Config.generation.population; i++)
+            for (let i = 0; i < Config.worm.population; i++)
                 this.#worms.push(new Worm(ancestorBrain));
         else if (lastGen)
             this.#worms = lastGen.#evolve();
         else
-            for (let i = 0; i < Config.generation.population; i++)
+            for (let i = 0; i < Config.worm.population; i++)
                 this.#worms.push(new Worm());
         this.#subscribeEvents();
     }
@@ -42,7 +42,7 @@ class Generation {
 
     run() {
         this.#currentWorm = this.#worms[this.#currentIndex];
-        The.wormBoard.set({ [WormBoard.key.wormNo]: (this.#currentIndex + 1) + " /" + Config.generation.population });
+        The.wormBoard.set({ [WormBoard.key.wormNo]: (this.#currentIndex + 1) + " /" + Config.worm.population });
         this.#currentWorm.run();
     }
 
@@ -56,7 +56,7 @@ class Generation {
         this.#updateBoard();
         const targetMet = wormTargetMet || this.#isTargetMet();
         this.#currentIndex++;
-        if (targetMet || this.#currentIndex >= Config.generation.population) {
+        if (targetMet || this.#currentIndex >= Config.worm.population) {
             this.#unsubscribeEvents();
             The.eventBus.notify(EventKey.generationEnd, targetMet, this);
         } else {
