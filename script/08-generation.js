@@ -47,39 +47,24 @@ class Generation {
         this.#currentWorm.run();
     }
 
-    #onWormDied(age, len) {
-        this.#maxAge = Math.max(this.#maxAge, age);
-        this.#minAge = Math.min(this.#minAge, age);
-        this.#maxLen = Math.max(this.#maxLen, len);
-        this.#minLen = Math.min(this.#minLen, len);
-        this.#totalLen += len;
-        this.#totalAge += age;
+    #onWormDied(wormTargetMet, worm) {
+        this.#maxAge = Math.max(this.#maxAge, worm.age);
+        this.#minAge = Math.min(this.#minAge, worm.age);
+        this.#maxLen = Math.max(this.#maxLen, worm.length);
+        this.#minLen = Math.min(this.#minLen, worm.length);
+        this.#totalLen += worm.length;
+        this.#totalAge += worm.age;
         this.#updateBoard();
-        const targetMet = this.#isTargetMet(age, len);
-        if (!targetMet && this.#wormCounter < Config.generation.population) {
-            this.run();
-        } else {
+        const targetMet = wormTargetMet || this.#isTargetMet();
+        if (targetMet || this.#wormCounter >= Config.generation.population) {
             this.#unsubscribeEvents();
-            The.eventBus.notify(EventKey.generationEnd, this, targetMet);
+            The.eventBus.notify(EventKey.generationEnd, targetMet, this);
+        } else {
+            this.run();
         }
     }
 
-    #isTargetMet(age, len) {
-        if (Config.worm.target.length && len >= Config.worm.target.length) {
-            if (Config.worm.target.offerBrainDownload) {
-                const shouldDownload = confirm(`Target length of ${Config.worm.target.length} reached!\nWould you like to download this TensorFlow neural net?`);
-                if (shouldDownload)
-                    The.worm.downloadBrain();
-            }
-            return true;
-        } else if (Config.worm.target.age && age >= Config.worm.target.age) {
-            if (Config.worm.target.offerBrainDownload) {
-                const shouldDownload = confirm(`Target age of ${Config.worm.target.length} reached!\nWould you like to download this TensorFlow neural net?`);
-                if (shouldDownload)
-                    The.worm.downloadBrain();
-            }
-            return true;
-        }
+    #isTargetMet() {
         return false;
     }
 

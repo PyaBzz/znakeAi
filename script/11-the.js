@@ -7,9 +7,9 @@ class The {
     }
 
     static get game() { return Game.instance }
-    static get evolution() { return The.game.currentEvo }
-    static get generation() { return The.evolution.currentGen }
-    static get worm() { return The.generation.currentWorm }
+    // static get evolution() { return The.game.currentEvo }
+    // static get generation() { return The.evolution.currentGen }
+    // static get worm() { return The.generation.currentWorm }
     static get grid() { return Grid.instance }
     static get feeder() { return Feeder.instance }
     static get gameBoard() { return GameBoard.instance }

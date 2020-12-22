@@ -24,8 +24,9 @@ class Worm {
 
     get #head() { return this.#sections[0] }
     get #tail() { return this.#sections.last }
-    get #length() { return this.#sections.length }
-    get fitness() { return this.#age + (this.#length - 1) * The.grid.playableCellCount }
+    get age() { return this.#age }
+    get length() { return this.#sections.length }
+    get fitness() { return this.#age + (this.length - 1) * The.grid.playableCellCount }
 
     #subscribeEvents() {
         const me = this;
@@ -195,9 +196,29 @@ class Worm {
 
     #die() {
         this.#stop();
-        this.#disappear();
         this.#unsubscribeEvents();
-        The.eventBus.notify(EventKey.wormDied, this.#age, this.#length);
+        const targetMet = this.#isTargetMet();
+        this.#disappear();
+        The.eventBus.notify(EventKey.wormDied, targetMet, this);
+    }
+
+    #isTargetMet() {
+        if (Config.worm.target.length && this.length >= Config.worm.target.length) {
+            if (Config.worm.target.offerBrainDownload) {
+                const shouldDownload = confirm(`Target length of ${Config.worm.target.length} reached!\nWould you like to download this TensorFlow neural net?`);
+                if (shouldDownload)
+                    this.downloadBrain();
+            }
+            return true;
+        } else if (Config.worm.target.age && this.age >= Config.worm.target.age) {
+            if (Config.worm.target.offerBrainDownload) {
+                const shouldDownload = confirm(`Target age of ${Config.worm.target.length} reached!\nWould you like to download this TensorFlow neural net?`);
+                if (shouldDownload)
+                    this.downloadBrain();
+            }
+            return true;
+        }
+        return false;
     }
 
     downloadBrain() {
@@ -216,7 +237,7 @@ class Worm {
 
     #updateBoard() {
         The.wormBoard.set({
-            [WormBoard.key.len]: this.#length,
+            [WormBoard.key.len]: this.length,
             [WormBoard.key.age]: this.#age,
         });
     }

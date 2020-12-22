@@ -6,7 +6,7 @@ class Game {
 	#ancestorBrain = null;
 	#evoCounter = 0;
 	#currentEvo = null;
-	#evoData = [["Evo", "Gens", "Worms", "Ave. Len", "Max. Len"]];
+	#evoData = [["EvolutionRound", "Generations", "TotalWorms", "AverageLen", "MaxLen"]];
 
 	#button = new MultiFuncButton(document.getElementById('button'),
 		{
@@ -114,9 +114,9 @@ class Game {
 		this.#currentEvo.run();
 	}
 
-	#onEvolutionEnd() {
-		// #evoData = [["Evo", "Gens", "Worms", "Ave. Len", "Max. Len"]];
-		this.#evoData.push([this.#evoCounter, "x", "y", The.evolution.averageLen, The.evolution.maxLen]);
+	#onEvolutionEnd(evoTargetMet, evo) {
+		// ["Evo", "Gens", "Worms", "Ave. Len", "Max. Len"]
+		this.#evoData.push([this.#evoCounter, evo.genCount, evo.totalWorms, evo.averageLen.toFixed(3), evo.maxLen]);
 		if (this.#evoCounter < Config.evolution.rounds) {
 			this.#run();
 		} else {

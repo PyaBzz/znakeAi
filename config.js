@@ -11,13 +11,13 @@ var Config = deepFreeze({
 		pause: ' ',
 	},
 	evolution: {
-		rounds: 3,
+		rounds: 1,
 		target: {
 			averageLen: 0,
 		},
 	},
 	generation: {
-		rounds: 130,
+		rounds: 3000,
 		population: 32,  // Only even numbers
 		target: {
 		},
@@ -30,9 +30,9 @@ var Config = deepFreeze({
 		},
 		target: {
 			age: 0,
-			length: 3,
-			offerBrainDownload: true,
-			brainDownloadFileName: 'znakeBrain',
+			length: 16,
+			offerBrainDownload: false,
+			brainDownloadFileName: 'downloads://znakeBrain',
 		},
 	},
 	neuralNet: {
