@@ -21,6 +21,7 @@ class Evolution {
     }
 
     get currentGen() { return this.#currentGen }
+    get maxLen() { return this.#maxLen }
     get averageLen() { return this.#totalLen / this.#totalWorms }
     get averageAge() { return this.#totalAge / this.#totalWorms }
 
@@ -28,7 +29,6 @@ class Evolution {
         const me = this;
         this.#subscriptions[EventKey.wormDied] = The.eventBus.subscribe(EventKey.wormDied, (...args) => this.#onWormDied(...args));
         this.#subscriptions[EventKey.generationEnd] = The.eventBus.subscribe(EventKey.generationEnd, (...args) => this.#onGenerationEnd(...args));
-        this.#subscriptions[EventKey.targetReached] = The.eventBus.subscribe(EventKey.targetReached, (...args) => this.#onTargetReached(...args));
     }
 
     #unsubscribeEvents() {
@@ -40,23 +40,10 @@ class Evolution {
     }
 
     run() {
-        if (The.target.reached)
-            return;
         this.#genCounter++;
         The.genBoard.set({ [GenBoard.key.generationNo]: this.#genCounter + " /" + Config.generation.rounds });
         this.#currentGen = new Generation(this.#ancestorBrain, this.#lastGen);
         this.#currentGen.run();
-    }
-
-    #onGenerationEnd(lastGen) {
-        this.#lastGen = lastGen;
-        if (this.#genCounter < Config.generation.rounds) {
-            this.run();
-        } else {
-            this.#unsubscribeEvents();
-            The.eventBus.notify(EventKey.evolutionEnd);
-            return;
-        }
     }
 
     #onWormDied(age, len) {
@@ -71,8 +58,24 @@ class Evolution {
         this.#updateBoard();
     }
 
-    #onTargetReached() {
-        this.#unsubscribeEvents();
+    #onGenerationEnd(lastGen, genTargetMet) {
+        this.#lastGen = lastGen;
+        const myTargetMet = this.#isTargetMet();
+        const evoTargetMet = genTargetMet || myTargetMet;
+        if (!evoTargetMet && this.#genCounter < Config.generation.rounds) {
+            this.run();
+        } else {
+            this.#unsubscribeEvents();
+            The.eventBus.notify(EventKey.evolutionEnd, this, evoTargetMet);
+        }
+    }
+
+    #isTargetMet() {
+        if (Config.evolution.target.averageLen && this.averageLen >= Config.evolution.target.averageLen) {
+            // alert(`Average length of ${Config.evolution.target.averageLen} reached`);
+            return true;
+        }
+        return false;
     }
 
     #updateBoard() {

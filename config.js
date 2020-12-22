@@ -2,6 +2,7 @@
 
 var Config = deepFreeze({
 	devMode: false,
+	statFileName: 'znakeResult',
 	grid: {
 		height: 11,  // Greater than 4
 		width: 11,  // Greater than 4
@@ -10,17 +11,28 @@ var Config = deepFreeze({
 		pause: ' ',
 	},
 	evolution: {
-		rounds: 1,
+		rounds: 3,
+		target: {
+			averageLen: 0,
+		},
 	},
 	generation: {
 		rounds: 130,
 		population: 32,  // Only even numbers
+		target: {
+		},
 	},
 	worm: {
 		startAtCentre: true,
 		stepTime: {
 			fast: 1,  // milliseconds
 			slow: 100,  // milliseconds
+		},
+		target: {
+			age: 0,
+			length: 4,
+			offerDownload: false,
+			downloadPath: 'downloads://znakeBrain',
 		},
 	},
 	neuralNet: {
@@ -31,12 +43,6 @@ var Config = deepFreeze({
 		useBias: false,
 		biasInit: NeuronInitialiser.zeros,
 		mutationDiversity: 0.1,  //Standard deviation of the normal noise
-		downloadPath: 'downloads://znakeBrain',
-	},
-	target: {
-		averageLen: 10,
-		length: 24,
-		age: 400,
 	},
 });
 

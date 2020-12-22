@@ -38,7 +38,7 @@ var ButtonKey = Object.freeze({
     Start: "Start",
     Pause: "Pause",
     Resume: "Resume",
-    End: "End",
+    Download: "Download",
 });
 
 var EventKey = Object.freeze({
@@ -52,5 +52,4 @@ var EventKey = Object.freeze({
     generationEnd: "generationEnd",
     averageLenChanged: "averageLenChanged",
     evolutionEnd: "evolutionEnd",
-    targetReached: "targetReached",
 });

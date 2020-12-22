@@ -46,8 +46,8 @@ class NeuralNetSrv {
             for (let i = 0; i < sourceModel.layers.length; i++) {
                 const sourceLayer = sourceModel.layers[i];
                 const weights = sourceLayer.getWeights();
-                const targetLayer = clone.layers[i];
-                targetLayer.setWeights(weights);
+                const cloneLayer = clone.layers[i];
+                cloneLayer.setWeights(weights);
             }
             return clone;
         });

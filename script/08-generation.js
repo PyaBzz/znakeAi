@@ -30,7 +30,6 @@ class Generation {
     #subscribeEvents() {
         const me = this;
         this.#subscriptions[EventKey.wormDied] = The.eventBus.subscribe(EventKey.wormDied, (...args) => this.#onWormDied(...args));
-        this.#subscriptions[EventKey.targetReached] = The.eventBus.subscribe(EventKey.targetReached, (...args) => this.#onTargetReached(...args));
     }
 
     #unsubscribeEvents() {
@@ -42,8 +41,6 @@ class Generation {
     }
 
     run() {
-        if (The.target.reached)
-            return;
         this.#wormCounter++;
         this.#currentWorm = this.#worms[this.#wormCounter - 1];
         The.wormBoard.set({ [WormBoard.key.wormNo]: this.#wormCounter + " /" + Config.generation.population });
@@ -58,13 +55,32 @@ class Generation {
         this.#totalLen += len;
         this.#totalAge += age;
         this.#updateBoard();
-        if (this.#wormCounter < Config.generation.population) {
+        const targetMet = this.#isTargetMet(age, len);
+        if (!targetMet && this.#wormCounter < Config.generation.population) {
             this.run();
         } else {
             this.#unsubscribeEvents();
-            The.eventBus.notify(EventKey.generationEnd, this);
-            return;
+            The.eventBus.notify(EventKey.generationEnd, this, targetMet);
         }
+    }
+
+    #isTargetMet(age, len) {
+        if (Config.worm.target.length && len >= Config.worm.target.length) {
+            if (Config.worm.target.offerDownload) {
+                const shouldDownload = confirm(`Target length of ${Config.worm.target.length} reached!\nWould you like to download this TensorFlow neural net?`);
+                if (shouldDownload)
+                    The.worm.downloadBrain();
+            }
+            return true;
+        } else if (Config.worm.target.age && age >= Config.worm.target.age) {
+            if (Config.worm.target.offerDownload) {
+                const shouldDownload = confirm(`Target age of ${Config.worm.target.length} reached!\nWould you like to download this TensorFlow neural net?`);
+                if (shouldDownload)
+                    The.worm.downloadBrain();
+            }
+            return true;
+        }
+        return false;
     }
 
     #evolve() {
@@ -76,11 +92,6 @@ class Generation {
 
     #naturalSelect() {
         return this.#worms.getTop(w => w.fitness, this.#reproducingPopulation).items;
-    }
-
-    #onTargetReached() {
-        this.#unsubscribeEvents();
-        // The.eventBus.notify(EventKey.generationEnd, this);
     }
 
     #updateBoard() {

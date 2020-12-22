@@ -6,7 +6,7 @@ class Game {
 	#ancestorBrain = null;
 	#evoCounter = 0;
 	#currentEvo = null;
-	#evoData = [];
+	#evoData = [["Evo", "Gens", "Worms", "Ave. Len", "Max. Len"]];
 
 	#button = new MultiFuncButton(document.getElementById('button'),
 		{
@@ -19,7 +19,7 @@ class Game {
 				this.#button.bind(ButtonKey.Pause);
 				The.eventBus.notify(EventKey.resume);
 			},
-			[ButtonKey.End]: () => null,
+			[ButtonKey.Download]: () => CsvFiler.download(this.#evoData, Config.statFileName),
 		});
 
 	constructor() {
@@ -36,7 +36,6 @@ class Game {
 		dummyObj = The.genBoard;
 		dummyObj = The.evoBoard;
 		dummyObj = The.wormBoard;
-		dummyObj = The.target;
 		Evolution.ancestor = null;
 		Game.#instance = this;
 	}
@@ -93,7 +92,6 @@ class Game {
 	#subscribeEvents() {
 		const me = this;
 		this.#subscriptions[EventKey.evolutionEnd] = The.eventBus.subscribe(EventKey.evolutionEnd, (...args) => this.#onEvolutionEnd(...args));
-		this.#subscriptions[EventKey.targetReached] = The.eventBus.subscribe(EventKey.targetReached, (...args) => this.#onTargetReached(...args));
 	}
 
 	#unsubscribeEvents() {
@@ -116,23 +114,20 @@ class Game {
 		this.#currentEvo.run();
 	}
 
-	#onTargetReached() {
-		this.#unsubscribeEvents();
-	}
-
 	#onEvolutionEnd() {
+		// #evoData = [["Evo", "Gens", "Worms", "Ave. Len", "Max. Len"]];
+		this.#evoData.push([this.#evoCounter, "x", "y", The.evolution.averageLen, The.evolution.maxLen]);
 		if (this.#evoCounter < Config.evolution.rounds) {
 			this.#run();
-		} else { //Todo: Add stat collection over evolutions and download as csv
+		} else {
 			this.#unsubscribeEvents();
 			this.#end();
-			return;
 		}
 	}
 
 	#end() {
-		alert(`Ran ${this.#evoCounter} rounds of evolution\nreaching no target`);
-		this.#button.bind(ButtonKey.End);
+		alert(`Ran ${this.#evoCounter} rounds of evolution\nDownloaded CSV file for result`);
+		this.#button.bind(ButtonKey.Download);
 	}
 }
 
@@ -148,9 +143,9 @@ class GameBoard {
 		document.getElementById("game-board"),
 		{
 			[GameBoard.key.useAncestor]: "No",
-			[GameBoard.key.age]: Config.target.age,
-			[GameBoard.key.length]: Config.target.length,
-			[GameBoard.key.averageLen]: Config.target.averageLen,
+			[GameBoard.key.age]: Config.worm.target.age,
+			[GameBoard.key.length]: Config.worm.target.length,
+			[GameBoard.key.averageLen]: Config.evolution.target.averageLen,
 		},
 		"Game Targets",
 	);
