@@ -123,7 +123,7 @@ class Game {
 	#onEvolutionEnd() {
 		if (this.#evoCounter < Config.evolution.rounds) {
 			this.#run();
-		} else {
+		} else { //Todo: Add stat collection over evolutions and download as csv
 			this.#unsubscribeEvents();
 			this.#end();
 			return;
