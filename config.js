@@ -30,9 +30,9 @@ var Config = deepFreeze({
 		},
 		target: {
 			age: 0,
-			length: 4,
-			offerDownload: false,
-			downloadPath: 'downloads://znakeBrain',
+			length: 3,
+			offerBrainDownload: true,
+			brainDownloadFileName: 'znakeBrain',
 		},
 	},
 	neuralNet: {

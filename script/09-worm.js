@@ -201,7 +201,7 @@ class Worm {
     }
 
     downloadBrain() {
-        const filePath = Config.worm.downloadPath + "-" + Config.neuralNet.layerSizes.toString("-");
+        const filePath = Config.worm.target.brainDownloadFileName + "-" + Config.neuralNet.layerSizes.toString("-");
         this.#brain.save(filePath);
     }
 

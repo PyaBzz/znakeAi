@@ -66,14 +66,14 @@ class Generation {
 
     #isTargetMet(age, len) {
         if (Config.worm.target.length && len >= Config.worm.target.length) {
-            if (Config.worm.target.offerDownload) {
+            if (Config.worm.target.offerBrainDownload) {
                 const shouldDownload = confirm(`Target length of ${Config.worm.target.length} reached!\nWould you like to download this TensorFlow neural net?`);
                 if (shouldDownload)
                     The.worm.downloadBrain();
             }
             return true;
         } else if (Config.worm.target.age && age >= Config.worm.target.age) {
-            if (Config.worm.target.offerDownload) {
+            if (Config.worm.target.offerBrainDownload) {
                 const shouldDownload = confirm(`Target age of ${Config.worm.target.length} reached!\nWould you like to download this TensorFlow neural net?`);
                 if (shouldDownload)
                     The.worm.downloadBrain();
