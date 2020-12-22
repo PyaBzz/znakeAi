@@ -41,8 +41,8 @@ class Generation {
     }
 
     run() {
-        this.#currentWorm = this.#worms[this.#currentIndex];
         The.wormBoard.set({ [WormBoard.key.wormNo]: (this.#currentIndex + 1) + " /" + Config.worm.population });
+        this.#currentWorm = this.#worms[this.#currentIndex];
         this.#currentWorm.run();
     }
 
