@@ -6,8 +6,8 @@ class Game {
 	#ancestorBrain = null;
 	#evoCounter = 0;
 	#currentEvo = null;
-	#slowDownFunc;
-	#speedUpFunc;
+	#evoData = [];
+
 	#button = new MultiFuncButton(document.getElementById('button'),
 		{
 			[ButtonKey.Start]: () => this.#start(),
