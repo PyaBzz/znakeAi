@@ -41,6 +41,7 @@ class Feeder {
 		if (val >= this.#spread)
 			this.#spread = val;
 		else {
+			this.#spread = Math.min(1, val);
 			this.#lastFood.beBlank();
 			this.#dropFood();
 		}
