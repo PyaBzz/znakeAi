@@ -59,7 +59,7 @@ class Evolution {
         this.#updateBoard();
     }
 
-    #onGenerationEnd(genTargetMet, lastGen) { //Todo: Add a logboard for evolutions
+    #onGenerationEnd(genTargetMet, lastGen) {
         this.#lastGen = lastGen;
         const targetMet = genTargetMet || this.#isTargetMet();
         this.#currentIndex++;

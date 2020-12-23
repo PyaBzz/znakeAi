@@ -18,4 +18,5 @@ class The {
     static get wormBoard() { return WormBoard.instance }
     static get eventBus() { return EventBus.instance }
     static get reporter() { return Reporter.instance }
+    static get evoLog() { return EvoLog.instance }
 }

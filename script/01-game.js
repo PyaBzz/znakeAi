@@ -7,6 +7,7 @@ class Game {
 	#evoCounter = 0;
 	#currentEvo = null;
 	#evoData = [];
+	#totalGens = 0;
 
 	#button = new MultiFuncButton(document.getElementById('button'),
 		{
@@ -37,12 +38,14 @@ class Game {
 		dummyObj = The.evoBoard;
 		dummyObj = The.wormBoard;
 		dummyObj = The.reporter;
+		dummyObj = The.evoLog;
 		Evolution.ancestor = null;
 		Game.#instance = this;
 	}
 
 	static get instance() { return Game.#instance ? Game.#instance : new Game(); }
 	get currentEvo() { return this.#currentEvo }
+	get #runningAverageGens() { return this.#totalGens / this.#evoCounter }
 
 	#validateConfig() {
 		let shouldThrow = false;
@@ -128,7 +131,10 @@ class Game {
 	}
 
 	#onEvolutionEnd(evoTargetMet, evo) {
-		this.#evoData.push([this.#evoCounter, evoTargetMet, evo.genCount, evo.totalWorms, evo.averageLen.toFixed(3), evo.maxLen]);
+		this.#totalGens += evo.genCount;
+		const dataRow = [this.#evoCounter, evoTargetMet, evo.genCount, evo.totalWorms, evo.averageLen.toFixed(3), evo.maxLen, this.#runningAverageGens.toFixed(3)];
+		this.#evoData.push(dataRow);
+		The.evoLog.log(dataRow)
 		if (this.#evoCounter < Config.evolution.rounds) {
 			this.#run();
 		} else {
