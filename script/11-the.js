@@ -17,4 +17,5 @@ class The {
     static get genBoard() { return GenBoard.instance }
     static get wormBoard() { return WormBoard.instance }
     static get eventBus() { return EventBus.instance }
+    static get reporter() { return Reporter.instance }
 }

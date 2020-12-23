@@ -43,9 +43,9 @@ var Config = deepFreeze({
 		biasInit: NeuronInitialiser.zeros,
 		mutationDiversity: 0.1,  //Standard deviation of the normal noise
 	},
-	statCsv: {
+	report: {
 		fileName: 'znakeResult',
-		columnWidth: 14,
+		columnWidth: 16,
 	}
 });
 

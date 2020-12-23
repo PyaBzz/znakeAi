@@ -6,7 +6,7 @@ class Game {
 	#ancestorBrain = null;
 	#evoCounter = 0;
 	#currentEvo = null;
-	#evoData = [["EvolutionRound", "Generations", "TotalWorms", "AverageLen", "MaxLen"]];
+	#evoData = [];
 
 	#button = new MultiFuncButton(document.getElementById('button'),
 		{
@@ -19,7 +19,7 @@ class Game {
 				this.#button.bind(ButtonKey.Pause);
 				The.eventBus.notify(EventKey.resume);
 			},
-			[ButtonKey.Download]: () => CsvFiler.download(this.#evoData, Config.statCsv.fileName, Config.statCsv.columnWidth),
+			[ButtonKey.Download]: () => { The.reporter.generate(this.#evoData) },
 		});
 
 	constructor() {
@@ -36,6 +36,7 @@ class Game {
 		dummyObj = The.genBoard;
 		dummyObj = The.evoBoard;
 		dummyObj = The.wormBoard;
+		dummyObj = The.reporter;
 		Evolution.ancestor = null;
 		Game.#instance = this;
 	}
@@ -127,8 +128,7 @@ class Game {
 	}
 
 	#onEvolutionEnd(evoTargetMet, evo) {
-		// ["Evo", "Gens", "Worms", "Ave. Len", "Max. Len"]
-		this.#evoData.push([this.#evoCounter, evo.genCount, evo.totalWorms, evo.averageLen.toFixed(3), evo.maxLen]);
+		this.#evoData.push([this.#evoCounter, evoTargetMet, evo.genCount, evo.totalWorms, evo.averageLen.toFixed(3), evo.maxLen]);
 		if (this.#evoCounter < Config.evolution.rounds) {
 			this.#run();
 		} else {
@@ -138,7 +138,7 @@ class Game {
 	}
 
 	#end() {
-		alert(`Ran ${this.#evoCounter} rounds of evolution\nDownload CSV file for stats`);
+		alert(`Ran ${this.#evoCounter} rounds of evolution\nDownload report file for stats`);
 		this.#button.bind(ButtonKey.Download);
 	}
 }

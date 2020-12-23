@@ -2,6 +2,26 @@
 
 var Direction = Object.freeze({ up: "up", right: "right", down: "down", left: "left" });
 
+var ButtonKey = Object.freeze({
+    Start: "Start",
+    Pause: "Pause",
+    Resume: "Resume",
+    Download: "Download",
+});
+
+var EventKey = Object.freeze({
+    // wormBorn: "wormBorn",
+    foodEaten: "foodEaten",
+    pause: "pause",
+    resume: "resume",
+    slowDown: "slowDown",
+    speedUp: "speedUp",
+    wormDied: "wormDied",
+    generationEnd: "generationEnd",
+    averageLenChanged: "averageLenChanged",
+    evolutionEnd: "evolutionEnd",
+});
+
 var NeuronActivation = Object.freeze({
     linear: "linear",
     elu: "elu",
@@ -32,24 +52,4 @@ var NeuronInitialiser = Object.freeze({
     randomUniform: "randomUniform",
     truncatedNormal: "truncatedNormal",
     varianceScaling: "varianceScaling",
-});
-
-var ButtonKey = Object.freeze({
-    Start: "Start",
-    Pause: "Pause",
-    Resume: "Resume",
-    Download: "Download",
-});
-
-var EventKey = Object.freeze({
-    // wormBorn: "wormBorn",
-    foodEaten: "foodEaten",
-    pause: "pause",
-    resume: "resume",
-    slowDown: "slowDown",
-    speedUp: "speedUp",
-    wormDied: "wormDied",
-    generationEnd: "generationEnd",
-    averageLenChanged: "averageLenChanged",
-    evolutionEnd: "evolutionEnd",
 });
