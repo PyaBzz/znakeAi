@@ -80,7 +80,7 @@ class NeuralNetSrv {
     #addNoise(tensor) {
         return tf.tidy(() => {
             const shape = tensor.shape;
-            let noiseTensor = tf.truncatedNormal(shape, 0, this.#config.mutationDiversity);
+            let noiseTensor = tf.truncatedNormal(shape, 0, this.#config.geneticDiversity);
             return tf.add(tensor, noiseTensor);
         });
     }

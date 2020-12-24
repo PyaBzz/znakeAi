@@ -31,14 +31,14 @@ class Reporter {
         data.unshift([""]);
         data.unshift([""]);
         data.unshift([""]);
-        data.unshift([Config.neuralNet.inputSize, Config.neuralNet.layerSizes, Config.neuralNet.mutationDiversity]);
-        data.unshift(["InputSize", "NeuralNetLayers", "mutationDiversity"]);
+        data.unshift([Config.neuralNet.inputSize, Config.neuralNet.layerSizes, Config.neuralNet.geneticDiversity]);
+        data.unshift(["InputSize", "NeuralNetLayers", "geneticDiversity"]);
         data.unshift([""]);
         data.unshift(["--------------", "--------------", "--------------", "NeuralNet Config", "--------------", "--------------", "--------------", "--------------"]);
         CsvFiler.download(data, this.#getFileName(), Config.report.columnWidth);
     }
 
     #getFileName() {
-        return `${Config.report.fileName}-${Config.neuralNet.inputSize}-${Config.neuralNet.layerSizes.join(',')}-${Config.neuralNet.mutationDiversity}`
+        return `${Config.report.fileName}-${Config.neuralNet.inputSize}-${Config.neuralNet.layerSizes.join(',')}-${Config.neuralNet.geneticDiversity}`
     }
 }

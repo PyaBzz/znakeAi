@@ -41,7 +41,7 @@ var Config = deepFreeze({
 		kernelInit: NeuronInitialiser.leCunNormal,
 		useBias: false,
 		biasInit: NeuronInitialiser.zeros,
-		mutationDiversity: 0.1,  //Standard deviation of the normal noise
+		geneticDiversity: 0.1,  //Standard deviation of the Gaussian noise
 	},
 	report: {
 		fileName: 'znakeRes',
