@@ -44,7 +44,7 @@ var Config = deepFreeze({
 		mutationDiversity: 0.1,  //Standard deviation of the normal noise
 	},
 	report: {
-		fileName: 'znakeResult',
+		fileName: 'znakeRes',
 		columnWidth: 18,
 	}
 });

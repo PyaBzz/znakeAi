@@ -35,6 +35,10 @@ class Reporter {
         data.unshift(["InputSize", "NeuralNetLayers", "mutationDiversity"]);
         data.unshift([""]);
         data.unshift(["--------------", "--------------", "--------------", "NeuralNet Config", "--------------", "--------------", "--------------", "--------------"]);
-        CsvFiler.download(data, Config.report.fileName, Config.report.columnWidth);
+        CsvFiler.download(data, this.#getFileName(), Config.report.columnWidth);
+    }
+
+    #getFileName() {
+        return `${Config.report.fileName}-${Config.neuralNet.inputSize}-${Config.neuralNet.layerSizes.join(',')}-${Config.neuralNet.mutationDiversity}`
     }
 }
