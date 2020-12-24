@@ -12,7 +12,7 @@ class EvoLog {
 
         this.#board = new Logboard(
             parent,
-            ["Evo", "TargetMet", "Generations", "TotalWorms", "AverageLen", "MaxLen", "RunningAverageGens"],
+            ["Evo", "TargetMet", "Generations", "TotalWorms", "AverageLen", "MaxLen"],
             "Evolution Log"
         );
 
