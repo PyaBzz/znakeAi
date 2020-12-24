@@ -45,7 +45,7 @@ var Config = deepFreeze({
 	},
 	report: {
 		fileName: 'znakeResult',
-		columnWidth: 16,
+		columnWidth: 18,
 	}
 });
 

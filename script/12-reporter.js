@@ -15,25 +15,26 @@ class Reporter {
     }
 
     generate(data) {
-        const rounds = data.length;
+        let evoCount = 0;
         let successCount = 0;
-        let totalWorms = 0;
+        let genCount = 0;
         data.forEach(row => {
-            successCount += data[1] ? 1 : 0;
-            totalWorms += row[3];
+            evoCount++;
+            successCount += row[1] ? 1 : 0;
+            genCount += row[2];
+            row.push((successCount / evoCount).toFixed(3));
+            row.push((genCount / evoCount).toFixed(3));
         });
-        const successRate = successCount / rounds;
-        const averageWorms = totalWorms / rounds;
-        data.unshift(["Evolution", "TargetMet", "Generations", "TotalWorms", "AverageLen", "MaxLen", "RunningAverageGens"]);
+        data.unshift(["Evolution", "TargetMet", "Generations", "TotalWorms", "AverageLen", "MaxLen", "Run.Ave.Success", "Run.Ave.Gens"]);
         data.unshift([""]);
-        data.unshift(["--------------", "--------------", "--------------", "--- DETAILS ---", "--------------", "--------------", "--------------"]);
+        data.unshift(["--------------", "--------------", "--------------", "--- Result ---", "--------------", "--------------", "--------------", "--------------"]);
         data.unshift([""]);
         data.unshift([""]);
         data.unshift([""]);
-        data.unshift([successRate.toFixed(3), averageWorms.toFixed(3)]);
-        data.unshift(["SuccessRate", "Ave.WormCount"]);
+        data.unshift([Config.neuralNet.inputSize, Config.neuralNet.layerSizes, Config.neuralNet.mutationDiversity]);
+        data.unshift(["InputSize", "NeuralNetLayers", "mutationDiversity"]);
         data.unshift([""]);
-        data.unshift(["--------------", "--------------", "--------------", "--- STATS ---", "--------------", "--------------", "--------------"]);
+        data.unshift(["--------------", "--------------", "--------------", "NeuralNet Config", "--------------", "--------------", "--------------", "--------------"]);
         CsvFiler.download(data, Config.report.fileName, Config.report.columnWidth);
     }
 }
