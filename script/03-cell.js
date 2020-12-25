@@ -3,14 +3,17 @@
 class Cell {
     static #types = Object.freeze({ head: "head", worm: "worm", wall: "wall", blank: "blank", food: "food" });
     // static #value = Object.freeze({ head: -2, worm: -1, wall: -1, blank: 0, food: 2 });
-    #element = document.createElement('td');
+    #element;
     #row;
     #col;
     #type;
 
     constructor(rowNumber, colNumber) {
-        this.#element.className = 'cell';
-        this.#element.cell = this;
+        if (Config.grid.draw) {
+            this.#element = document.createElement('td');
+            this.#element.className = 'cell';
+            this.#element.cell = this;
+        }
         this.#row = rowNumber;
         this.#col = colNumber;
         this.#type = Cell.#types.blank;
@@ -31,27 +34,32 @@ class Cell {
 
     beWorm() {
         this.#type = Cell.#types.worm;
-        this.#element.className = 'worm';
+        if (Config.grid.draw)
+            this.#element.className = 'worm';
     }
 
     beHead() {
         this.#type = Cell.#types.head;
-        this.#element.className = 'worm';
+        if (Config.grid.draw)
+            this.#element.className = 'worm';
     }
 
     beFood() {
         this.#type = Cell.#types.food;
-        this.#element.className = 'food';
+        if (Config.grid.draw)
+            this.#element.className = 'food';
     }
 
     beBlank() {
         this.#type = Cell.#types.blank;
-        this.#element.className = 'cell';
+        if (Config.grid.draw)
+            this.#element.className = 'cell';
     }
 
     beWall() {
         this.#type = Cell.#types.wall;
-        this.#element.className = 'wall';
+        if (Config.grid.draw)
+            this.#element.className = 'wall';
     }
 
     getDiff(predicate, direc1, direc2, visitFunc) {

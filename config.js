@@ -2,8 +2,8 @@
 
 var Config = deepFreeze({
 	devMode: false,
-	showOnGrid: false, //Todo: Develop
 	grid: {
+		draw: true,
 		height: 11,  // Greater than 4
 		width: 11,  // Greater than 4
 	},

@@ -40,16 +40,19 @@ class Grid {
                 }
             }
         }
-        const table = document.createElement('table');
-        for (let row = 0; row <= this.#maxRowIndex; row++) {
-            const newRow = document.createElement('tr');
-            for (let col = 0; col <= this.#maxColIndex; col++) {
-                const cell = this.#cells[col][row];
-                cell.sitIn(newRow);
+        if (Config.grid.draw) {
+            const table = document.createElement('table');
+            for (let row = 0; row <= this.#maxRowIndex; row++) {
+                const newRow = document.createElement('tr');
+                for (let col = 0; col <= this.#maxColIndex; col++) {
+                    const cell = this.#cells[col][row];
+                    cell.sitIn(newRow);
+                }
+                table.appendChild(newRow);
             }
-            table.appendChild(newRow);
+            parent.appendChild(table);
         }
-        parent.appendChild(table);
+
         Grid.#instance = this;
     }
 
