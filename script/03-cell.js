@@ -33,33 +33,29 @@ class Cell {
     }
 
     beWorm() {
-        this.#type = Cell.#types.worm;
-        if (Config.grid.draw)
-            this.#element.className = 'worm';
+        this.#be(Cell.#types.worm);
     }
 
     beHead() {
-        this.#type = Cell.#types.head;
-        if (Config.grid.draw)
-            this.#element.className = 'worm';
+        this.#be(Cell.#types.worm);
     }
 
     beFood() {
-        this.#type = Cell.#types.food;
-        if (Config.grid.draw)
-            this.#element.className = 'food';
+        this.#be(Cell.#types.food);
     }
 
     beBlank() {
-        this.#type = Cell.#types.blank;
-        if (Config.grid.draw)
-            this.#element.className = 'cell';
+        this.#be(Cell.#types.blank);
     }
 
     beWall() {
-        this.#type = Cell.#types.wall;
+        this.#be(Cell.#types.wall);
+    }
+
+    #be(type) {
+        this.#type = type;
         if (Config.grid.draw)
-            this.#element.className = 'wall';
+            this.#element.className = type;
     }
 
     getDiff(predicate, direc1, direc2, visitFunc) {
