@@ -7,9 +7,7 @@ class Generation {
     #currentIndex = 0;
     #currentWorm = null;
     #maxLen = 0;
-    #minLen = Number.MAX_VALUE;
     #maxAge = 0;
-    #minAge = Number.MAX_VALUE;
     #totalLen = 0;
     #totalAge = 0;
 
@@ -48,9 +46,7 @@ class Generation {
 
     #onWormDied(wormTargetMet, worm) {
         this.#maxAge = Math.max(this.#maxAge, worm.age);
-        this.#minAge = Math.min(this.#minAge, worm.age);
         this.#maxLen = Math.max(this.#maxLen, worm.length);
-        this.#minLen = Math.min(this.#minLen, worm.length);
         this.#totalLen += worm.length;
         this.#totalAge += worm.age;
         this.#updateBoard();
@@ -82,9 +78,7 @@ class Generation {
     #updateBoard() {
         The.genBoard.set({
             [GenBoard.key.maxLen]: this.#maxLen,
-            [GenBoard.key.minLen]: this.#minLen,
             [GenBoard.key.maxAge]: this.#maxAge,
-            [GenBoard.key.minAge]: this.#minAge,
         });
     }
 }
@@ -93,19 +87,15 @@ class GenBoard {
     static #instance = null;
     static key = Object.freeze({
         generationNo: "Generation No",
-        maxLen: "Max Length",
-        minLen: "Min Length",
         maxAge: "Max Age",
-        minAge: "Min Age",
+        maxLen: "Max Length",
     });
     #board = new Infoboard(
         document.getElementById("generation-board"),
         {
             [GenBoard.key.generationNo]: 0,
-            [GenBoard.key.maxLen]: 0,
-            [GenBoard.key.minLen]: 0,
             [GenBoard.key.maxAge]: 0,
-            [GenBoard.key.minAge]: 0,
+            [GenBoard.key.maxLen]: 0,
         },
         "Generation",
     );
