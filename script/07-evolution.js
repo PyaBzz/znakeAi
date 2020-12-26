@@ -4,7 +4,7 @@ class Evolution {
     #subscriptions = {};
     #ancestorBrain = null;
     #lastGen = null;
-    #currentIndex = 0; //Todo: Rename to genIndex
+    #genIndex = 0;
     #currentGen = null;
     #maxLen = 0;
     #maxAge = 0;
@@ -18,7 +18,7 @@ class Evolution {
         this.#subscribeEvents();
     }
 
-    get genCount() { return this.#currentIndex + 1 }
+    get genCount() { return this.#genIndex + 1 }
     get currentGen() { return this.#currentGen }
     get maxLen() { return this.#maxLen }
     get totalWorms() { return this.#totalWorms }
@@ -40,7 +40,7 @@ class Evolution {
     }
 
     run() {
-        The.genBoard.set({ [GenBoard.key.generationNo]: (this.#currentIndex + 1) + " /" + Config.generation.rounds });
+        The.genBoard.set({ [GenBoard.key.generationNo]: (this.#genIndex + 1) + " /" + Config.generation.rounds });
         this.#currentGen = new Generation(this.#ancestorBrain, this.#lastGen);
         this.#currentGen.run();
     }
@@ -58,8 +58,8 @@ class Evolution {
     #onGenerationEnd(genTargetMet, lastGen) {
         this.#lastGen = lastGen;
         const targetMet = genTargetMet || this.#isTargetMet();
-        this.#currentIndex++;
-        if (targetMet || this.#currentIndex >= Config.generation.rounds) {
+        this.#genIndex++;
+        if (targetMet || this.#genIndex >= Config.generation.rounds) {
             this.#unsubscribeEvents();
             The.eventBus.notify(EventKey.evolutionEnd, targetMet, this);
         } else {
