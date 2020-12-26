@@ -207,21 +207,21 @@ class Worm {
             if (Config.worm.target.offerBrainDownload) {
                 const shouldDownload = confirm(`Target length of ${Config.worm.target.length} reached!\nWould you like to download this TensorFlow neural net?`);
                 if (shouldDownload)
-                    this.downloadBrain();
+                    this.#downloadBrain();
             }
             return true;
         } else if (Config.worm.target.age && this.age >= Config.worm.target.age) {
             if (Config.worm.target.offerBrainDownload) {
                 const shouldDownload = confirm(`Target age of ${Config.worm.target.length} reached!\nWould you like to download this TensorFlow neural net?`);
                 if (shouldDownload)
-                    this.downloadBrain();
+                    this.#downloadBrain();
             }
             return true;
         }
         return false;
     }
 
-    downloadBrain() {
+    #downloadBrain() {
         const filePath = Config.worm.target.brainDownloadFileName + "-" + Config.neuralNet.layerSizes.join("-");
         this.#brain.save(filePath);
     }
