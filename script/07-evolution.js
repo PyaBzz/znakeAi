@@ -4,7 +4,7 @@ class Evolution {
     #subscriptions = {};
     #ancestorBrain = null;
     #lastGen = null;
-    #currentIndex = 0;
+    #currentIndex = 0; //Todo: Rename to genIndex
     #currentGen = null;
     #maxLen = 0;
     #maxAge = 0;

@@ -6,7 +6,6 @@ class Game {
 	#ancestorBrain = null;
 	#evoCounter = 0;
 	#currentEvo = null;
-	#evoData = [];
 
 	#button = new MultiFuncButton(document.getElementById('button'),
 		{
@@ -19,7 +18,7 @@ class Game {
 				this.#button.bind(ButtonKey.Pause);
 				The.eventBus.notify(EventKey.resume);
 			},
-			[ButtonKey.Download]: () => { The.reporter.generate(this.#evoData) },
+			[ButtonKey.Download]: () => { The.evoStat.download() },
 		});
 
 	constructor() {
@@ -36,8 +35,8 @@ class Game {
 		dummyObj = The.genBoard;
 		dummyObj = The.evoBoard;
 		dummyObj = The.wormBoard;
-		dummyObj = The.reporter;
-		dummyObj = The.evoLog;
+		dummyObj = The.evoStat;
+		dummyObj = The.evoLogBoard;
 		Evolution.ancestor = null;
 		Game.#instance = this;
 	}
@@ -130,8 +129,7 @@ class Game {
 
 	#onEvolutionEnd(evoTargetMet, evo) {
 		const dataRow = [this.#evoCounter, evoTargetMet, evo.genCount, evo.totalWorms, evo.averageLen.toFixed(3), evo.maxLen];
-		this.#evoData.push(dataRow);
-		The.evoLog.log(dataRow)
+		The.evoStat.add(dataRow);
 		if (this.#evoCounter < Config.evolution.rounds) {
 			this.#run();
 		} else {
