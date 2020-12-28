@@ -17,12 +17,13 @@ var Config = deepFreeze({
 		},
 	},
 	generation: {
+		population: 32,
+		reproducingPopulationRatio: 0.2, // in range (0 ~ 1)
 		rounds: 3000,
 		target: {
 		},
 	},
 	worm: {
-		population: 32,  // Only even numbers
 		startAtCentre: true,
 		stepTime: {
 			fast: 1,  // milliseconds

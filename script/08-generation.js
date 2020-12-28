@@ -1,7 +1,7 @@
 "use strict";
 
 class Generation {
-    #reproducingPopulation = Config.worm.population / 2;
+    #reproducingPopulation = Math.floor(Config.generation.population * Config.generation.reproducingPopulationRatio);
     #subscriptions = {};
     #worms = [];
     #wormIndex = 0;
@@ -13,12 +13,12 @@ class Generation {
 
     constructor(ancestorBrain, lastGen) {
         if (ancestorBrain)
-            for (let i = 0; i < Config.worm.population; i++)
+            for (let i = 0; i < Config.generation.population; i++)
                 this.#worms.push(new Worm(ancestorBrain));
         else if (lastGen)
             this.#worms = lastGen.#evolve();
         else
-            for (let i = 0; i < Config.worm.population; i++)
+            for (let i = 0; i < Config.generation.population; i++)
                 this.#worms.push(new Worm());
         this.#subscribeEvents();
     }
@@ -39,7 +39,7 @@ class Generation {
     }
 
     run() {
-        The.wormBoard.set({ [WormBoard.key.wormNo]: (this.#wormIndex + 1) + " /" + Config.worm.population });
+        The.wormBoard.set({ [WormBoard.key.wormNo]: (this.#wormIndex + 1) + " /" + Config.generation.population });
         this.#currentWorm = this.#worms[this.#wormIndex];
         this.#currentWorm.run();
     }
@@ -52,7 +52,7 @@ class Generation {
         this.#updateBoard();
         const targetMet = wormTargetMet || this.#isTargetMet();
         this.#wormIndex++;
-        if (targetMet || this.#wormIndex >= Config.worm.population) {
+        if (targetMet || this.#wormIndex >= Config.generation.population) {
             this.#unsubscribeEvents();
             The.eventBus.notify(EventKey.generationEnd, targetMet, this);
         } else {
@@ -66,9 +66,13 @@ class Generation {
 
     #evolve() {
         const fittest = this.#naturalSelect();
-        const replicas = fittest.map(w => w.replicate());
-        const mutants = fittest.map(w => w.mutate());
-        return [...replicas, ...mutants];
+        const result = fittest.map(w => w.replicate());
+        let diffIndex = 0;
+        while (result.length < Config.generation.population) {
+            const cyclicIndex = diffIndex % this.#reproducingPopulation;
+            result.push(fittest[cyclicIndex].mutate());
+        }
+        return result;
     }
 
     #naturalSelect() {
