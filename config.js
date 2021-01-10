@@ -1,6 +1,6 @@
 "use strict";
 
-var Config = deepFreeze({
+var Config = Obj.deepFreeze({
 	devMode: false,
 	grid: {
 		draw: true,

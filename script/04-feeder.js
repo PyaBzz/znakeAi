@@ -51,15 +51,15 @@ class Feeder {
 		const centre = The.grid.centreCell;
 		let additiveSpread = 0;
 		let blankCells = [];
-		while (blankCells.hasNone) {
+		while (BazArray.hasNone(blankCells)) {
 			const effectiveSpread = this.#spread + additiveSpread;
 			const spreadSurface = Math.pow((2 * effectiveSpread + 1), 2);
 			blankCells = The.grid.getBlankCellsAround(centre, effectiveSpread);
-			if (spreadSurface >= The.grid.playableCellCount && blankCells.hasNone)
+			if (spreadSurface >= The.grid.playableCellCount && BazArray.hasNone(blankCells))
 				alert("There's no blank cell to drop food!") //Todo: The ultimate goal, isn't it?
 			additiveSpread++;
 		}
-		const nextFoodCell = blankCells.pickRandom();
+		const nextFoodCell = BazArray.pickRandom(blankCells).items[0];
 		if (!nextFoodCell)
 			debugger;
 		nextFoodCell.beFood();

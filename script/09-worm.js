@@ -23,7 +23,7 @@ class Worm {
     }
 
     get #head() { return this.#sections[0] }
-    get #tail() { return this.#sections.last }
+    get #tail() { return BazArray.getLast(this.#sections) }
     get age() { return this.#age }
     get length() { return this.#sections.length }
     get fitness() { return this.#age + (this.length - 1) * The.grid.playableCellCount }
@@ -103,7 +103,7 @@ class Worm {
     #getNextDirection() {
         const brainOutputTensor = this.#think();
         const brainOutputArray = brainOutputTensor.arraySync()[0];
-        let indexOfMax = brainOutputArray.getMax().index;
+        let indexOfMax = BazArray.getMax(brainOutputArray).index;
         if (indexOfMax === 0)
             return Direction.up;
         if (indexOfMax === 1)
@@ -134,35 +134,35 @@ class Worm {
         result.push(foodSignalVer);
 
         let deathVector = this.#head.getDiff(c => c.isDeadly, Direction.up);
-        const deathSignalUp = - 1 / bazMath.amplitude(deathVector);
+        const deathSignalUp = - 1 / BazMath.amplitude(deathVector);
         result.push(deathSignalUp);
 
         deathVector = this.#head.getDiff(c => c.isDeadly, Direction.up, Direction.right);
-        const deathSignalUpRight = - 1 / bazMath.amplitude(deathVector);
+        const deathSignalUpRight = - 1 / BazMath.amplitude(deathVector);
         result.push(deathSignalUpRight);
 
         deathVector = this.#head.getDiff(c => c.isDeadly, Direction.right);
-        const deathSignalRight = - 1 / bazMath.amplitude(deathVector);
+        const deathSignalRight = - 1 / BazMath.amplitude(deathVector);
         result.push(deathSignalRight);
 
         deathVector = this.#head.getDiff(c => c.isDeadly, Direction.right, Direction.down);
-        const deathSignalDownRight = - 1 / bazMath.amplitude(deathVector);
+        const deathSignalDownRight = - 1 / BazMath.amplitude(deathVector);
         result.push(deathSignalDownRight);
 
         deathVector = this.#head.getDiff(c => c.isDeadly, Direction.down);
-        const deathSignalDown = - 1 / bazMath.amplitude(deathVector);
+        const deathSignalDown = - 1 / BazMath.amplitude(deathVector);
         result.push(deathSignalDown);
 
         deathVector = this.#head.getDiff(c => c.isDeadly, Direction.down, Direction.left);
-        const deathSignalDownLeft = - 1 / bazMath.amplitude(deathVector);
+        const deathSignalDownLeft = - 1 / BazMath.amplitude(deathVector);
         result.push(deathSignalDownLeft);
 
         deathVector = this.#head.getDiff(c => c.isDeadly, Direction.left);
-        const deathSignalLeft = - 1 / bazMath.amplitude(deathVector);
+        const deathSignalLeft = - 1 / BazMath.amplitude(deathVector);
         result.push(deathSignalLeft);
 
         deathVector = this.#head.getDiff(c => c.isDeadly, Direction.left, Direction.up);
-        const deathSignalUpLeft = - 1 / bazMath.amplitude(deathVector);
+        const deathSignalUpLeft = - 1 / BazMath.amplitude(deathVector);
         result.push(deathSignalUpLeft);
 
         return result;
@@ -181,13 +181,13 @@ class Worm {
 
     #moveHeadTo(nextHeadCell) {
         this.#head.beWorm();
-        this.#sections.addToFront(nextHeadCell);
+        this.#sections.unshift(nextHeadCell);
         this.#head.beHead();
     }
 
     #moveTail() {
         this.#tail.beBlank();
-        this.#sections.takeLastOut();
+        this.#sections.pop();
     }
 
     #disappear() {

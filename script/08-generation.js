@@ -76,7 +76,7 @@ class Generation {
     }
 
     #naturalSelect() {
-        return this.#worms.getTop(w => w.fitness, this.#reproducingPopulation).items;
+        return BazArray.getTop(this.#worms, w => w.fitness, this.#reproducingPopulation).items;
     }
 
     #updateBoard() {
